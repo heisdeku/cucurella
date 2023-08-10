@@ -12,8 +12,15 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		32D894D7ADD44AB6AE9DC7BE /* HelveticaNeueBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2087F5BC16644CEF9B862286 /* HelveticaNeueBold.ttf */; };
+		5E0B08F24656428082C63D2F /* HelveticaNeueMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 403F04EAEF4A4AD78591A826 /* HelveticaNeueMedium.ttf */; };
+		698888A4B5D24FFC8689741E /* HelveticaNeue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ED7C357313B9460E9CE67CE7 /* HelveticaNeue.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-ofayd-ofaydTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-ofayd-ofaydTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		99FE23B09B5543D98059ED18 /* HelveticaNeueHeavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3589F9CE0E5049AF8C6AB893 /* HelveticaNeueHeavy.ttf */; };
+		C47EB30BBC474F9088D10B8C /* HelveticaNeueThin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 663F870E01C3484F8C1256F8 /* HelveticaNeueThin.ttf */; };
+		CA04FEF8D6444F1F9B5A87FA /* HelveticaNeueBlack.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D94EC119941D4686A28ED59F /* HelveticaNeueBlack.ttf */; };
+		E876B4B113444DFFB58FEE58 /* HelveticaNeueLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CCF14C20BF5F42ECADA58182 /* HelveticaNeueLight.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,13 +44,20 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ofayd/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ofayd/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-ofayd-ofaydTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ofayd-ofaydTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2087F5BC16644CEF9B862286 /* HelveticaNeueBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeueBold.ttf; path = ../assets/fonts/HelveticaNeueBold.ttf; sourceTree = "<group>"; };
+		3589F9CE0E5049AF8C6AB893 /* HelveticaNeueHeavy.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeueHeavy.ttf; path = ../assets/fonts/HelveticaNeueHeavy.ttf; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-ofayd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ofayd.debug.xcconfig"; path = "Target Support Files/Pods-ofayd/Pods-ofayd.debug.xcconfig"; sourceTree = "<group>"; };
+		403F04EAEF4A4AD78591A826 /* HelveticaNeueMedium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeueMedium.ttf; path = ../assets/fonts/HelveticaNeueMedium.ttf; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-ofayd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ofayd.release.xcconfig"; path = "Target Support Files/Pods-ofayd/Pods-ofayd.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-ofayd-ofaydTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ofayd-ofaydTests.debug.xcconfig"; path = "Target Support Files/Pods-ofayd-ofaydTests/Pods-ofayd-ofaydTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-ofayd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ofayd.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		663F870E01C3484F8C1256F8 /* HelveticaNeueThin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeueThin.ttf; path = ../assets/fonts/HelveticaNeueThin.ttf; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ofayd/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-ofayd-ofaydTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ofayd-ofaydTests.release.xcconfig"; path = "Target Support Files/Pods-ofayd-ofaydTests/Pods-ofayd-ofaydTests.release.xcconfig"; sourceTree = "<group>"; };
+		CCF14C20BF5F42ECADA58182 /* HelveticaNeueLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeueLight.ttf; path = ../assets/fonts/HelveticaNeueLight.ttf; sourceTree = "<group>"; };
+		D94EC119941D4686A28ED59F /* HelveticaNeueBlack.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeueBlack.ttf; path = ../assets/fonts/HelveticaNeueBlack.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		ED7C357313B9460E9CE67CE7 /* HelveticaNeue.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeue.ttf; path = ../assets/fonts/HelveticaNeue.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +120,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6FA391184A194E0FA18689F4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ED7C357313B9460E9CE67CE7 /* HelveticaNeue.ttf */,
+				D94EC119941D4686A28ED59F /* HelveticaNeueBlack.ttf */,
+				2087F5BC16644CEF9B862286 /* HelveticaNeueBold.ttf */,
+				3589F9CE0E5049AF8C6AB893 /* HelveticaNeueHeavy.ttf */,
+				CCF14C20BF5F42ECADA58182 /* HelveticaNeueLight.ttf */,
+				403F04EAEF4A4AD78591A826 /* HelveticaNeueMedium.ttf */,
+				663F870E01C3484F8C1256F8 /* HelveticaNeueThin.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -122,6 +150,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				6FA391184A194E0FA18689F4 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -244,6 +273,13 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				698888A4B5D24FFC8689741E /* HelveticaNeue.ttf in Resources */,
+				CA04FEF8D6444F1F9B5A87FA /* HelveticaNeueBlack.ttf in Resources */,
+				32D894D7ADD44AB6AE9DC7BE /* HelveticaNeueBold.ttf in Resources */,
+				99FE23B09B5543D98059ED18 /* HelveticaNeueHeavy.ttf in Resources */,
+				E876B4B113444DFFB58FEE58 /* HelveticaNeueLight.ttf in Resources */,
+				5E0B08F24656428082C63D2F /* HelveticaNeueMedium.ttf in Resources */,
+				C47EB30BBC474F9088D10B8C /* HelveticaNeueThin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,7 +288,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
@@ -262,7 +298,7 @@
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
@@ -380,7 +416,7 @@
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -392,7 +428,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
