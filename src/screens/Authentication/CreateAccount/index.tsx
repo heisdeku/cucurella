@@ -4,20 +4,21 @@ import theme from '@libs/theme';
 import {Text} from '@components/Text';
 import Container from '@components/Container';
 import styled from 'styled-components/native';
-import MainAppBaseView from '@components/AppSafeView';
 import {Base} from '@components/Base';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Row} from '@components/Base/Row';
 import PhoneInput from 'react-native-phone-number-input';
 import {input_dropdown, social} from '@libs/svgs';
 import {SvgXml} from 'react-native-svg';
+import {navigate} from '@stacks/helper';
+import KeyboardWrapper from '@components/KeyboardWrapper';
 
 function CreateAccount(): JSX.Element {
   const phoneInput = useRef(null);
   const [type, setType] = useState<'phone' | 'email'>('phone');
   return (
-    <MainAppBaseView>
-      <Container justifyContent={'space-between'} pb={'70px'} pt={'45px'}>
+    <KeyboardWrapper>
+      <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'}>
             Enter your {type === 'phone' ? 'phone number' : 'email address'}
@@ -124,9 +125,9 @@ function CreateAccount(): JSX.Element {
             </SocialAuth>
           </Row>
         </Base.View>
-        <Base.Button title="Continue" />
+        <Base.Button title="Continue" onPress={() => navigate('VerifyCode')} />
       </Container>
-    </MainAppBaseView>
+    </KeyboardWrapper>
   );
 }
 
@@ -137,7 +138,7 @@ const Line = styled.View`
 `;
 
 const SocialAuth = styled.TouchableOpacity`
-  border-radius: 4.545px;
+  border-radius: 4.529px;
   justify-content: center;
   align-items: center;
   border: 1.136px solid ${theme.colors.neutral03};
