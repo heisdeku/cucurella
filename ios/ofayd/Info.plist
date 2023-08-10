@@ -53,13 +53,14 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>HelveticaNeue.ttf</string>
 		<string>HelveticaNeueBlack.ttf</string>
 		<string>HelveticaNeueBold.ttf</string>
 		<string>HelveticaNeueHeavy.ttf</string>
 		<string>HelveticaNeueLight.ttf</string>
 		<string>HelveticaNeueMedium.ttf</string>
 		<string>HelveticaNeueThin.ttf</string>
+		<string>HelveticaNeue.ttf</string>
+		<string>HelveticaNeueRegular.otf</string>
 	</array>
 </dict>
 </plist>

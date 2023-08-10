@@ -1,7 +1,8 @@
 export default {
   fonts: {
     300: 'HelveticaNeueThin',
-    400: 'HelveticaNeue',
+    400: 'HelveticaNeueRegular',
+    regular: 'HelveticaNeueRegular',
     500: 'HelveticaNeueMedium',
     600: 'HelveticaNeueBold',
     700: 'HelveticaNeueBold',
@@ -9,16 +10,12 @@ export default {
     900: 'HelveticaNeueHeavy',
   },
   colors: {
+    black: '#0B0C0F',
     white: '#FFFFFF',
-    white100: '#ffffffb3',
-    white200: '#ffffff4d',
-    white300: '#ffffff99',
-    grey200: '#3C3C3C',
-    black200: '#0B0B0B',
-    black300: '#1E1E1E',
-    black400: '#151515',
-    purple: '#6128D0',
-    alertYellow: '#FFD700',
-    alertRed: '#C22323',
+    green08: '#15803D',
+    neutral01: '#F8FAFC',
+    neutral03: '#E2E8F0',
+    neutral07: '#334155',
+    stroke: '#EDF0F4',
   },
 };

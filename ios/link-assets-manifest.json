@@ -3,7 +3,7 @@
   "data": [
     {
       "path": "assets/fonts/HelveticaNeue.ttf",
-      "sha1": "d82ba04b7438da9836d701bbf704600d77b466c0"
+      "sha1": "ac8d8510e43277a5bebd1f7bc0cf05c36bc6334c"
     },
     {
       "path": "assets/fonts/HelveticaNeueBlack.ttf",
@@ -24,6 +24,10 @@
     {
       "path": "assets/fonts/HelveticaNeueMedium.ttf",
       "sha1": "5b235bd8ab01aa99e3a2a66daea10350a9d254ed"
+    },
+    {
+      "path": "assets/fonts/HelveticaNeueRegular.otf",
+      "sha1": "1cfb94cd7d3818187fb9670eea88d3b20d629acb"
     },
     {
       "path": "assets/fonts/HelveticaNeueThin.ttf",

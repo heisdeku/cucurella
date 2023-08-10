@@ -1,22 +1,18 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, StatusBar, Text} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {ThemeProvider} from 'styled-components/native';
 import theme from '@libs/theme';
+import Root from '@stacks/RootStack';
+import {View} from 'react-native';
+import {windowHeight} from '@libs/constant';
 
 function App(): JSX.Element {
   return (
     <GestureHandlerRootView>
       <ThemeProvider theme={theme}>
-        <NavigationContainer>
-          <SafeAreaView>
-            <StatusBar barStyle={'dark-content'} />
-            <ScrollView contentInsetAdjustmentBehavior="automatic">
-              <Text>Welcome to Ofayd</Text>
-            </ScrollView>
-          </SafeAreaView>
-        </NavigationContainer>
+        <View style={{minHeight: windowHeight}}>
+          <Root />
+        </View>
       </ThemeProvider>
     </GestureHandlerRootView>
   );
