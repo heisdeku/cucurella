@@ -17,7 +17,7 @@ function KeyboardWrapper({children}: {children: any}) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             minHeight: windowHeight - 80,
-            paddingBottom: 79,
+            paddingBottom: 20,
           }}
           onTouchStart={() => {
             Keyboard.dismiss();

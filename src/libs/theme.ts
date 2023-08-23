@@ -19,5 +19,8 @@ export default {
     neutral03: '#E2E8F0',
     neutral07: '#334155',
     stroke: '#EDF0F4',
+    dark: '#000',
+    offsetGray: '#F3F4F6',
+    offsetGray2: '#F9FAFC',
   },
 };

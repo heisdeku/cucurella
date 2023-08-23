@@ -3,15 +3,15 @@ import theme from '@libs/theme';
 import {Text} from '@components/Text';
 import Container from '@components/Container';
 import styled from 'styled-components/native';
-import MainAppBaseView from '@components/AppSafeView';
 import {Base} from '@components/Base';
 import {StyleSheet} from 'react-native';
 import {navigate} from '@stacks/helper';
+import KeyboardWrapper from '@components/KeyboardWrapper';
 
 function MoreInformation(): JSX.Element {
   return (
-    <MainAppBaseView>
-      <Container justifyContent={'space-between'} pb={'70px'} pt={'29px'}>
+    <KeyboardWrapper>
+      <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'}>
             Tell us more about yourself
@@ -48,7 +48,7 @@ function MoreInformation(): JSX.Element {
         </Base.View>
         <Base.Button title="Continue" onPress={() => navigate('PinSetup')} />
       </Container>
-    </MainAppBaseView>
+    </KeyboardWrapper>
   );
 }
 

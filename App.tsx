@@ -5,6 +5,7 @@ import theme from '@libs/theme';
 import Root from '@stacks/RootStack';
 import {StyleSheet} from 'react-native';
 import {KeyboardProvider} from 'react-native-keyboard-controller';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 const styles = StyleSheet.create({
   root: {
@@ -16,7 +17,9 @@ function App(): JSX.Element {
     <GestureHandlerRootView style={styles.root}>
       <KeyboardProvider statusBarTranslucent>
         <ThemeProvider theme={theme}>
-          <Root />
+          <BottomSheetModalProvider>
+            <Root />
+          </BottomSheetModalProvider>
         </ThemeProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>

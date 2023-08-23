@@ -1,14 +1,21 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, TextInput, TextInputProps} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {StyleSheet, TextInput, TextInputProps, View} from 'react-native';
 import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {IS_ANDROID} from '@libs/constant';
 import {Text} from '@components/Text';
 import {readOnlyInput} from '@libs/helper';
 import {styled} from 'styled-components/native';
-import {navigate} from '@stacks/helper';
 import theme from '@libs/theme';
 import KeyboardWrapper from '@components/KeyboardWrapper';
+import {
+  BottomSheetModal,
+  BottomSheetView,
+  useBottomSheetDynamicSnapPoints,
+} from '@gorhom/bottom-sheet';
+import CustomBackdrop from '@components/CustomBackdrop';
+import {SvgXml} from 'react-native-svg';
+import {biometrics, close_icon} from '@libs/svgs';
 
 const styles = createStyles();
 
@@ -20,7 +27,7 @@ const readableInputProps: TextInputProps = {
   maxLength: 4,
 };
 
-export const PinSetup: React.FC = () => {
+export const PinConfirm: React.FC = () => {
   const [code, setCode] = useState<string>('');
   const createRef = useRef<any>(null);
   const [
@@ -54,15 +61,35 @@ export const PinSetup: React.FC = () => {
     }
   }, [code]);
 
+  // ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  const initialSnapPoints = useMemo(() => ['25%', 'CONTENT_HEIGHT'], []);
+
+  const {
+    animatedHandleHeight,
+    animatedSnapPoints,
+    animatedContentHeight,
+    handleContentLayout,
+  } = useBottomSheetDynamicSnapPoints(initialSnapPoints);
+
   return (
     <KeyboardWrapper>
       <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'} lineHeight={'31px'}>
-            Create a four digit pin
+            Confirm Pin
           </Text.Medium>
           <Text.General mt={'8px'} color={theme.colors.neutral07}>
-            Use this pin when you want to log in next time
+            Enter your pin again
           </Text.General>
           <Base.View mt={'40px'}>
             <FormGroup>
@@ -104,13 +131,82 @@ export const PinSetup: React.FC = () => {
         </Base.View>
         <Base.Button
           title="Continue"
-          onPress={() => navigate('PinConfirm')}
+          onPress={() => handlePresentModalPress()}
           disabled={btnDisabled}
         />
       </Container>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={1}
+        snapPoints={animatedSnapPoints}
+        onChange={handleSheetChanges}
+        handleStyle={{display: 'none'}}
+        handleHeight={animatedHandleHeight}
+        contentHeight={animatedContentHeight}
+        backdropComponent={({animatedIndex, style, animatedPosition}) => (
+          <CustomBackdrop
+            animatedPosition={animatedPosition}
+            animatedIndex={animatedIndex}
+            style={style}
+          />
+        )}>
+        <BottomSheetView onLayout={handleContentLayout}>
+          <Base.View px={'20px'} py="26px" mb={'45px'}>
+            <Close>
+              <SvgXml xml={close_icon} />
+            </Close>
+            <Base.View
+              width={'64px'}
+              height="64px"
+              borderRadius={'49px'}
+              mx={'auto'}
+              mb="18px"
+              justifyContent={'center'}
+              alignItems={'center'}
+              backgroundColor={theme.colors.offsetGray}>
+              <SvgXml xml={biometrics.face} />
+            </Base.View>
+            <Base.View mb={'29px'} alignItems={'center'}>
+              <Text.Medium
+                mb={'8px'}
+                fontSize={'20px'}
+                color={theme.colors.dark}>
+                Enable Biometrics
+              </Text.Medium>
+              <Text.General fontSize={'14px'} color={theme.colors.dark}>
+                Use Finger print to log in
+              </Text.General>
+            </Base.View>
+            <Base.Button title="Enable Biometrics" />
+            <ContinueWithoutBiometrics>
+              <Text.Medium fontSize={'16px'}>
+                Continue without Biometrics
+              </Text.Medium>
+            </ContinueWithoutBiometrics>
+          </Base.View>
+        </BottomSheetView>
+      </BottomSheetModal>
     </KeyboardWrapper>
   );
 };
+
+const Close = styled.TouchableOpacity`
+  background-color: ${theme.colors.offsetGray2};
+  height: 35px;
+  width: 35px;
+  margin-left: auto;
+  border-radius: 9999px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 7px;
+`;
+
+const ContinueWithoutBiometrics = styled.TouchableOpacity`
+  margin-top: 10px;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+`;
 
 const FormGroup = styled.View`
   flex-direction: row;

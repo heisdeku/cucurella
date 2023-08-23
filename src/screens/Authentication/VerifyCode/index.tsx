@@ -5,9 +5,9 @@ import Container from '@components/Container';
 import {IS_ANDROID} from '@libs/constant';
 import {Text} from '@components/Text';
 import {readOnlyInput} from '@libs/helper';
-import MainAppBaseView from '@components/AppSafeView';
 import {styled} from 'styled-components/native';
 import {navigate} from '@stacks/helper';
+import KeyboardWrapper from '@components/KeyboardWrapper';
 
 const styles = createStyles();
 
@@ -17,7 +17,7 @@ export const VerifyCode: React.FC = () => {
     isInvalid,
     // setIsInvalid
   ] = useState<boolean>(false);
-  //   const [btnDisbled, setBtnDisabled] = useState<boolean>(true);
+  const [btnDisbled, setBtnDisabled] = useState<boolean>(true);
 
   const inputRef = useRef<any>(null);
 
@@ -54,9 +54,9 @@ export const VerifyCode: React.FC = () => {
   }, [pinCode]);
 
   return (
-    <MainAppBaseView>
-      <Container pb={'70px'} pt={'29px'}>
-        <Base.View mb={'168px'}>
+    <KeyboardWrapper>
+      <Container pt={'29px'}>
+        <Base.View mb={'auto'}>
           <Text.Medium fontSize={'24px'} lineHeight={'31px'}>
             Enter the 4-digit code sent to your email address
           </Text.Medium>
@@ -95,9 +95,10 @@ export const VerifyCode: React.FC = () => {
         <Base.Button
           title="Continue"
           onPress={() => navigate('MoreInformation')}
+          disabled={btnDisbled}
         />
       </Container>
-    </MainAppBaseView>
+    </KeyboardWrapper>
   );
 };
 
