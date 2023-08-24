@@ -3,6 +3,7 @@ import React from 'react';
 import AuthStack from './AuthStack';
 import {navigationRef} from './helper';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import AppNavigation from './AppStack';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ const Root = () => {
         screenOptions={{
           headerShown: false,
         }}>
+        <Stack.Screen name="App" component={AppNavigation} />
         <Stack.Screen name="Authentication" component={AuthStack} />
       </Stack.Navigator>
     </NavigationContainer>

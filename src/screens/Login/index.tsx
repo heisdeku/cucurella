@@ -1,28 +1,26 @@
-import React, {useRef, useState} from 'react';
+import React from 'react';
 import theme from '@libs/theme';
 import {Text} from '@components/Text';
 import Container from '@components/Container';
 import styled from 'styled-components/native';
 import {Base} from '@components/Base';
 import {Row} from '@components/Base/Row';
-import {input_dropdown, social} from '@libs/svgs';
+import {social} from '@libs/svgs';
 import {SvgXml} from 'react-native-svg';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 
-interface Props {
-  name: string;
-}
-
-const Login: React.FC<Props> = ({name}): JSX.Element => {
+const Login: React.FC = (): JSX.Element => {
   return (
     <KeyboardWrapper>
       <Container pt={'29px'}>
         <Base.View>
-          <Text.Medium fontSize={'24px'}>Hi {name || 'Doris'},</Text.Medium>
+          <Text.Medium mb={'7px'} fontSize={'24px'}>
+            Hi {'Doris'},
+          </Text.Medium>
           <Text.General
-            font-size={'16px'}
-            font-weight={'400'}
-            line-height={'21px'}
+            fontSize={'16px'}
+            fontWeight={'400'}
+            lineHeight={'21px'}
             color={theme.colors.neutral07}>
             Please enter your pin to login
           </Text.General>
@@ -110,7 +108,7 @@ const InputField = styled.TextInput`
   line-height: 15px;
   color: ${theme.colors.neutral07};
   height: 88px;
-  margin: 10px 0;
+  margin: 20px 0;
 `;
 
 export default Login;

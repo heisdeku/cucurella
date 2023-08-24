@@ -4,8 +4,8 @@ import CreateAccount from '@screens/Authentication/CreateAccount';
 import {VerifyCode} from '@screens/Authentication/VerifyCode';
 import MoreInformation from '@screens/Authentication/MoreInformation';
 import {PinSetup} from '@screens/Authentication/PinSetup';
-import {PinConfirm} from '@screens/Authentication/PINConfirm';
 import Login from '@screens/Login';
+import PinConfirm from '@screens/Authentication/PINConfirm';
 
 const Stack = createNativeStackNavigator();
 

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {StyleSheet, TextInput, TextInputProps, View} from 'react-native';
+import {StyleSheet, TextInput, TextInputProps} from 'react-native';
 import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {IS_ANDROID} from '@libs/constant';
@@ -8,14 +8,8 @@ import {readOnlyInput} from '@libs/helper';
 import {styled} from 'styled-components/native';
 import theme from '@libs/theme';
 import KeyboardWrapper from '@components/KeyboardWrapper';
-import {
-  BottomSheetModal,
-  BottomSheetView,
-  useBottomSheetDynamicSnapPoints,
-} from '@gorhom/bottom-sheet';
-import CustomBackdrop from '@components/CustomBackdrop';
-import {SvgXml} from 'react-native-svg';
-import {biometrics, close_icon} from '@libs/svgs';
+import withBottomDrawer from '@components/withBottomDrawer';
+import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
 
 const styles = createStyles();
 
@@ -27,7 +21,7 @@ const readableInputProps: TextInputProps = {
   maxLength: 4,
 };
 
-export const PinConfirm: React.FC = () => {
+const PinConfirm: React.FC = ({handleOpen, handleClose}) => {
   const [code, setCode] = useState<string>('');
   const createRef = useRef<any>(null);
   const [
@@ -60,26 +54,6 @@ export const PinConfirm: React.FC = () => {
       setBtnDisabled(false);
     }
   }, [code]);
-
-  // ref
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  // callbacks
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
-
-  const initialSnapPoints = useMemo(() => ['25%', 'CONTENT_HEIGHT'], []);
-
-  const {
-    animatedHandleHeight,
-    animatedSnapPoints,
-    animatedContentHeight,
-    handleContentLayout,
-  } = useBottomSheetDynamicSnapPoints(initialSnapPoints);
 
   return (
     <KeyboardWrapper>
@@ -131,82 +105,13 @@ export const PinConfirm: React.FC = () => {
         </Base.View>
         <Base.Button
           title="Continue"
-          onPress={() => handlePresentModalPress()}
+          onPress={() => handleOpen(DRAWER_CONSTANTS.biometrics)}
           disabled={btnDisabled}
         />
       </Container>
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={1}
-        snapPoints={animatedSnapPoints}
-        onChange={handleSheetChanges}
-        handleStyle={{display: 'none'}}
-        handleHeight={animatedHandleHeight}
-        contentHeight={animatedContentHeight}
-        backdropComponent={({animatedIndex, style, animatedPosition}) => (
-          <CustomBackdrop
-            animatedPosition={animatedPosition}
-            animatedIndex={animatedIndex}
-            style={style}
-          />
-        )}>
-        <BottomSheetView onLayout={handleContentLayout}>
-          <Base.View px={'20px'} py="26px" mb={'45px'}>
-            <Close>
-              <SvgXml xml={close_icon} />
-            </Close>
-            <Base.View
-              width={'64px'}
-              height="64px"
-              borderRadius={'49px'}
-              mx={'auto'}
-              mb="18px"
-              justifyContent={'center'}
-              alignItems={'center'}
-              backgroundColor={theme.colors.offsetGray}>
-              <SvgXml xml={biometrics.face} />
-            </Base.View>
-            <Base.View mb={'29px'} alignItems={'center'}>
-              <Text.Medium
-                mb={'8px'}
-                fontSize={'20px'}
-                color={theme.colors.dark}>
-                Enable Biometrics
-              </Text.Medium>
-              <Text.General fontSize={'14px'} color={theme.colors.dark}>
-                Use Finger print to log in
-              </Text.General>
-            </Base.View>
-            <Base.Button title="Enable Biometrics" />
-            <ContinueWithoutBiometrics>
-              <Text.Medium fontSize={'16px'}>
-                Continue without Biometrics
-              </Text.Medium>
-            </ContinueWithoutBiometrics>
-          </Base.View>
-        </BottomSheetView>
-      </BottomSheetModal>
     </KeyboardWrapper>
   );
 };
-
-const Close = styled.TouchableOpacity`
-  background-color: ${theme.colors.offsetGray2};
-  height: 35px;
-  width: 35px;
-  margin-left: auto;
-  border-radius: 9999px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 7px;
-`;
-
-const ContinueWithoutBiometrics = styled.TouchableOpacity`
-  margin-top: 10px;
-  justify-content: center;
-  width: 100%;
-  align-items: center;
-`;
 
 const FormGroup = styled.View`
   flex-direction: row;
@@ -236,3 +141,5 @@ function createStyles() {
     },
   });
 }
+
+export default withBottomDrawer(PinConfirm);
