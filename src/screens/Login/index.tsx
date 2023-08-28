@@ -1,114 +1,84 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import theme from '@libs/theme';
 import {Text} from '@components/Text';
 import Container from '@components/Container';
 import styled from 'styled-components/native';
 import {Base} from '@components/Base';
-import {Row} from '@components/Base/Row';
-import {social} from '@libs/svgs';
-import {SvgXml} from 'react-native-svg';
+import {navigate} from '@stacks/helper';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 
+// interface Props {
+//   name?: string;
+// }
+
 const Login: React.FC = (): JSX.Element => {
+  const phoneInput = useRef(null);
+  const [type, setType] = useState<'phone' | 'email'>('phone');
   return (
     <KeyboardWrapper>
-      <Container pt={'29px'}>
+      <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
-          <Text.Medium mb={'7px'} fontSize={'24px'}>
-            Hi {'Doris'},
+          <Text.Medium fontSize={'24px'}>
+            Welcome, Login to continue
           </Text.Medium>
-          <Text.General
-            fontSize={'16px'}
-            fontWeight={'400'}
-            lineHeight={'21px'}
-            color={theme.colors.neutral07}>
-            Please enter your pin to login
-          </Text.General>
-          <InputField keyboardType="phone-pad" />
-          <Text.General mb="50px">Forget password? Reset</Text.General>
-          <Row mb={'24px'} alignItems={'center'} mx={'auto'}>
-            <Line />
-            <Text.General
-              lineHeight={'17.5px'}
-              fontWeight={'400'}
-              fontSize={'14px'}
-              mt={'2px'}
-              mx={'16px'}
-              color={theme.colors.black}>
-              Or login with
+          <Base.View mt="40px">
+            <Text.Small fontWeight={'500'} mb={'8px'}>
+              Phone Number
+            </Text.Small>
+            <InputField placeholder="Enter your phone number" maxLength={12} />
+          </Base.View>
+          <Base.View style={styles.container}>
+            <Text.General mb="50px">
+              Don't have an acccount?{' '}
+              <TouchableOpacity onPress={() => console.log('Sign Up clicked')}>
+                <Text.General style={styles.signUpLink}>Sign Up</Text.General>
+              </TouchableOpacity>
             </Text.General>
-            <Line />
-          </Row>
-          <Row width={'250px'} mx={'auto'}>
-            <SocialAuth activeOpacity={0.8}>
-              <SvgXml xml={social.google} />
-              <Text.General
-                lineHeight={'17.5px'}
-                fontWeight={'400'}
-                fontSize={'14px'}
-                mt={'2px'}
-                color={theme.colors.black}>
-                Google
-              </Text.General>
-            </SocialAuth>
-            <SocialAuth activeOpacity={0.8}>
-              <SvgXml xml={social.apple} />
-              <Text.General
-                lineHeight={'17.5px'}
-                fontWeight={'400'}
-                fontSize={'14px'}
-                mt={'2px'}
-                color={theme.colors.black}>
-                Apple
-              </Text.General>
-            </SocialAuth>
-            <SocialAuth activeOpacity={0.8}>
-              <SvgXml xml={social.facebook} />
-              <Text.General
-                lineHeight={'17.5px'}
-                fontWeight={'400'}
-                fontSize={'14px'}
-                mt={'4px'}
-                color={theme.colors.black}>
-                Facebook
-              </Text.General>
-            </SocialAuth>
-          </Row>
+          </Base.View>
+        </Base.View>
+        <Base.View>
+          <Base.Button
+            title="Continue"
+            alignSelf="flex-end"
+            onPress={() => navigate('VerifyCode')}
+          />
+          <TouchableOpacity
+            style={styles.footer}
+            onPress={() => console.log('Continue as a guest')}>
+            <Text.Medium>Continue as a guest</Text.Medium>
+          </TouchableOpacity>
         </Base.View>
       </Container>
     </KeyboardWrapper>
   );
 };
 
-const Line = styled.View`
-  height: 1px;
-  width: 80px;
-  background-color: ${theme.colors.neutral03};
-`;
-
-const SocialAuth = styled.TouchableOpacity`
-  border-radius: 4.529px;
-  justify-content: center;
-  align-items: center;
-  border: 1.136px solid ${theme.colors.neutral03};
-  padding: 15px 0px;
-  width: 77px;
-  height: 66px;
-`;
-
 const InputField = styled.TextInput`
   background-color: ${theme.colors.neutral01};
-  padding: 29px 16px;
   border: 1px solid ${theme.colors.stroke};
   border-radius: 8px;
   width: 100%;
-  font-size: 12px;
+  font-size: 15px;
   font-style: normal;
   font-weight: 300;
-  line-height: 15px;
   color: ${theme.colors.neutral07};
-  height: 88px;
-  margin: 20px 0;
+  height: 50px;
 `;
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+
+  footer: {
+    alignItems: 'center',
+  },
+
+  signUpLink: {
+    color: theme.colors.green08,
+  },
+});
 
 export default Login;
