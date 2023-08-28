@@ -27,19 +27,21 @@ const Login: React.FC = (): JSX.Element => {
             Welcome, Login to continue
           </Text.Medium>
           <Base.View mt="40px">
-            <Text.Small fontWeight={'500'} mb={'8px'}>
+            <Text.Small fontWeight={'500'} mb={'10px'}>
               Phone Number
             </Text.Small>
             <InputField placeholder="Enter your phone number" maxLength={12} />
           </Base.View>
-          <Base.View style={styles.container}>
-            <Text.General mb="50px">
-              Don't have an acccount?{' '}
-              <TouchableOpacity onPress={() => console.log('Sign Up clicked')}>
-                <Text.General style={styles.signUpLink}>Sign Up</Text.General>
-              </TouchableOpacity>
-            </Text.General>
-          </Base.View>
+          <Base.Row justifyContent="flex-start" mt="10px">
+            <Text.Caption fontFamily="500" color={theme.colors.neutral07}>
+              Don't have an account? {''}
+            </Text.Caption>
+            <TouchableOpacity onPress={() => console.log('Sign up clicked')}>
+              <Text.Caption fontFamily="500" color={theme.colors.green08}>
+                Sign Up
+              </Text.Caption>
+            </TouchableOpacity>
+          </Base.Row>
         </Base.View>
         <Base.View>
           <Base.Button
@@ -68,6 +70,7 @@ const InputField = styled.TextInput`
   font-weight: 300;
   color: ${theme.colors.neutral07};
   height: 50px;
+  padding-left: 10px;
 `;
 
 const styles = StyleSheet.create({
