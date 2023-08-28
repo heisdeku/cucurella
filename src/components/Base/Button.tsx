@@ -62,6 +62,7 @@ export const Button: React.FC<ButtonProps> = ({
   rightElement,
   disabled,
   isLoading,
+  alignSelf,
   ...rest
 }) => {
   return (
