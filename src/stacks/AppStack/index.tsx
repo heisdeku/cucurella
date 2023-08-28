@@ -1,6 +1,6 @@
 import CustomBottomTab from '@components/CustomBottomTab';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '@screens/Home';
 import ProductScreen from '@screens/Product';
 import AddCard from '@screens/AddCard';
@@ -12,7 +12,7 @@ const MainTab = () => {
   return (
     <Tab.Navigator
       tabBar={props => <CustomBottomTab {...props} />}
-      screenOptions={{ headerShown: false }}>
+      screenOptions={{headerShown: false}}>
       <Tab.Screen
         name="Home"
         options={{
@@ -52,8 +52,8 @@ const AppNavigation = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      {/* <Stack.Screen name="Main" component={MainTab} />
-      <Stack.Screen name="Product" component={ProductScreen} /> */}
+      <Stack.Screen name="Main" component={MainTab} />
+      <Stack.Screen name="Product" component={ProductScreen} />
       <Stack.Screen name="AddCard" component={AddCard} />
     </Stack.Navigator>
   );

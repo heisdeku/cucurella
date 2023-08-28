@@ -28,7 +28,13 @@ export const BiometricsDrawer = ({payload, handleOpen, handleClose}) => {
           Use Finger print to log in
         </Text.General>
       </Base.View>
-      <Base.Button title="Enable Biometrics" />
+      <Base.Button
+        onPress={() => {
+          navigate('Login');
+          return handleClose();
+        }}
+        title="Enable Biometrics"
+      />
       <ContinueWithoutBiometrics
         onPress={() => {
           navigate('Login');

@@ -14,8 +14,8 @@ const Root = () => {
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="App" component={AppNavigation} />
         <Stack.Screen name="Authentication" component={AuthStack} />
+        <Stack.Screen name="App" component={AppNavigation} />
       </Stack.Navigator>
     </NavigationContainer>
   );

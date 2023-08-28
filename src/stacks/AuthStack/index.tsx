@@ -4,7 +4,6 @@ import CreateAccount from '@screens/Authentication/CreateAccount';
 import {VerifyCode} from '@screens/Authentication/VerifyCode';
 import MoreInformation from '@screens/Authentication/MoreInformation';
 import {PinSetup} from '@screens/Authentication/PinSetup';
-
 import Login from '@screens/Login';
 import PinConfirm from '@screens/Authentication/PINConfirm';
 
@@ -15,7 +14,6 @@ const AuthStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        gestureEnabled: false,
       }}>
       <Stack.Screen name="Register" component={CreateAccount} />
       <Stack.Screen name="VerifyCode" component={VerifyCode} />
