@@ -17,22 +17,20 @@ const Login: React.FC = (): JSX.Element => {
           <Text.Medium fontSize={'24px'} mb={'34px'}>
             Welcome, Login to continue
           </Text.Medium>
-          <Input
-            label="Phone Number"
-            placeholder="Enter your 11 digits phone number"
-            keyboardType="phone-pad"
-          />
-          <Base.Row justifyContent={'flex-start'} mt="10px">
-            <Text.Caption fontFamily="400" color={theme.colors.neutral07}>
-              Don't have an account
-            </Text.Caption>
-            <TouchableOpacity onPress={() => navigate('Register')}>
-              <Text.Caption fontFamily="400" color={theme.colors.green08}>
-                {' '}
-                Sign up
-              </Text.Caption>
-            </TouchableOpacity>
-          </Base.Row>
+          <Base.View mt="40px">
+            <Text.Small fontWeight={'500'} mb={'8px'}>
+              Phone Number
+            </Text.Small>
+            <InputField placeholder="Enter your phone number" maxLength={12} />
+          </Base.View>
+          <Base.View style={styles.container}>
+            <Text.General mb="50px">
+              Don't have an acccount?{' '}
+              <TouchableOpacity onPress={() => console.log('Sign Up clicked')}>
+                <Text.General style={styles.signUpLink}>Sign Up</Text.General>
+              </TouchableOpacity>
+            </Text.General>
+          </Base.View>
         </Base.View>
         <Base.View>
           <Base.Button
@@ -50,6 +48,18 @@ const Login: React.FC = (): JSX.Element => {
     </KeyboardWrapper>
   );
 };
+
+const InputField = styled.TextInput`
+  background-color: ${theme.colors.neutral01};
+  border: 1px solid ${theme.colors.stroke};
+  border-radius: 8px;
+  width: 100%;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  color: ${theme.colors.neutral07};
+  height: 50px;
+`;
 
 const styles = StyleSheet.create({
   container: {
