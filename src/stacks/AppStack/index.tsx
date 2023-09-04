@@ -6,6 +6,7 @@ import ProductScreen from '@screens/Product';
 import AddCard from '@screens/AddCard';
 import Account from '@screens/ProfileDetails/Account';
 import ProfileDetails from '@screens/ProfileDetails/Details';
+import SavedPlaces from '@screens/ProfileDetails/SavedPlaces';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,6 +59,7 @@ const AppNavigation = () => {
       <Stack.Screen name="Product" component={ProductScreen} />
       <Stack.Screen name="AddCard" component={AddCard} />
       <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
+      <Stack.Screen name="SavedPlaces" component={SavedPlaces} />
     </Stack.Navigator>
   );
 };

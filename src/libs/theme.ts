@@ -30,5 +30,6 @@ export default {
     dark: '#000',
     offsetGray: '#F3F4F6',
     offsetGray2: '#F9FAFC',
+    red01: '#FEF2F2',
   },
 };

@@ -5,9 +5,11 @@ import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {Text} from '@components/Text';
 import {styled} from 'styled-components/native';
-import {Path, Svg, SvgXml} from 'react-native-svg';
-import {arrowLeft, arrowRight, chevron_icon} from '@libs/svgs';
+import {SvgXml} from 'react-native-svg';
+import {arrowRight} from '@libs/svgs';
 import Input from '@components/Base/Input';
+import {TouchableOpacity} from 'react-native';
+import {goBack} from '@stacks/helper';
 
 const ProfileDetails = () => {
   return (
@@ -15,11 +17,15 @@ const ProfileDetails = () => {
       <Base.Row
         pb={'16px'}
         px={'20px'}
+        pt={'16px'}
+        backgroundColor={theme.colors.white}
         borderBottomWidth={'1px'}
         borderBottomColor={theme.colors.neutral03}
         justifyContent={'flex-start'}
         alignItems={'center'}>
-        <SvgXml xml={arrowRight} />
+        <TouchableOpacity onPress={() => goBack()}>
+          <SvgXml xml={arrowRight} />
+        </TouchableOpacity>
         <Text.Medium
           mx={'auto'}
           flex={'1'}
@@ -27,7 +33,7 @@ const ProfileDetails = () => {
           textAlign={'center'}>
           Profile Details
         </Text.Medium>
-        <Base.View />
+        <Base.View width={'10%'} />
       </Base.Row>
       <Container pt={'24px'}>
         <Base.View
@@ -86,19 +92,6 @@ const ProfileDetails = () => {
     </KeyboardWrapper>
   );
 };
-
-const InputField = styled.TextInput`
-  background-color: ${theme.colors.neutral01};
-  padding: 19px 16px;
-  border: 1px solid ${theme.colors.stroke};
-  border-radius: 8px;
-  width: 100%;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 15px;
-  color: ${theme.colors.neutral07};
-`;
 
 const Avatar = styled.View`
   height: 100px;

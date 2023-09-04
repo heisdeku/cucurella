@@ -62,9 +62,6 @@ const ListItemSeperator = () => (
 );
 
 const Account: React.FC = (): JSX.Element => {
-  const goToProfileDetails = () => {
-    return navigate('ProfileDetails');
-  };
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Base.View>
@@ -99,13 +96,14 @@ const Account: React.FC = (): JSX.Element => {
           <ListItem
             chevron={<SvgXml xml={chevron_icon} />}
             icon={<SvgXml xml={person_icon} />}
-            onPress={goToProfileDetails}
+            onPress={() => navigate('ProfileDetails')}
             text="Profile details"
             seperator={<ListItemSeperator />}
           />
           <ListItem
             chevron={<SvgXml xml={chevron_icon} />}
             icon={<SvgXml xml={location_icon} />}
+            onPress={() => navigate('SavedPlaces')}
             text="Saved places"
             seperator={<ListItemSeperator />}
           />
