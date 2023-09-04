@@ -1,12 +1,12 @@
 import React from 'react';
 import theme from '@libs/theme';
 import KeyboardWrapper from '@components/KeyboardWrapper';
-import { Base } from '@components/Base';
+import {Base} from '@components/Base';
 import Container from '@components/Container';
-import { Text } from '@components/Text';
-import { styled } from 'styled-components/native';
+import {Text} from '@components/Text';
+import {styled} from 'styled-components/native';
 
-function ProfileDetails(): JSX.Element {
+const ProfileDetails = (): JSX.Element => {
   return (
     <KeyboardWrapper>
       <Container justifyContent={'space-between'} paddingX={'0'} pt={'20px'}>
@@ -39,12 +39,24 @@ function ProfileDetails(): JSX.Element {
             </Base.Row>
             <Line />
           </Base.View>
-          <Base.View justifyContent={'space-between'} alignItems={'center'} marginY={'20px'} marginX={"auto"}>
+          <Base.View
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            marginY={'20px'}
+            marginX={'auto'}>
             <Avatar>
-              <Text.Medium margin={'auto'} fontSize={'40px'}>JD</Text.Medium>
+              <Text.Medium margin={'auto'} fontSize={'40px'}>
+                JD
+              </Text.Medium>
             </Avatar>
             <SubText>
-              <Text.General margin={'auto'} fontSize={'12px'} paddingX={'4px'} color={theme.colors.neutral07}>Change profile picture</Text.General>
+              <Text.General
+                margin={'auto'}
+                fontSize={'12px'}
+                paddingX={'4px'}
+                color={theme.colors.neutral07}>
+                Change profile picture
+              </Text.General>
             </SubText>
           </Base.View>
           <Base.View mt={'32px'} paddingX={'20px'}>
@@ -72,14 +84,13 @@ function ProfileDetails(): JSX.Element {
               </Text.Small>
               <InputField placeholder="John Doe" keyboardType="numeric" />
             </Base.View>
-
           </Base.View>
         </Base.View>
         <Base.Button title={'Save changes'} />
       </Container>
     </KeyboardWrapper>
   );
-}
+};
 
 const InputField = styled.TextInput`
   background-color: ${theme.colors.neutral01};
@@ -108,19 +119,17 @@ const Line = styled.View`
 `;
 
 const Avatar = styled.View`
-height: 100px;
-width: 100px;
-border-radius: 67px;
-background-color: ${theme.colors.neutral01};
+  height: 100px;
+  width: 100px;
+  border-radius: 67px;
+  background-color: ${theme.colors.neutral01};
 `;
 
 const SubText = styled.View`
-border-radius: 37px;
-padding: 8px;
-margin-top: 16px;
-background-color: ${theme.colors.neutral01};
+  border-radius: 37px;
+  padding: 8px;
+  margin-top: 16px;
+  background-color: ${theme.colors.neutral01};
 `;
-
-
 
 export default ProfileDetails;

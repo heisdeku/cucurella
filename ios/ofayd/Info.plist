@@ -62,5 +62,16 @@
 		<string>HelveticaNeue.ttf</string>
 		<string>HelveticaNeueRegular.otf</string>
 	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>To verify your address, allow Ofayd to access your Location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>To verify your address, allow Ofayd to access your Location</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>Grant Location Permission</key>
+		<string>To verify your address, allow Ofayd to access your Location</string>
+	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To verify your address, allow Ofayd to access your Location</string>
 </dict>
 </plist>

@@ -1,5 +1,7 @@
 import {Base} from '@components/Base';
 import {Text} from '@components/Text';
+import withBottomDrawer from '@components/withBottomDrawer';
+import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
 import {
   mdiLocation,
   notification_icon,
@@ -8,7 +10,7 @@ import {
 } from '@libs/svgs';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
-import {Dimensions, ScrollView, TouchableOpacity} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
@@ -90,12 +92,13 @@ const Listing = ({name, description}: IListing) => {
   );
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({handleOpen, handleClose}) => {
   return (
     <Base.SafeView backgroundColor={theme.colors.white}>
       <Base.View px={'20px'} pt={'18px'} pb={'20px'}>
         <Base.Row alignItems={'center'} mb={'16px'}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleOpen(DRAWER_CONSTANTS.location)}>
             <Base.Row alignItems={'center'}>
               <LocationPointer>
                 <SvgXml xml={mdiLocation} />
@@ -218,4 +221,4 @@ const MainScrollArea = styled.ScrollView`
   flex: 1;
   background-color: ${theme.colors.green01};
 `;
-export default HomeScreen;
+export default withBottomDrawer(HomeScreen);

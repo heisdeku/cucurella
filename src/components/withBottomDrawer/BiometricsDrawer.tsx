@@ -1,6 +1,6 @@
 import {styled} from 'styled-components/native';
 import {Base} from '@components/Base';
-import {biometrics, close_icon} from '@libs/svgs';
+import {biometrics} from '@libs/svgs';
 import {SvgXml} from 'react-native-svg';
 import {Text} from '@components/Text';
 import theme from '@libs/theme';
@@ -35,29 +35,18 @@ export const BiometricsDrawer = ({payload, handleOpen, handleClose}) => {
         }}
         title="Enable Biometrics"
       />
-      <ContinueWithoutBiometrics
+      <SecondaryButton
         onPress={() => {
           navigate('Login');
           return handleClose();
         }}>
         <Text.Medium fontSize={'16px'}>Continue without Biometrics</Text.Medium>
-      </ContinueWithoutBiometrics>
+      </SecondaryButton>
     </>
   );
 };
 
-const Close = styled.TouchableOpacity`
-  background-color: ${theme.colors.offsetGray2};
-  height: 35px;
-  width: 35px;
-  margin-left: auto;
-  border-radius: 9999px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 7px;
-`;
-
-const ContinueWithoutBiometrics = styled.TouchableOpacity`
+const SecondaryButton = styled.TouchableOpacity`
   margin-top: 10px;
   justify-content: center;
   width: 100%;
