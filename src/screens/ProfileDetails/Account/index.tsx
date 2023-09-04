@@ -1,11 +1,10 @@
-import {View, FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native';
 import {Base} from '@components/Base';
 import {styled} from 'styled-components/native';
 import theme from '@libs/theme';
 import {Text} from '@components/Text';
 import {SvgXml} from 'react-native-svg';
 import {navigate} from '@stacks/helper';
-import ProfileDetails from '@screens/ProfileDetails/ProfileDetails';
 import {
   person_icon,
   location_icon,
@@ -18,11 +17,6 @@ import {
   pentagon_icon,
 } from '@libs/svgs';
 
-interface Props {
-  name?: string;
-  discription?: string;
-  email?: string;
-}
 interface ListItemProps {
   text: string;
   icon: React.ReactNode;
@@ -39,17 +33,20 @@ const ListItem: React.FC<ListItemProps> = ({
   onPress,
 }) => (
   <>
-    <TouchableOpacity onPress={onPress}>
-      <Base.Row justifyContent={'flex-start'} padding={'15px 0'}>
+    <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
+      <Base.Row
+        justifyContent={'flex-start'}
+        height={'47px'}
+        alignItems={'center'}
+        mt={'10px'}>
         <Base.View marginRight={'10px'}>{icon}</Base.View>
         <Text.General
           color={theme.colors.neutral07}
-          fontSize={'16px'}
-          lineHeight={'18.9px'}
-          width={'85%'}>
+          fontSize={'14px'}
+          lineHeight={'18.9px'}>
           {text}
         </Text.General>
-        <Base.View>{chevron}</Base.View>
+        <Base.View ml={'auto'}>{chevron}</Base.View>
       </Base.Row>
     </TouchableOpacity>
     {seperator}
@@ -59,53 +56,44 @@ const ListItem: React.FC<ListItemProps> = ({
 const ListItemSeperator = () => (
   <Base.View
     width={'100%'}
-    height={'1px'}
+    height={'0.5px'}
     background={theme.colors.neutral03}
   />
 );
 
-const DashBoard: React.FC = ({
-  name = 'Jane Doe',
-  discription = 'JD',
-  email = 'Jonedoe@gmail.com',
-}: Props): JSX.Element => {
+const Account: React.FC = (): JSX.Element => {
   const goToProfileDetails = () => {
     return navigate('ProfileDetails');
   };
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <Base.View>
         <Container>
-          <Base.View margin={'auto'}>
-            <Avatar>
-              <Text.Medium
-                margin={'auto'}
-                lineHeight={'37.2px'}
-                fontSize={'40px'}>
-                {discription}
-              </Text.Medium>
-            </Avatar>
-            <Text.Medium
-              fontSize={'18px'}
-              color={theme.colors.white}
-              lineHeight={'20px'}
-              margin={'5px 0'}
-              textAlign={'center'}>
-              {name}
+          <Avatar>
+            <Text.Medium lineHeight={'52.381px'} fontSize={'41.905px'}>
+              JD
             </Text.Medium>
-            <Text.General fontFamily="400" color={theme.colors.white}>
-              {email}
-            </Text.General>
-          </Base.View>
-        </Container>
-        <Base.View
-          background={theme.colors.white}
-          padding={'10px'}
-          marginBottom={'20px'}>
+          </Avatar>
           <Text.Medium
             fontSize={'20px'}
-            fontWeight={'500'}
-            marginBottom={'20px'}>
+            color={theme.colors.white}
+            lineHeight={'25px'}
+            mb={'2px'}
+            textAlign={'center'}>
+            Jane Doe
+          </Text.Medium>
+          <Text.General
+            fontFamily="400"
+            fontSize={'14px'}
+            color={theme.colors.neutral03}>
+            Jonedoe@gmail.com
+          </Text.General>
+        </Container>
+        <Section>
+          <Text.Medium
+            color={theme.colors.dark}
+            fontSize={'20px'}
+            fontWeight={'500'}>
             Personal
           </Text.Medium>
           <ListItem
@@ -132,11 +120,8 @@ const DashBoard: React.FC = ({
             icon={<SvgXml xml={support_icon} />}
             text="Support"
           />
-        </Base.View>
-        <Base.View
-          background={theme.colors.white}
-          padding={'10px'}
-          marginBottom={'20px'}>
+        </Section>
+        <Section>
           <Text.Medium fontSize={'20px'} fontWeight={'500'}>
             About us
           </Text.Medium>
@@ -157,8 +142,8 @@ const DashBoard: React.FC = ({
             icon={<SvgXml xml={support_icon} />}
             text="Follow us"
           />
-        </Base.View>
-        <Base.View background={theme.colors.white} padding={'10px'}>
+        </Section>
+        <Section>
           <Text.Medium fontSize={'20px'} fontWeight={'500'}>
             Legal
           </Text.Medium>
@@ -174,24 +159,41 @@ const DashBoard: React.FC = ({
             icon={<SvgXml xml={support_icon} />}
             text="Follow us"
           />
-        </Base.View>
+        </Section>
+        <Text.General
+          fontSize={'14px'}
+          color={theme.colors.neutral07}
+          textAlign={'center'}
+          mb={'20px'}>
+          Version 1.1.2
+        </Text.General>
       </Base.View>
     </ScrollView>
   );
 };
 
+const Section = styled.View`
+  background-color: ${theme.colors.white};
+  padding: 24px 16px 0;
+  margin-bottom: 16px;
+`;
+
 const Container = styled.View`
   background-color: #063418;
   width: 100%;
-  height: 279px;
+  padding-bottom: 46px;
+  padding-top: 78px;
+  align-items: center;
 `;
 
 const Avatar = styled.View`
   width: 100px;
   height: 100px;
-  margin: auto;
+  margin-bottom: 8px;
   border-radius: 50px;
   background-color: #d2ffe4;
+  justify-content: center;
+  align-items: center;
 `;
 
-export default DashBoard;
+export default Account;
