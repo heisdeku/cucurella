@@ -4,6 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '@screens/Home';
 import ProductScreen from '@screens/Product';
 import AddCard from '@screens/AddCard';
+import DashBoard from '@screens/ProfileDetails/DashBoard';
+import ProfileDetails from '@screens/ProfileDetails/ProfileDetails';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,7 +42,7 @@ const MainTab = () => {
         options={{
           tabBarLabel: 'Account',
         }}
-        component={HomeScreen}
+        component={DashBoard}
       />
     </Tab.Navigator>
   );
@@ -55,6 +57,8 @@ const AppNavigation = () => {
       <Stack.Screen name="Main" component={MainTab} />
       <Stack.Screen name="Product" component={ProductScreen} />
       <Stack.Screen name="AddCard" component={AddCard} />
+      <Stack.Screen name="DashBoard" component={DashBoard} />
+      <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
     </Stack.Navigator>
   );
 };
