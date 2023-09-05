@@ -8,6 +8,10 @@ import Account from '@screens/ProfileDetails/Account';
 import ProfileDetails from '@screens/ProfileDetails/Details';
 import SavedPlaces from '@screens/ProfileDetails/SavedPlaces';
 import OrdersScreen from '@screens/Orders';
+import Checkout from '@screens/Checkout';
+import ConfirmOrderDetails from '@screens/ConfirmOrderDetails';
+import OrderSuccess from '@screens/OrderSuccess';
+import OrderDetails from '@screens/Orders/Details';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,6 +62,10 @@ const AppNavigation = () => {
       }}>
       <Stack.Screen name="Main" component={MainTab} />
       <Stack.Screen name="Product" component={ProductScreen} />
+      <Stack.Screen name="OrderDetails" component={OrderDetails} />
+      <Stack.Screen name="OrderCheckout" component={Checkout} />
+      <Stack.Screen name="ConfirmDetails" component={ConfirmOrderDetails} />
+      <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
       <Stack.Screen name="AddCard" component={AddCard} />
       <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
       <Stack.Screen name="SavedPlaces" component={SavedPlaces} />

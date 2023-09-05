@@ -26,10 +26,13 @@ export default {
     neutral06: '#64748B',
     neutral07: '#334155',
     neutral08: '#1E293B',
+    neutral09: '#0F172A',
     stroke: '#EDF0F4',
     dark: '#000',
     offsetGray: '#F3F4F6',
     offsetGray2: '#F9FAFC',
+    orange07: '#EA580C',
     red01: '#FEF2F2',
+    red07: '#DC2626',
   },
 };

@@ -48,7 +48,7 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
           }
           fontFamily={state?.index === 0 ? '700' : '500'}
           mt={'8px'}>
-          Home
+          Shop
         </Text.General>
       </TabContainer>
       <TabContainer
@@ -93,7 +93,7 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
         onPress={() => onPress(state?.routes[3], state?.index === 3)}
         activeOpacity={0.65}
         key={'Account'}>
-        {state?.index === 2 ? (
+        {state?.index === 3 ? (
           <SvgXml xml={TABICONS.account.active} />
         ) : (
           <SvgXml xml={TABICONS.account.default} />

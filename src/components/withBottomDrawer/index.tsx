@@ -70,7 +70,7 @@ const withBottomDrawer = (Component: any) => (props: any) => {
           />
         )}>
         <BottomSheetView onLayout={handleContentLayout}>
-          <Base.View px={'20px'} py="26px" mb={'45px'}>
+          <Base.View px={'20px'} py="23px" mb={'20px'}>
             <Close onPress={() => handleClose()}>
               <SvgXml xml={close_icon} />
             </Close>
@@ -90,7 +90,6 @@ const Close = styled.TouchableOpacity`
   border-radius: 9999px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 7px;
 `;
 
 export default withBottomDrawer;

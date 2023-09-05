@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import {DRAWER_CONSTANTS} from './constants';
 import {BiometricsDrawer} from './BiometricsDrawer';
 import {LocationDrawer} from './LocationDrawer';
+import {WarningDrawer} from './WarningDrawer';
 
 export const getDrawerChild = (
   data: any,
@@ -21,6 +22,14 @@ export const getDrawerChild = (
     case DRAWER_CONSTANTS.location:
       return (
         <LocationDrawer
+          payload={data?.payload}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+        />
+      );
+    case DRAWER_CONSTANTS.warning:
+      return (
+        <WarningDrawer
           payload={data?.payload}
           handleOpen={handleOpen}
           handleClose={handleClose}

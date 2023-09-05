@@ -38,14 +38,23 @@ const OrdersEmpty = () => {
   );
 };
 
-const Order = () => {
+const Order = ({
+  isLast,
+  isComplete = false,
+}: {
+  isLast: boolean;
+  isComplete?: boolean;
+}) => {
+  const handleNavigate = () => {
+    return navigate(!isComplete ? 'OrderCheckout' : 'OrderDetails');
+  };
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={handleNavigate}>
       <Base.Row
         pb={'16px'}
-        mb={'16px'}
-        borderBottomWidth={'0.5px'}
-        borderBottomColor={theme.colors.neutral03}
+        mb={!isLast ? '16px' : '0px'}
+        borderBottomWidth={!isLast ? '0.5px' : '0px'}
+        borderBottomColor={!isLast ? theme.colors.neutral03 : ''}
         alignItems={'center'}>
         <Base.View>
           <Text.General
@@ -59,8 +68,12 @@ const Order = () => {
             color={theme.colors.neutral06}
             fontSize={'14px'}>
             31 July at 10:34am |{' '}
-            <Text.General color={theme.colors.green07} fontSize={'14px'}>
-              processing
+            <Text.General
+              color={
+                isComplete ? theme.colors.green07 : theme.colors.goldenYellow
+              }
+              fontSize={'14px'}>
+              {!isComplete ? 'processing' : 'completed'}
             </Text.General>
           </Text.General>
         </Base.View>
@@ -69,6 +82,7 @@ const Order = () => {
     </TouchableOpacity>
   );
 };
+
 const OrdersFilled = () => {
   const [activeTab, setActiveTab] = useState('ongoing');
   return (
@@ -103,14 +117,14 @@ const OrdersFilled = () => {
         {activeTab === 'ongoing' && (
           <TabOrdersListing bounces={false}>
             {new Array(10).fill('order').map((_, i) => {
-              return <Order key={i} />;
+              return <Order key={i} isLast={i + 1 === 5} />;
             })}
           </TabOrdersListing>
         )}
         {activeTab === 'complete' && (
           <TabOrdersListing bounces={false}>
             {new Array(5).fill('order').map((_, i) => {
-              return <Order key={i} />;
+              return <Order isComplete={true} key={i} isLast={i + 1 === 5} />;
             })}
           </TabOrdersListing>
         )}
