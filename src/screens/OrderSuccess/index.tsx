@@ -29,7 +29,10 @@ const OrderSuccess = () => {
         </Text.Medium>
       </Base.View>
       <Base.View mt={'70%'} px={'18px'}>
-        <Base.Button onPress={() => navigate('Home')} title="Track Order" />
+        <Base.Button
+          onPress={() => navigate('TrackOrder')}
+          title="Track Order"
+        />
       </Base.View>
     </Base.View>
   );

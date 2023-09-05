@@ -163,7 +163,7 @@ const Account: React.FC = (): JSX.Element => {
           color={theme.colors.neutral07}
           textAlign={'center'}
           mb={'20px'}>
-          Version 1.1.2
+          Version 0.0.1
         </Text.General>
       </Base.View>
     </ScrollView>

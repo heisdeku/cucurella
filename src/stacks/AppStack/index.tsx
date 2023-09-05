@@ -12,6 +12,7 @@ import Checkout from '@screens/Checkout';
 import ConfirmOrderDetails from '@screens/ConfirmOrderDetails';
 import OrderSuccess from '@screens/OrderSuccess';
 import OrderDetails from '@screens/Orders/Details';
+import TrackOrder from '@screens/TrackOrder';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -66,6 +67,7 @@ const AppNavigation = () => {
       <Stack.Screen name="OrderCheckout" component={Checkout} />
       <Stack.Screen name="ConfirmDetails" component={ConfirmOrderDetails} />
       <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
+      <Stack.Screen name="TrackOrder" component={TrackOrder} />
       <Stack.Screen name="AddCard" component={AddCard} />
       <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
       <Stack.Screen name="SavedPlaces" component={SavedPlaces} />
