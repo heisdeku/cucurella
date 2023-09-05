@@ -7,6 +7,7 @@ import AddCard from '@screens/AddCard';
 import Account from '@screens/ProfileDetails/Account';
 import ProfileDetails from '@screens/ProfileDetails/Details';
 import SavedPlaces from '@screens/ProfileDetails/SavedPlaces';
+import OrdersScreen from '@screens/Orders';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,7 +37,7 @@ const MainTab = () => {
         options={{
           tabBarLabel: 'Orders',
         }}
-        component={HomeScreen}
+        component={OrdersScreen}
       />
       <Tab.Screen
         name="Account"
