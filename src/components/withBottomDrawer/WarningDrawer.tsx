@@ -40,7 +40,7 @@ const getWarningDetails = (type: string) => {
   }
 };
 //@ts-ignore
-export const WarningDrawer = ({handleClose, payload, handleOpen}) => {
+export const WarningDrawer = ({handleClose, payload}) => {
   const onButtonClick = () => {
     switch (payload?.type) {
       case 'no-card-detected':

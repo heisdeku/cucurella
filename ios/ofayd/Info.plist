@@ -35,10 +35,30 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>To verify your address, allow Ofayd to access your Location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>To verify your address, allow Ofayd to access your Location</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>Grant Location Permission</key>
+		<string>To verify your address, allow Ofayd to access your Location</string>
+	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>To verify your address, allow Ofayd to access your Location</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>HelveticaNeueBlack.ttf</string>
+		<string>HelveticaNeueBold.ttf</string>
+		<string>HelveticaNeueHeavy.ttf</string>
+		<string>HelveticaNeueLight.ttf</string>
+		<string>HelveticaNeueMedium.ttf</string>
+		<string>HelveticaNeueThin.ttf</string>
+		<string>HelveticaNeue.ttf</string>
+		<string>HelveticaNeueRegular.otf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
+	<string>BootSplash.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -51,27 +71,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>HelveticaNeueBlack.ttf</string>
-		<string>HelveticaNeueBold.ttf</string>
-		<string>HelveticaNeueHeavy.ttf</string>
-		<string>HelveticaNeueLight.ttf</string>
-		<string>HelveticaNeueMedium.ttf</string>
-		<string>HelveticaNeueThin.ttf</string>
-		<string>HelveticaNeue.ttf</string>
-		<string>HelveticaNeueRegular.otf</string>
-	</array>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>To verify your address, allow Ofayd to access your Location</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>To verify your address, allow Ofayd to access your Location</string>
-	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
-	<dict>
-		<key>Grant Location Permission</key>
-		<string>To verify your address, allow Ofayd to access your Location</string>
-	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To verify your address, allow Ofayd to access your Location</string>
 </dict>
 </plist>

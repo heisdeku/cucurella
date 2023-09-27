@@ -33,11 +33,7 @@ export const getDrawerChild = (
       );
     case DRAWER_CONSTANTS.warning:
       return (
-        <WarningDrawer
-          payload={data?.payload}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-        />
+        <WarningDrawer payload={data?.payload} handleClose={handleClose} />
       );
     default:
       return <View />;
