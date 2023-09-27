@@ -23,7 +23,7 @@ function App(): JSX.Element {
     };
 
     init().finally(async () => {
-      await BootSplash.hide({fade: true, duration: 5000});
+      return await BootSplash.hide({fade: true});
     });
   }, []);
   return (

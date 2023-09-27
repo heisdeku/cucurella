@@ -1,34 +1,26 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, TextInput, TextInputProps} from 'react-native';
+import {TextInput} from 'react-native';
 import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {IS_ANDROID} from '@libs/constant';
 import {Text} from '@components/Text';
-import {readOnlyInput} from '@libs/helper';
-import {styled} from 'styled-components/native';
+import {readableInputProps, readOnlyInput} from '@libs/helper';
 import {navigate} from '@stacks/helper';
 import KeyboardWrapper from '@components/KeyboardWrapper';
+import {useOnboardingStore} from '@store/OnboardingStore';
+import {createPinViewStyles, FormGroup} from '../styles';
 
-const styles = createStyles();
-
-export const VerifyCode: React.FC = () => {
+export const VerifyCode = () => {
+  const [updateStateItem] = useOnboardingStore(state => [
+    state.updateStateItem,
+  ]);
   const [pinCode, setPinCode] = useState<string>('');
-  const [
-    isInvalid,
-    // setIsInvalid
-  ] = useState<boolean>(false);
   const [btnDisbled, setBtnDisabled] = useState<boolean>(true);
 
+  const styles = createPinViewStyles();
   const inputRef = useRef<any>(null);
 
   const splitCode = pinCode.split('');
-  const readableInputProps: TextInputProps = {
-    editable: false,
-    autoCapitalize: 'none',
-    keyboardType: 'number-pad',
-    selectionColor: 'transparent',
-    maxLength: 4,
-  };
 
   const resetAll = () => {
     setPinCode('');
@@ -41,11 +33,10 @@ export const VerifyCode: React.FC = () => {
     setPinCode(value);
   }, []);
 
-  useEffect(() => {
-    if (isInvalid) {
-      setPinCode('');
-    }
-  }, [isInvalid]);
+  const handlePinComplete = () => {
+    updateStateItem('otp', pinCode);
+    return navigate('MoreInformation');
+  };
 
   useEffect(() => {
     if (pinCode.length > 3) {
@@ -94,39 +85,10 @@ export const VerifyCode: React.FC = () => {
         </Base.View>
         <Base.Button
           title="Continue"
-          onPress={() => navigate('MoreInformation')}
+          onPress={() => handlePinComplete()}
           disabled={btnDisbled}
         />
       </Container>
     </KeyboardWrapper>
   );
 };
-
-const FormGroup = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 54px;
-  width: 250px;
-  margin: 40px auto 0;
-`;
-
-function createStyles() {
-  return StyleSheet.create({
-    inputCode: {
-      color: 'transparent',
-      fontSize: 30,
-      flex: 1,
-      paddingLeft: 60,
-      letterSpacing: 55,
-      height: 54,
-      position: 'absolute',
-      zIndex: 2,
-      top: 0,
-      left: 0,
-      textAlign: 'center',
-      width: '100%',
-      backgroundColor: 'transparent',
-    },
-  });
-}

@@ -7,47 +7,94 @@ import {Base} from '@components/Base';
 import {StyleSheet} from 'react-native';
 import {navigate} from '@stacks/helper';
 import KeyboardWrapper from '@components/KeyboardWrapper';
+import {useOnboardingStore} from '@store/OnboardingStore';
+import {Formik} from 'formik';
+import Input from '@components/Base/Input';
 
 function MoreInformation(): JSX.Element {
+  const [updateStateItem, source, userEmail, userPhoneNumber] =
+    useOnboardingStore(state => [
+      state.updateStateItem,
+      state.source,
+      state.email,
+      state.phoneNumber,
+    ]);
+
+  const handleContinue = (values: any) => {
+    updateStateItem('firstName', values?.firstName);
+    updateStateItem('lastName', values?.lastName);
+    updateStateItem('phoneNumber', values?.phoneNumber || userPhoneNumber);
+    updateStateItem('email', values?.email || userEmail);
+    return navigate('PinSetup');
+  };
+
   return (
     <KeyboardWrapper hasPaddingTop>
-      <Container justifyContent={'space-between'} pt={'29px'}>
-        <Base.View>
-          <Text.Medium fontSize={'24px'}>
-            Tell us more about yourself
-          </Text.Medium>
-          <Base.View mt={'32px'}>
-            <Base.View mb={'24px'}>
-              <Text.Small fontWeight={'500'} mb={'8px'}>
-                First Name
-              </Text.Small>
-              <InputField
-                placeholder="What's your first name?"
-                keyboardType="default"
-              />
+      <Formik
+        onSubmit={values => {
+          return handleContinue(values);
+        }}
+        initialValues={{
+          firstName: '',
+          lastName: '',
+          phoneNumber: '',
+          email: '',
+        }}>
+        {({handleChange, handleSubmit, values}) => (
+          <Container justifyContent={'space-between'} pt={'29px'}>
+            <Base.View>
+              <Text.Medium fontSize={'24px'}>
+                Tell us more about yourself
+              </Text.Medium>
+              <Base.View mt={'32px'}>
+                <Base.View mb={'24px'}>
+                  <Input
+                    label="First Name"
+                    placeholder={`What's your first name?`}
+                    value={values?.firstName}
+                    setValue={handleChange('firstName')}
+                  />
+                </Base.View>
+                <Base.View mb={'24px'}>
+                  <Input
+                    label="Last Name"
+                    placeholder={`What's your last name?`}
+                    value={values?.lastName}
+                    setValue={handleChange('lastName')}
+                  />
+                </Base.View>
+                {source === 'email' && (
+                  <Base.View mb={'24px'}>
+                    <Input
+                      label="Phone Number"
+                      placeholder={`+2348076756427`}
+                      keyboardType="number-pad"
+                      value={values?.phoneNumber}
+                      setValue={handleChange('phoneNumber')}
+                    />
+                  </Base.View>
+                )}
+                {source === 'phone' && (
+                  <Base.View mb={'24px'}>
+                    <Input
+                      label="Email Address"
+                      placeholder={`sample@gmail.com`}
+                      keyboardType="email-address"
+                      value={values?.email}
+                      setValue={handleChange('email')}
+                    />
+                  </Base.View>
+                )}
+              </Base.View>
             </Base.View>
-            <Base.View mb={'24px'}>
-              <Text.Small fontWeight={'500'} mb={'8px'}>
-                Last Name
-              </Text.Small>
-              <InputField
-                placeholder="What's your last name?"
-                keyboardType="default"
-              />
-            </Base.View>
-            <Base.View mb={'24px'}>
-              <Text.Small fontWeight={'500'} mb={'8px'}>
-                Email Address
-              </Text.Small>
-              <InputField
-                placeholder="What's your email address?"
-                keyboardType="email-address"
-              />
-            </Base.View>
-          </Base.View>
-        </Base.View>
-        <Base.Button title="Continue" onPress={() => navigate('PinSetup')} />
-      </Container>
+            <Base.Button
+              title="Continue"
+              disabled={!values.firstName || !values.lastName}
+              onPress={() => handleSubmit()}
+            />
+          </Container>
+        )}
+      </Formik>
     </KeyboardWrapper>
   );
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import theme from '@libs/theme';
 import {Text} from '@components/Text';
 import Container from '@components/Container';
@@ -12,34 +12,69 @@ import {SvgXml} from 'react-native-svg';
 import {navigate} from '@stacks/helper';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 import Input from '@components/Base/Input';
+import {useOnboardingStore} from '@store/OnboardingStore';
+import {client} from '@api/common';
+import {handleServerError, showErrorMessage} from '@libs/error';
+import {showMessage} from 'react-native-flash-message';
 
 function CreateAccount(): JSX.Element {
-  const [type, setType] = useState<'phone' | 'email'>('phone');
+  const [value, setValue] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [updateStateItem, source] = useOnboardingStore(state => [
+    state.updateStateItem,
+    state.source,
+  ]);
+  const handleChangeOnboardingSource = () => {
+    return updateStateItem('source', source === 'phone' ? 'email' : 'phone');
+  };
+  const handleCreateAccount = async () => {
+    setIsLoading(true);
+    const key = source === 'phone' ? 'phoneNumber' : 'email';
+    try {
+      const response = await client.post(`/user/register/${source}`, {
+        [key]: value,
+      });
+      if (response.status === 200) {
+        updateStateItem(key, value);
+        setIsLoading(false);
+        navigate('VerifyCode');
+        return showMessage({message: `Kindly check your ${key} for the OTP`});
+      }
+    } catch (e) {
+      const message = handleServerError(e);
+      setIsLoading(false);
+      return showErrorMessage(message);
+    }
+  };
   return (
     <KeyboardWrapper hasPaddingTop>
       <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'} mb={'34px'}>
-            Enter your {type === 'phone' ? 'phone number' : 'email address'}
+            Enter your {source === 'phone' ? 'phone number' : 'email address'}
           </Text.Medium>
           <Input
-            label={type === 'phone' ? 'Phone Number' : 'Email Address'}
+            label={source === 'phone' ? 'Phone Number' : 'Email Address'}
             placeholder={
-              type === 'phone'
+              source === 'phone'
                 ? 'Enter your 11 digits phone number'
                 : 'Enter your email address'
             }
-            keyboardType={type === 'phone' ? 'phone-pad' : 'email-address'}
+            value={value}
+            //@ts-ignore
+            setValue={setValue}
+            keyboardType={source === 'phone' ? 'phone-pad' : 'email-address'}
           />
           <Base.Row justifyContent={'flex-start'} mt="10px">
             <Text.Caption fontFamily="500" color={theme.colors.neutral07}>
               Can't receive otp?
             </Text.Caption>
             <TouchableOpacity
-              onPress={() => setType(type === 'phone' ? 'email' : 'phone')}>
+              activeOpacity={0.9}
+              onPress={() => handleChangeOnboardingSource()}>
               <Text.Caption fontFamily="500" color={theme.colors.green08}>
                 {' '}
-                {type === 'phone'
+                {source === 'phone'
                   ? 'Use email instead'
                   : 'Use phone number instead'}
               </Text.Caption>
@@ -97,7 +132,12 @@ function CreateAccount(): JSX.Element {
         <Base.View>
           <Base.Button
             title="Continue"
-            onPress={() => navigate('VerifyCode')}
+            // onPress={() => }
+            onPress={() => handleCreateAccount()}
+            disabled={
+              !value || (source === 'phone' && value.length < 10) || isLoading
+            }
+            isLoading={isLoading}
           />
           <Base.Row justifyContent={'center'} mt={'10px'}>
             <Text.Caption

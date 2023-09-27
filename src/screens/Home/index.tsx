@@ -5,6 +5,7 @@ import {Text} from '@components/Text';
 import withBottomDrawer from '@components/withBottomDrawer';
 import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
 import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
+import updateStatusBar from '@hooks/updateStatusBar';
 import {
   mdiLocation,
   notification_icon,
@@ -56,7 +57,9 @@ const Listing = ({name, description}: IListing) => {
 };
 
 const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
+  updateStatusBar('dark-content');
   const insets = useSafeAreaInsets();
+
   return (
     <CartViewWrapper>
       <Fragment>

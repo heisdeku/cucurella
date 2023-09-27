@@ -1,14 +1,16 @@
 import {Base} from '@components/Base';
-import Container from '@components/Container';
 import {Text} from '@components/Text';
+import {useIsFirstTime} from '@hooks/useIsFirstTime';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
+import {handleContinueAsGuest} from '@store/UserStore';
 import {ImageBackground, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
 const Onboarding = () => {
   const insets = useSafeAreaInsets();
+  const [_, setIsFirstTime] = useIsFirstTime();
   return (
     <Base.View minHeight={'100%'}>
       <ImageBackground
@@ -41,12 +43,16 @@ const Onboarding = () => {
             <Base.Button
               title="Sign up"
               onPress={() => {
+                setIsFirstTime(false);
                 return navigate('Authentication');
               }}
             />
             <Base.Row justifyContent={'center'} mt={'13px'}>
               <TouchableOpacity
-                onPress={() => navigate('Authentication', {screen: 'Login'})}>
+                onPress={() => {
+                  setIsFirstTime(false);
+                  return handleContinueAsGuest();
+                }}>
                 <Text.Small fontFamily="500">Continue as a guest</Text.Small>
               </TouchableOpacity>
             </Base.Row>

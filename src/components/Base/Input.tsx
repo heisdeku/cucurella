@@ -12,7 +12,7 @@ interface IInputProps extends Omit<TextInputProps, 'value'> {
   label: string;
   placeholder: string;
   value?: string;
-  setValue?: () => void | any;
+  setValue?: (value: any) => void | any;
   hasCountryCode?: false;
 }
 
@@ -57,6 +57,10 @@ const Input = ({
             <InputField
               placeholder={placeholder}
               placeholderTextColor={theme.colors.neutral07}
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect={false}
+              onChangeText={(text: string) => setValue?.(text)}
               {...props}
             />
           )}
@@ -72,11 +76,10 @@ const InputField = styled.TextInput`
   border: 1px solid ${theme.colors.stroke};
   border-radius: 8px;
   width: 100%;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 300;
+  font-size: 13px;
+  font-weight: 400;
   line-height: 15px;
-  color: ${theme.colors.neutral07};
+  color: ${theme.colors.black};
 `;
 
 const InputContainer = styled.View`
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 12,
-    color: theme.colors.neutral07,
+    color: theme.colors.black,
     fontWeight: '300',
     lineHeight: 15,
   },

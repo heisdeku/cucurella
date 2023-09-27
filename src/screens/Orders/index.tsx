@@ -1,6 +1,7 @@
 import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {Text} from '@components/Text';
+import updateStatusBar from '@hooks/updateStatusBar';
 import {windowHeight} from '@libs/constant';
 import {order_empty_illustration, outlineArrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
@@ -46,6 +47,7 @@ const Order = ({
   isLast: boolean;
   isComplete?: boolean;
 }) => {
+  updateStatusBar('dark-content');
   const handleNavigate = () => {
     return navigate(!isComplete ? 'OrderCheckout' : 'OrderDetails');
   };

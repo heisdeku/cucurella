@@ -1,4 +1,4 @@
-import {Platform, TextStyle} from 'react-native';
+import {Platform, TextInputProps, TextStyle} from 'react-native';
 import theme from './theme';
 import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 
@@ -63,4 +63,12 @@ export const requestLocationPermission = async () => {
   } catch (error) {
     console.error('Error requesting location permission:', error);
   }
+};
+
+export const readableInputProps: TextInputProps = {
+  editable: false,
+  autoCapitalize: 'none',
+  keyboardType: 'number-pad',
+  selectionColor: 'transparent',
+  maxLength: 4,
 };

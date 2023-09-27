@@ -16,6 +16,7 @@ import {
   launch_icon,
   pentagon_icon,
 } from '@libs/svgs';
+import updateStatusBar from '@hooks/updateStatusBar';
 
 interface ListItemProps {
   text: string;
@@ -62,6 +63,7 @@ const ListItemSeperator = () => (
 );
 
 const Account: React.FC = (): JSX.Element => {
+  updateStatusBar('light-content');
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Base.View>

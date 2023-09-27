@@ -2,6 +2,8 @@ import {Base} from '@components/Base';
 import {Text} from '@components/Text';
 import withBottomDrawer from '@components/withBottomDrawer';
 import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
+import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
+import updateStatusBar from '@hooks/updateStatusBar';
 import {outlineArrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
@@ -49,7 +51,8 @@ export const Transaction = ({isDebit}: IWalletTransaction) => {
   );
 };
 
-const WalletScreen = ({handleOpen}) => {
+const WalletScreen: React.FC<IDrawerChildProps> = ({handleOpen}) => {
+  updateStatusBar('dark-content');
   const inserts = useSafeAreaInsets();
   return (
     <Base.View minHeight={'100%'}>
@@ -84,7 +87,7 @@ const WalletScreen = ({handleOpen}) => {
               NGN 90,000.00
             </Text.Medium>
             <Base.Button
-              onPress={() => handleOpen(DRAWER_CONSTANTS.bankDetails)}
+              onPress={() => handleOpen?.(DRAWER_CONSTANTS.bankDetails)}
               title="Add Cash"
             />
           </StyledImageBackground>

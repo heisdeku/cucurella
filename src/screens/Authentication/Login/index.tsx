@@ -8,6 +8,7 @@ import {Base} from '@components/Base';
 import {navigate} from '@stacks/helper';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 import Input from '@components/Base/Input';
+import {handleContinueAsGuest} from '@store/UserStore';
 
 const Login: React.FC = (): JSX.Element => {
   return (
@@ -35,7 +36,7 @@ const Login: React.FC = (): JSX.Element => {
           />
           <TouchableOpacity
             style={styles.footer}
-            onPress={() => navigate('App')}>
+            onPress={() => handleContinueAsGuest()}>
             <Text.Medium fontSize={'14px'}>Continue as a guest</Text.Medium>
           </TouchableOpacity>
         </Base.View>

@@ -1,34 +1,25 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {StyleSheet, TextInput, TextInputProps} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {TextInput} from 'react-native';
 import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {IS_ANDROID} from '@libs/constant';
 import {Text} from '@components/Text';
-import {readOnlyInput} from '@libs/helper';
-import {styled} from 'styled-components/native';
+import {readableInputProps, readOnlyInput} from '@libs/helper';
 import theme from '@libs/theme';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 import withBottomDrawer from '@components/withBottomDrawer';
 import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
 import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
+import {createPinViewStyles, FormGroup} from '../styles';
+import {useOnboardingStore} from '@store/OnboardingStore';
 
-const styles = createStyles();
+const styles = createPinViewStyles();
 
-const readableInputProps: TextInputProps = {
-  editable: false,
-  autoCapitalize: 'none',
-  keyboardType: 'number-pad',
-  selectionColor: 'transparent',
-  maxLength: 4,
-};
-
-const PinConfirm: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
+const PinConfirm: React.FC<IDrawerChildProps> = ({handleOpen}) => {
+  const [userCreatedPin] = useOnboardingStore(state => [state.pin]);
   const [code, setCode] = useState<string>('');
-  const createRef = useRef<any>(null);
-  const [
-    isInvalid,
-    // setIsInvalid
-  ] = useState<boolean>(false);
+  const createRef = useRef<TextInput>(null);
+
   const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
 
   const splitCode = code.split('');
@@ -43,12 +34,6 @@ const PinConfirm: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
     }
     setCode(value);
   }, []);
-
-  useEffect(() => {
-    if (isInvalid) {
-      setCode('');
-    }
-  }, [isInvalid]);
 
   useEffect(() => {
     if (code.length > 3) {
@@ -113,34 +98,5 @@ const PinConfirm: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
     </KeyboardWrapper>
   );
 };
-
-const FormGroup = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 54px;
-  width: 250px;
-  margin: 0 auto 42px;
-`;
-
-function createStyles() {
-  return StyleSheet.create({
-    inputCode: {
-      color: 'transparent',
-      fontSize: 30,
-      flex: 1,
-      paddingLeft: 60,
-      letterSpacing: 55,
-      height: 54,
-      position: 'absolute',
-      zIndex: 2,
-      top: 0,
-      left: 0,
-      textAlign: 'center',
-      width: '100%',
-      backgroundColor: 'transparent',
-    },
-  });
-}
 
 export default withBottomDrawer(PinConfirm);

@@ -13,6 +13,7 @@ module.exports = {
           '@libs': './src/libs',
           '@screens': './src/screens',
           '@stacks': './src/stacks',
+          '@store': './src/store',
         },
       },
     ],

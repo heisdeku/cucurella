@@ -5,19 +5,29 @@ import {navigationRef} from './helper';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AppNavigation from './AppStack';
 import Onboarding from '@screens/Onboarding';
+import {useIsFirstTime} from '@hooks/useIsFirstTime';
 
 const Stack = createNativeStackNavigator();
 
 const Root = () => {
+  const [isFirstTime] = useIsFirstTime();
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="Onboarding" component={Onboarding} />
-        <Stack.Screen name="Authentication" component={AuthStack} />
-        <Stack.Screen name="App" component={AppNavigation} />
+        {isFirstTime && (
+          <Stack.Group>
+            <Stack.Screen name="Onboarding" component={Onboarding} />
+          </Stack.Group>
+        )}
+        {!isFirstTime && (
+          <Stack.Group>
+            <Stack.Screen name="Authentication" component={AuthStack} />
+            <Stack.Screen name="App" component={AppNavigation} />
+          </Stack.Group>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
