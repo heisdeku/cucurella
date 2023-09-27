@@ -1,31 +1,32 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import MainAppBaseView from '@components/AppSafeView';
-
 import {Keyboard, KeyboardAvoidingView, ScrollView} from 'react-native';
-
 import {IS_ANDROID, windowHeight} from '@libs/constant';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-function KeyboardWrapper({children}: {children: any}) {
+interface IKeyboardWrapper {
+  children: any;
+  hasPaddingTop?: boolean;
+}
+function KeyboardWrapper({children, hasPaddingTop}: IKeyboardWrapper) {
+  const insets = useSafeAreaInsets();
   return (
-    <MainAppBaseView>
-      <KeyboardAvoidingView
-        behavior={IS_ANDROID ? 'height' : 'height'}
-        style={{flex: 1}}>
-        <ScrollView
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            minHeight: windowHeight - 80,
-            paddingBottom: 20,
-          }}
-          onTouchStart={() => {
-            Keyboard.dismiss();
-          }}>
-          {children}
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </MainAppBaseView>
+    <KeyboardAvoidingView
+      behavior={IS_ANDROID ? 'height' : 'height'}
+      style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          minHeight: windowHeight - 40,
+          paddingBottom: 20,
+          paddingTop: hasPaddingTop ? insets.top : 0,
+        }}
+        onTouchStart={() => {
+          Keyboard.dismiss();
+        }}>
+        {children}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

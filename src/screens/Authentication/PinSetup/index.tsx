@@ -55,7 +55,7 @@ export const PinSetup: React.FC = () => {
   }, [code]);
 
   return (
-    <KeyboardWrapper>
+    <KeyboardWrapper hasPaddingTop>
       <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'} lineHeight={'31px'}>

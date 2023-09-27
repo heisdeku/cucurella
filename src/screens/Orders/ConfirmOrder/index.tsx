@@ -1,108 +1,22 @@
 import {Base} from '@components/Base';
-import KeyboardWrapper from '@components/KeyboardWrapper';
+import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
 import withBottomDrawer from '@components/withBottomDrawer';
 import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
-import {windowHeight} from '@libs/constant';
-import {
-  add_icon,
-  arrowRight,
-  linear_call,
-  mdiLocation,
-  minus_icon,
-  select_checkbox,
-} from '@libs/svgs';
+import {linear_call, mdiLocation, select_checkbox} from '@libs/svgs';
 import theme from '@libs/theme';
-import {goBack, navigate} from '@stacks/helper';
+import {navigate} from '@stacks/helper';
 import {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
-const Order = () => {
-  const [amount, setAmount] = useState(1);
-  return (
-    <Base.Row
-      borderRadius={'8px'}
-      backgroundColor={theme.colors.white}
-      padding={'16px'}
-      mb={'16px'}
-      alignItems={'flex-end'}>
-      <Base.View>
-        <Base.Row mb={'16px'}>
-          <ProductImage
-            source={{
-              uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1692820452/ofayd-mocks/ymjrrmeofornej3m6u1s.png',
-            }}
-            resizeMethod="auto"
-            resizeMode="cover"
-          />
-          <Base.View>
-            <Text.Medium lineHeight={'16px'} fontSize={'16px'}>
-              Mangoes
-            </Text.Medium>
-            <Text.General color={theme.colors.neutral06} fontSize={'12px'}>
-              10kg
-            </Text.General>
-            <Text.General
-              color={theme.colors.neutral07}
-              fontSize={'14px'}
-              fontFamily="500"
-              mt={'5.5px'}>
-              ₦200
-            </Text.General>
-          </Base.View>
-        </Base.Row>
-        <TouchableOpacity>
-          <Text.General
-            fontFamily="400"
-            fontSize={'12px'}
-            style={{textDecorationLine: 'underline'}}
-            color={theme.colors.red07}>
-            Delete Item
-          </Text.General>
-        </TouchableOpacity>
-      </Base.View>
-      <Base.Row>
-        <RangeButton onPress={() => setAmount(amount === 0 ? 0 : amount - 1)}>
-          <SvgXml xml={minus_icon} />
-        </RangeButton>
-        <Text.Medium fontSize={'12px'} mx={'7.65px'}>
-          {amount}
-        </Text.Medium>
-        <RangeButton onPress={() => setAmount(amount + 1)}>
-          <SvgXml xml={add_icon} />
-        </RangeButton>
-      </Base.Row>
-    </Base.Row>
-  );
-};
-
+//@ts-ignore
 const ConfirmOrderDetails = ({handleOpen}) => {
   const [method, setMethod] = useState<'wallet' | 'debit-card' | null>(null);
   return (
     <Base.View>
-      <Base.Row
-        pb={'16px'}
-        px={'20px'}
-        pt={'60px'}
-        backgroundColor={theme.colors.white}
-        borderBottomWidth={'1px'}
-        borderBottomColor={theme.colors.neutral03}
-        justifyContent={'flex-start'}
-        alignItems={'center'}>
-        <TouchableOpacity onPress={() => goBack()}>
-          <SvgXml xml={arrowRight} />
-        </TouchableOpacity>
-        <Text.Medium
-          mx={'auto'}
-          flex={'1'}
-          fontFamily={'700'}
-          textAlign={'center'}>
-          Confirm Order Details
-        </Text.Medium>
-        <Base.View width={'10%'} />
-      </Base.Row>
+      <ScreenHeader label="Confirm Order Details" />
       <ScrollArea>
         <Base.View
           mt={'16px'}
@@ -220,10 +134,11 @@ const ConfirmOrderDetails = ({handleOpen}) => {
                     fontSize={'14px'}
                     mt={'3px'}
                     color={theme.colors.neutral07}
-                    fontFamily="300"
+                    fontFamily="400"
                     lineHeight={'20px'}>
                     <Text.Medium
                       fontSize={'14px'}
+                      fontWeight={'500'}
                       lineHeight={'20px'}
                       color={theme.colors.neutral09}>
                       NGN 50,000
@@ -260,10 +175,11 @@ const ConfirmOrderDetails = ({handleOpen}) => {
                     fontSize={'14px'}
                     mt={'3px'}
                     color={theme.colors.neutral07}
-                    fontFamily="300"
+                    fontFamily="400"
                     lineHeight={'20px'}>
                     <Text.Medium
                       fontSize={'14px'}
+                      fontFamily="500"
                       lineHeight={'20px'}
                       color={theme.colors.neutral09}>
                       NGN 50,000
@@ -357,7 +273,10 @@ const ConfirmOrderDetails = ({handleOpen}) => {
         borderTopColor={theme.colors.neutral03}
         backgroundColor={theme.colors.white}
         px={'20px'}>
-        <Base.Button title="Pay now" onPress={() => navigate('OrderSuccess')} />
+        <Base.Button
+          title="Pay now"
+          onPress={() => navigate('Success', {type: 'order'})}
+        />
       </Base.View>
     </Base.View>
   );
@@ -383,18 +302,6 @@ const PaymentMethod = styled.TouchableOpacity`
   margin-bottom: 12px;
 `;
 
-const RangeButton = styled.TouchableOpacity`
-  border: 1px solid ${theme.colors.green08};
-  padding: 5.5px;
-  border-radius: 6px;
-`;
-
-const ProductImage = styled.Image`
-  width: 62px;
-  height: 48px;
-  border-radius: 3px;
-  margin-right: 8px;
-`;
 const ScrollArea = styled.ScrollView``;
 
 export default withBottomDrawer(ConfirmOrderDetails);

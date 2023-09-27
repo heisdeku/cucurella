@@ -8,8 +8,11 @@ import {navigate} from '@stacks/helper';
 import {requestLocationPermission} from '@libs/helper';
 import React from 'react';
 import {IDrawerChildProps} from './helper';
+import {TouchableOpacity} from 'react-native';
 
-export const LocationDrawer: React.FC<IDrawerChildProps> = ({handleClose}) => {
+export const LocationSetDrawer: React.FC<IDrawerChildProps> = ({
+  handleClose,
+}) => {
   return (
     <>
       <Base.View
@@ -25,26 +28,23 @@ export const LocationDrawer: React.FC<IDrawerChildProps> = ({handleClose}) => {
       </Base.View>
       <Base.View width={'260px'} mx={'auto'} mb={'28px'} alignItems={'center'}>
         <Text.Medium
-          mb={'8px'}
+          mb={'3px'}
           textAlign={'center'}
           fontSize={'20px'}
           color={theme.colors.dark}>
-          Allow Ofayd to access your location
+          26B empire homes estate chevron drive Lekki
         </Text.Medium>
+        <TouchableOpacity
+          onPress={() => {
+            handleClose?.();
+            return navigate('AddAddressSearch');
+          }}>
+          <Text.Medium fontSize={'16px'} color={theme.colors.orange07}>
+            Not your address?
+          </Text.Medium>
+        </TouchableOpacity>
       </Base.View>
-      <Base.Button
-        onPress={() => {
-          requestLocationPermission();
-        }}
-        title="Allow"
-      />
-      <SecondaryButton
-        onPress={() => {
-          navigate('Login');
-          return handleClose?.();
-        }}>
-        <Text.Medium fontSize={'16px'}>Continue without location</Text.Medium>
-      </SecondaryButton>
+      <Base.Button onPress={() => handleClose?.()} title="Add Address" />
     </>
   );
 };

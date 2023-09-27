@@ -1,5 +1,6 @@
 import {Base} from '@components/Base';
 import {Text} from '@components/Text';
+import updateStatusBar from '@hooks/updateStatusBar';
 import {
   add_icon,
   arrowLeft,
@@ -10,11 +11,15 @@ import {
 } from '@libs/svgs';
 import theme from '@libs/theme';
 import {goBack} from '@stacks/helper';
+import {useState} from 'react';
 import {Dimensions, ScrollView} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
 const ProductScreen = () => {
+  const [stockLevel, setStockLevel] = useState(1);
+  const insets = useSafeAreaInsets();
   return (
     <Base.View
       height={Dimensions.get('screen').height}
@@ -23,7 +28,7 @@ const ProductScreen = () => {
         source={{
           uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1692866177/ofayd-mocks/hyupbv5ffqrs6qsjampy.png',
         }}>
-        <Base.Row px={'20px'} pt={'53px'}>
+        <Base.Row px={'20px'} pt={insets.top + 18}>
           <Button onPress={() => goBack()}>
             <SvgXml xml={arrowLeft} />
           </Button>
@@ -129,13 +134,16 @@ const ProductScreen = () => {
         px={'20px'}>
         <Base.Row>
           <Base.Row>
-            <RangeButton>
+            <RangeButton
+              onPress={() => {
+                setStockLevel(stockLevel === 0 ? 0 : stockLevel - 1);
+              }}>
               <SvgXml xml={minus_icon} />
             </RangeButton>
             <Text.Medium fontSize={'16px'} mx={'11px'}>
-              2
+              {stockLevel}
             </Text.Medium>
-            <RangeButton>
+            <RangeButton onPress={() => setStockLevel(stockLevel + 1)}>
               <SvgXml xml={add_icon} />
             </RangeButton>
           </Base.Row>

@@ -11,26 +11,21 @@ import Input from '@components/Base/Input';
 
 const Login: React.FC = (): JSX.Element => {
   return (
-    <KeyboardWrapper>
+    <KeyboardWrapper hasPaddingTop>
       <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'} mb={'34px'}>
             Welcome, Login to continue
           </Text.Medium>
-          <Base.View mt="40px">
-            <Text.Small fontWeight={'500'} mb={'8px'}>
-              Phone Number
-            </Text.Small>
-            <InputField placeholder="Enter your phone number" maxLength={12} />
+          <Base.View>
+            <Input label="Phone Number" placeholder="08082134567" />
           </Base.View>
-          <Base.View style={styles.container}>
-            <Text.General mb="50px">
-              Don't have an acccount?{' '}
-              <TouchableOpacity onPress={() => console.log('Sign Up clicked')}>
-                <Text.General style={styles.signUpLink}>Sign Up</Text.General>
-              </TouchableOpacity>
-            </Text.General>
-          </Base.View>
+          <Base.Row mt={10} justifyContent={'flex-start'}>
+            <Text.General>Don't have an acccount? </Text.General>
+            <TouchableOpacity onPress={() => console.log('Sign Up clicked')}>
+              <Text.General style={styles.signUpLink}>Sign Up</Text.General>
+            </TouchableOpacity>
+          </Base.Row>
         </Base.View>
         <Base.View>
           <Base.Button

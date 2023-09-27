@@ -22,6 +22,7 @@ const Input = ({
   value,
   setValue,
   hasCountryCode,
+  ...props
 }: IInputProps) => {
   const phoneInput = useRef(null);
   return (
@@ -53,7 +54,11 @@ const Input = ({
             />
           )}
           {!hasCountryCode && (
-            <InputField placeholder={placeholder} keyboardType="phone-pad" />
+            <InputField
+              placeholder={placeholder}
+              placeholderTextColor={theme.colors.neutral07}
+              {...props}
+            />
           )}
         </Base.View>
       </Base.View>
@@ -74,7 +79,9 @@ const InputField = styled.TextInput`
   color: ${theme.colors.neutral07};
 `;
 
-const InputContainer = styled.View``;
+const InputContainer = styled.View`
+  flex: 1;
+`;
 
 const styles = StyleSheet.create({
   flagButton: {

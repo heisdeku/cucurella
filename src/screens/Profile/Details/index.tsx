@@ -5,36 +5,13 @@ import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {Text} from '@components/Text';
 import {styled} from 'styled-components/native';
-import {SvgXml} from 'react-native-svg';
-import {arrowRight} from '@libs/svgs';
 import Input from '@components/Base/Input';
-import {TouchableOpacity} from 'react-native';
-import {goBack} from '@stacks/helper';
+import ScreenHeader from '@components/ScreenHeader';
 
 const ProfileDetails = () => {
   return (
     <KeyboardWrapper>
-      <Base.Row
-        pb={'16px'}
-        px={'20px'}
-        pt={'16px'}
-        backgroundColor={theme.colors.white}
-        borderBottomWidth={'1px'}
-        borderBottomColor={theme.colors.neutral03}
-        justifyContent={'flex-start'}
-        alignItems={'center'}>
-        <TouchableOpacity onPress={() => goBack()}>
-          <SvgXml xml={arrowRight} />
-        </TouchableOpacity>
-        <Text.Medium
-          mx={'auto'}
-          flex={'1'}
-          fontFamily={'700'}
-          textAlign={'center'}>
-          Profile Details
-        </Text.Medium>
-        <Base.View width={'10%'} />
-      </Base.Row>
+      <ScreenHeader label="Profile Details" />
       <Container pt={'24px'}>
         <Base.View
           justifyContent={'space-between'}

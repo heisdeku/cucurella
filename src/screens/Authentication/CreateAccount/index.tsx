@@ -16,7 +16,7 @@ import Input from '@components/Base/Input';
 function CreateAccount(): JSX.Element {
   const [type, setType] = useState<'phone' | 'email'>('phone');
   return (
-    <KeyboardWrapper>
+    <KeyboardWrapper hasPaddingTop>
       <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'} mb={'34px'}>

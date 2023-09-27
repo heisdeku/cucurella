@@ -10,6 +10,7 @@ import theme from '@libs/theme';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 import withBottomDrawer from '@components/withBottomDrawer';
 import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
+import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
 
 const styles = createStyles();
 
@@ -21,7 +22,7 @@ const readableInputProps: TextInputProps = {
   maxLength: 4,
 };
 
-const PinConfirm: React.FC = ({handleOpen, handleClose}) => {
+const PinConfirm: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
   const [code, setCode] = useState<string>('');
   const createRef = useRef<any>(null);
   const [
@@ -56,7 +57,7 @@ const PinConfirm: React.FC = ({handleOpen, handleClose}) => {
   }, [code]);
 
   return (
-    <KeyboardWrapper>
+    <KeyboardWrapper hasPaddingTop>
       <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'} lineHeight={'31px'}>
@@ -105,7 +106,7 @@ const PinConfirm: React.FC = ({handleOpen, handleClose}) => {
         </Base.View>
         <Base.Button
           title="Continue"
-          onPress={() => handleOpen(DRAWER_CONSTANTS.biometrics)}
+          onPress={() => handleOpen?.(DRAWER_CONSTANTS.biometrics)}
           disabled={btnDisabled}
         />
       </Container>

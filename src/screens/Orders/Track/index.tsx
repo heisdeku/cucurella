@@ -1,15 +1,10 @@
 import {Base} from '@components/Base';
+import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
-import {
-  arrowRight,
-  linear_call,
-  mdiLocation,
-  order_progress__tracker,
-} from '@libs/svgs';
+import {arrowRight, order_progress__tracker} from '@libs/svgs';
 import theme from '@libs/theme';
-import {goBack, navigate} from '@stacks/helper';
 import {useState} from 'react';
-import {Alert, TouchableOpacity} from 'react-native';
+import {Alert} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
@@ -39,27 +34,7 @@ const TrackOrder = () => {
   const [method, setMethod] = useState<'wallet' | 'debit-card' | null>(null);
   return (
     <Base.View>
-      <Base.Row
-        pb={'16px'}
-        px={'20px'}
-        pt={'60px'}
-        backgroundColor={theme.colors.white}
-        borderBottomWidth={'1px'}
-        borderBottomColor={theme.colors.neutral03}
-        justifyContent={'flex-start'}
-        alignItems={'center'}>
-        <TouchableOpacity onPress={() => goBack()}>
-          <SvgXml xml={arrowRight} />
-        </TouchableOpacity>
-        <Text.Medium
-          mx={'auto'}
-          flex={'1'}
-          fontFamily={'700'}
-          textAlign={'center'}>
-          Track Order
-        </Text.Medium>
-        <Base.View width={'10%'} />
-      </Base.Row>
+      <ScreenHeader toHome label="Track Order" />
       <ScrollArea>
         <Base.View py={'16px'} px={'24px'} backgroundColor={theme.colors.white}>
           <Text.General

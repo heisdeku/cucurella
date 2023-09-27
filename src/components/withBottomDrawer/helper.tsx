@@ -4,6 +4,14 @@ import {DRAWER_CONSTANTS} from './constants';
 import {BiometricsDrawer} from './BiometricsDrawer';
 import {LocationDrawer} from './LocationDrawer';
 import {WarningDrawer} from './WarningDrawer';
+import {BankDetailsDrawer} from './BankDetailsDrawer';
+import {LocationSetDrawer} from './LocationSetDrawer';
+
+export interface IDrawerChildProps {
+  handleClose?: () => void;
+  handleOpen?: (value: any, payload?: any) => void;
+  payload?: any;
+}
 
 export const getDrawerChild = (
   data: any,
@@ -11,21 +19,17 @@ export const getDrawerChild = (
   handleOpen?: (value: any, payload?: any) => void,
 ) => {
   switch (data?.id) {
+    case DRAWER_CONSTANTS.bankDetails:
+      return <BankDetailsDrawer />;
     case DRAWER_CONSTANTS.biometrics:
-      return (
-        <BiometricsDrawer
-          payload={data?.payload}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-        />
-      );
+      return <BiometricsDrawer handleClose={handleClose} />;
     case DRAWER_CONSTANTS.location:
       return (
-        <LocationDrawer
-          payload={data?.payload}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-        />
+        <LocationDrawer handleOpen={handleOpen} handleClose={handleClose} />
+      );
+    case DRAWER_CONSTANTS.locationSet:
+      return (
+        <LocationSetDrawer handleOpen={handleOpen} handleClose={handleClose} />
       );
     case DRAWER_CONSTANTS.warning:
       return (

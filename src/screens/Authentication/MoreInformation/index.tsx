@@ -10,7 +10,7 @@ import KeyboardWrapper from '@components/KeyboardWrapper';
 
 function MoreInformation(): JSX.Element {
   return (
-    <KeyboardWrapper>
+    <KeyboardWrapper hasPaddingTop>
       <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'}>

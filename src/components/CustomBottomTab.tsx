@@ -7,6 +7,7 @@ import {TABICONS} from '@libs/tab-icons';
 import {Row} from './Base/Row';
 import theme from '@libs/theme';
 import {Text} from './Text';
+import {Base} from './Base';
 
 function CustomBottomTab({state, navigation, handleOpen}: any) {
   const inserts = useSafeAreaInsets();
@@ -52,13 +53,13 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
         </Text.General>
       </TabContainer>
       <TabContainer
-        activeOpacity={0.65}
         onPress={() => onPress(state?.routes[1], state?.index === 1)}
-        key={'Wallet'}>
+        activeOpacity={0.65}
+        key={'Orders'}>
         {state?.index === 1 ? (
-          <SvgXml xml={TABICONS.wallet.active} />
+          <SvgXml xml={TABICONS.orders.active} />
         ) : (
-          <SvgXml xml={TABICONS.wallet.default} />
+          <SvgXml xml={TABICONS.orders.default} />
         )}
         <Text.General
           fontSize={'12px'}
@@ -67,17 +68,35 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
           }
           fontFamily={state?.index === 1 ? '700' : '500'}
           mt={'8px'}>
-          Wallet
+          Orders
         </Text.General>
+        <Base.View
+          position={'absolute'}
+          backgroundColor={theme.colors.goldenYellow}
+          width={'18px'}
+          height={'18px'}
+          top={'-5px'}
+          right={'15px'}
+          justifyContent={'center'}
+          display={'flex'}
+          alignItems={'center'}
+          borderRadius={'46.25px'}>
+          <Text.Medium
+            color={theme.colors.black}
+            lineHeight={'12px'}
+            fontSize={'10px'}>
+            5
+          </Text.Medium>
+        </Base.View>
       </TabContainer>
       <TabContainer
-        onPress={() => onPress(state?.routes[2], state?.index === 2)}
         activeOpacity={0.65}
-        key={'Orders'}>
+        onPress={() => onPress(state?.routes[2], state?.index === 2)}
+        key={'Wallet'}>
         {state?.index === 2 ? (
-          <SvgXml xml={TABICONS.orders.active} />
+          <SvgXml xml={TABICONS.wallet.active} />
         ) : (
-          <SvgXml xml={TABICONS.orders.default} />
+          <SvgXml xml={TABICONS.wallet.default} />
         )}
         <Text.General
           fontSize={'12px'}
@@ -86,7 +105,7 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
           }
           fontFamily={state?.index === 2 ? '700' : '500'}
           mt={'8px'}>
-          Orders
+          Wallet
         </Text.General>
       </TabContainer>
       <TabContainer
@@ -116,14 +135,7 @@ const TabContainer = styled.TouchableOpacity`
   flex: 1;
   align-items: center;
   justify-content: center;
-`;
-
-const ProfileContainer = styled.Image`
-  height: 24px;
-  width: 24px;
-  border-radius: 50px;
-  border-color: #fff;
-  border-width: ${(props: any) => (props.active ? '1px' : '0px')};
+  position: relative;
 `;
 
 export default CustomBottomTab;

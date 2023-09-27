@@ -1,15 +1,17 @@
 import {Base} from '@components/Base';
+import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
 import {windowHeight} from '@libs/constant';
-import {add_icon, arrowRight, minus_icon} from '@libs/svgs';
+import {add_icon, minus_icon} from '@libs/svgs';
 import theme from '@libs/theme';
-import {goBack, navigate} from '@stacks/helper';
+import {navigate} from '@stacks/helper';
 import {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
-const Order = () => {
+export interface IOrder {}
+const Order: React.FC<IOrder> = () => {
   const [amount, setAmount] = useState(1);
   return (
     <Base.Row
@@ -71,27 +73,7 @@ const Order = () => {
 const Checkout = () => {
   return (
     <Base.View>
-      <Base.Row
-        pb={'16px'}
-        px={'20px'}
-        pt={'60px'}
-        backgroundColor={theme.colors.white}
-        borderBottomWidth={'1px'}
-        borderBottomColor={theme.colors.neutral03}
-        justifyContent={'flex-start'}
-        alignItems={'center'}>
-        <TouchableOpacity onPress={() => goBack()}>
-          <SvgXml xml={arrowRight} />
-        </TouchableOpacity>
-        <Text.Medium
-          mx={'auto'}
-          flex={'1'}
-          fontFamily={'700'}
-          textAlign={'center'}>
-          Checkout
-        </Text.Medium>
-        <Base.View width={'10%'} />
-      </Base.Row>
+      <ScreenHeader label="Checkout" />
       <OrderList>
         {new Array(Math.floor(Math.random() * 6)).fill('order').map((_, i) => {
           return <Order key={i} />;

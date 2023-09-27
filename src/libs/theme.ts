@@ -28,6 +28,8 @@ export default {
     neutral08: '#1E293B',
     neutral09: '#0F172A',
     stroke: '#EDF0F4',
+    slate02: '#F1F5F9',
+    slate04: '#CBD5E1',
     dark: '#000',
     offsetGray: '#F3F4F6',
     offsetGray2: '#F9FAFC',

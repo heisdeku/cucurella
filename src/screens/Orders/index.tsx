@@ -21,6 +21,7 @@ const types = [
     key: 'complete',
   },
 ];
+
 const OrdersEmpty = () => {
   return (
     <Fragment>

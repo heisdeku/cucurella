@@ -5,8 +5,11 @@ import {SvgXml} from 'react-native-svg';
 import {Text} from '@components/Text';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
+import {IDrawerChildProps} from './helper';
 
-export const BiometricsDrawer = ({payload, handleOpen, handleClose}) => {
+export const BiometricsDrawer: React.FC<IDrawerChildProps> = ({
+  handleClose,
+}) => {
   return (
     <>
       <Base.View
@@ -31,14 +34,14 @@ export const BiometricsDrawer = ({payload, handleOpen, handleClose}) => {
       <Base.Button
         onPress={() => {
           navigate('Login');
-          return handleClose();
+          return handleClose?.();
         }}
         title="Enable Biometrics"
       />
       <SecondaryButton
         onPress={() => {
           navigate('Login');
-          return handleClose();
+          return handleClose?.();
         }}>
         <Text.Medium fontSize={'16px'}>Continue without Biometrics</Text.Medium>
       </SecondaryButton>

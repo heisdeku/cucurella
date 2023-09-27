@@ -54,7 +54,7 @@ export const VerifyCode: React.FC = () => {
   }, [pinCode]);
 
   return (
-    <KeyboardWrapper>
+    <KeyboardWrapper hasPaddingTop>
       <Container pt={'29px'}>
         <Base.View mb={'auto'}>
           <Text.Medium fontSize={'24px'} lineHeight={'31px'}>
