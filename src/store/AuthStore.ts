@@ -20,21 +20,15 @@ export interface IAuthActions {
 
 export const getAccessToken = async () => {
   try {
-    return await RNSensitiveInfo.getItem('ofayd-user-access-token', {
-      sharedPreferencesName: 'ofaydSharedPreferences',
-      keychainService: 'ofaydSharedKeychain',
-    });
+    return await appStorage.getItem('ofayd-user-access-token');
   } catch (e) {
     console.error(e);
     return null;
   }
 };
 
-export const setRefreshToken = async (token: string) => {
-  return await RNSensitiveInfo.setItem('ofayd-user-access-token', token, {
-    sharedPreferencesName: 'ofaydSharedPreferences',
-    keychainService: 'ofaydSharedKeychain',
-  });
+export const setAccessToken = async (token: string) => {
+  return await appStorage.setItem('ofayd-user-access-token', token);
 };
 
 export const useAuthStore = create(
@@ -49,15 +43,16 @@ export const useAuthStore = create(
       authenticate: (tokens: IAuthTokens) => {
         set({
           accessToken: tokens.accessToken,
+          status: 'signIn',
         });
+        setAccessToken(tokens.accessToken);
       },
       logOut: async (cb?: TAuthLogoutParams) => {
         try {
-          const refreshToken = await getAccessToken();
           cb?.(get()?.accessToken as string)
             .then()
             .catch(console.error);
-          set({accessToken: null});
+          set({accessToken: null, status: 'signOut'});
           async () =>
             await RNSensitiveInfo.deleteItem('ofayd-user-access-token', {
               sharedPreferencesName: 'ofaydSharedPreferences',

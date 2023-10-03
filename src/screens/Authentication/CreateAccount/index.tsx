@@ -16,8 +16,10 @@ import {useOnboardingStore} from '@store/OnboardingStore';
 import {client} from '@api/common';
 import {handleServerError, showErrorMessage} from '@libs/error';
 import {showMessage} from 'react-native-flash-message';
+import updateStatusBar from '@hooks/updateStatusBar';
 
 function CreateAccount(): JSX.Element {
+  updateStatusBar('dark-content');
   const [value, setValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [updateStateItem, source] = useOnboardingStore(state => [

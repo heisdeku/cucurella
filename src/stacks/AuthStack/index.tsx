@@ -6,6 +6,7 @@ import MoreInformation from '@screens/Authentication/MoreInformation';
 import {PinSetup} from '@screens/Authentication/PinSetup';
 import Login from '@screens/Authentication/Login';
 import PinConfirm from '@screens/Authentication/PINConfirm';
+import EnterPin from '@screens/Authentication/Login/EnterPin';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ const AuthStack = () => {
       <Stack.Screen name="PinSetup" component={PinSetup} />
       <Stack.Screen name="PinConfirm" component={PinConfirm} />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="LoginEnterPin" component={EnterPin} />
     </Stack.Navigator>
   );
 };

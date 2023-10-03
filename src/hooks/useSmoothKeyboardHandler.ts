@@ -58,7 +58,7 @@ export const useSmoothKeyboardHandler: typeof useKeyboardHandler = (
 
   useKeyboardHandler(
     {
-      onStart: e => {
+      onStart: (e: any) => {
         'worklet';
 
         // immediately dispatch onStart/onEnd events if onStart dispatched with the same height

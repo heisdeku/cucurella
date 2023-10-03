@@ -2,7 +2,6 @@ import React from 'react';
 import theme from '@libs/theme';
 import {Text} from '@components/Text';
 import Container from '@components/Container';
-import styled from 'styled-components/native';
 import {Base} from '@components/Base';
 import {StyleSheet} from 'react-native';
 import {navigate} from '@stacks/helper';
@@ -98,19 +97,6 @@ function MoreInformation(): JSX.Element {
     </KeyboardWrapper>
   );
 }
-
-const InputField = styled.TextInput`
-  background-color: ${theme.colors.neutral01};
-  padding: 19px 16px;
-  border: 1px solid ${theme.colors.stroke};
-  border-radius: 8px;
-  width: 100%;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 15px;
-  color: ${theme.colors.neutral07};
-`;
 
 const styles = StyleSheet.create({
   flagButton: {

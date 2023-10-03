@@ -1,3 +1,5 @@
+import {handleServerError} from '@libs/error';
+import {useAuthStore} from '@store/AuthStore';
 import axios from 'axios';
 
 const Env = {
@@ -10,9 +12,15 @@ export const client = axios.create({
 
 client.interceptors.request.use(
   config => {
+    const {accessToken} = useAuthStore.getState();
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
     return config;
   },
   error => {
+    const errorMessage = handleServerError(error);
+    console.log('axios interceptor error ----->', errorMessage);
     return Promise.reject(error);
   },
 );

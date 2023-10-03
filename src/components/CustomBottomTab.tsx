@@ -8,9 +8,14 @@ import {Row} from './Base/Row';
 import theme from '@libs/theme';
 import {Text} from './Text';
 import {Base} from './Base';
+import {useOrdersByType} from '@api/orders';
 
 function CustomBottomTab({state, navigation, handleOpen}: any) {
   const inserts = useSafeAreaInsets();
+
+  const {data: ongoingOrdersData} = useOrdersByType({
+    variables: {status: 'ongoing'},
+  });
 
   const onPress = (route: any, isFocused: boolean) => {
     const event = navigation.emit({
@@ -70,24 +75,26 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
           mt={'8px'}>
           Orders
         </Text.General>
-        <Base.View
-          position={'absolute'}
-          backgroundColor={theme.colors.goldenYellow}
-          width={'18px'}
-          height={'18px'}
-          top={'-5px'}
-          right={'15px'}
-          justifyContent={'center'}
-          display={'flex'}
-          alignItems={'center'}
-          borderRadius={'46.25px'}>
-          <Text.Medium
-            color={theme.colors.black}
-            lineHeight={'12px'}
-            fontSize={'10px'}>
-            5
-          </Text.Medium>
-        </Base.View>
+        {Number(ongoingOrdersData?.count) > 0 && (
+          <Base.View
+            position={'absolute'}
+            backgroundColor={theme.colors.goldenYellow}
+            width={'18px'}
+            height={'18px'}
+            top={'-5px'}
+            right={'15px'}
+            justifyContent={'center'}
+            display={'flex'}
+            alignItems={'center'}
+            borderRadius={'46.25px'}>
+            <Text.Medium
+              color={theme.colors.black}
+              lineHeight={'12px'}
+              fontSize={'10px'}>
+              {ongoingOrdersData?.count}
+            </Text.Medium>
+          </Base.View>
+        )}
       </TabContainer>
       <TabContainer
         activeOpacity={0.65}

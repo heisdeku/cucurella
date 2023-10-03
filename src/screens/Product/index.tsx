@@ -1,6 +1,12 @@
+import {useAddToCart, useManageQuantity} from '@api/index';
+import {useProduct} from '@api/products';
 import {Base} from '@components/Base';
 import {Text} from '@components/Text';
+import withBottomDrawer from '@components/withBottomDrawer';
+import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
+import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
 import updateStatusBar from '@hooks/updateStatusBar';
+import {formatMonetaryAmount} from '@libs/helper';
 import {
   add_icon,
   arrowLeft,
@@ -10,163 +16,241 @@ import {
   shoppingBag,
 } from '@libs/svgs';
 import theme from '@libs/theme';
-import {goBack} from '@stacks/helper';
-import {useState} from 'react';
-import {Dimensions, ScrollView} from 'react-native';
+import {useRoute} from '@react-navigation/native';
+import {goBack, navigate} from '@stacks/helper';
+import {findProductInCart, useCartStore} from '@store/CartStore';
+import {useGlobalStore} from '@store/GlobalStore';
+import {useUserStore} from '@store/UserStore';
+import {Fragment, useState} from 'react';
+import {ActivityIndicator, Alert, Dimensions, ScrollView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
-const ProductScreen = () => {
-  const [stockLevel, setStockLevel] = useState(1);
+const ProductScreen = ({handleOpen, handleClose}: IDrawerChildProps) => {
   const insets = useSafeAreaInsets();
+  updateStatusBar('light-content');
+
+  const params = useRoute().params as {productId: string};
+
+  const productInCart = findProductInCart(params?.productId);
+
+  const {data, isLoading} = useProduct({
+    variables: {productId: params.productId},
+  });
+  const {mutate: addToCart, isLoading: addIsLoading} = useAddToCart();
+  const {mutate: manageQuantity, isLoading: manageIsLoading} =
+    useManageQuantity();
+
+  const [cartTotal] = useCartStore(state => [
+    state.cart.cartTotalVisibleQuantity,
+  ]);
+  const [isLocationGranted] = useGlobalStore(state => [state.locationGranted]);
+  const [currentLocation] = useUserStore(state => [state.user.currentLocation]);
+
+  const [stockLevel, setStockLevel] = useState(
+    productInCart ? productInCart?.quantity : 0,
+  );
+
+  const handleAddProductToCart = () => {
+    setStockLevel(1);
+    return addToCart({productId: data?.id as string, quantity: 1});
+  };
+
+  const handleQuantity = () => {
+    const decreasedStockLevel = stockLevel === 0 ? 0 : stockLevel - 1;
+    const increasedStockLevel =
+      stockLevel < (data?.quantity as number) ? stockLevel + 1 : stockLevel;
+
+    return manageQuantity({
+      productId: params?.productId,
+      type:
+        stockLevel > (productInCart?.quantity as number)
+          ? 'increase'
+          : 'decrease',
+      quantity:
+        stockLevel > (productInCart?.quantity as number)
+          ? increasedStockLevel
+          : decreasedStockLevel,
+    });
+  };
+
+  const handleButtonPress = () => {
+    stockLevel > 0 ? handleQuantity() : handleAddProductToCart();
+  };
+
   return (
     <Base.View
       height={Dimensions.get('screen').height}
       backgroundColor={theme.colors.white}>
       <ProductImage
         source={{
-          uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1692866177/ofayd-mocks/hyupbv5ffqrs6qsjampy.png',
+          uri: data?.images[0],
         }}>
         <Base.Row px={'20px'} pt={insets.top + 18}>
           <Button onPress={() => goBack()}>
             <SvgXml xml={arrowLeft} />
           </Button>
-          <Button>
-            <Base.View
-              position={'absolute'}
-              zIndex={2}
-              borderRadius={'999px'}
-              top={'-5px'}
-              right={'-5px'}
-              width={'17.5px'}
-              height={'17.5px'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              backgroundColor={theme.colors.goldenYellow}>
-              <Text.General fontFamily="700" fontSize={'8.75px'}>
-                10
-              </Text.General>
-            </Base.View>
-            <SvgXml xml={shoppingBag} />
-          </Button>
+          {Number(cartTotal) > 0 && (
+            <Button onPress={() => navigate('OrderCheckout')}>
+              <Base.View
+                position={'absolute'}
+                zIndex={2}
+                borderRadius={'999px'}
+                top={'-5px'}
+                right={'-5px'}
+                width={'17.5px'}
+                height={'17.5px'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                backgroundColor={theme.colors.goldenYellow}>
+                <Text.General fontFamily="700" fontSize={'8.75px'}>
+                  {cartTotal}
+                </Text.General>
+              </Base.View>
+              <SvgXml xml={shoppingBag} />
+            </Button>
+          )}
         </Base.Row>
       </ProductImage>
-      <ScrollView bounces={false} style={{backgroundColor: theme.colors.white}}>
-        <Base.View p={'20px'}>
-          <Base.Row alignItems={'flex-start'}>
-            <Base.View>
-              <Text.Medium fontSize={'24px'} lineHeight={'30px'}>
-                Green bell Pepper
-              </Text.Medium>
-              <Text.Medium
-                fontSize={'14px'}
-                lineHeight={'17.5px'}
-                my={'7px'}
-                color={theme.colors.neutral07}>
-                Over 200 pieces sold
-              </Text.Medium>
-              <Text.Medium
-                mb={'16px'}
-                lineHeight={'17.5px'}
-                fontSize={'14px'}
-                color={theme.colors.neutral07}>
-                1 gram = 1 peice
-              </Text.Medium>
-              <UnderlinedButton>
-                <Text.Medium
-                  lineHeight={'20px'}
-                  fontSize={'16px'}
-                  style={{textDecorationLine: 'underline'}}
-                  color={theme.colors.neutral07}>
-                  Get more details
-                </Text.Medium>
-              </UnderlinedButton>
-            </Base.View>
-            <LikeProductButton>
-              <SvgXml xml={boldHeart} />
-            </LikeProductButton>
-          </Base.Row>
-          <Base.View mt={'24px'}>
-            <Text.Medium fontSize={'18px'} lineHeight={'22.5px'}>
-              Description
-            </Text.Medium>
-            <Text.Small fontSize={'16px'} lineHeight={'20px'} mt={'8px'}>
-              Tags: vegetables, fruits, household items,{' '}
-            </Text.Small>
-          </Base.View>
-          <Base.View mt={'24px'}>
-            <Text.Medium fontSize={'18px'} lineHeight={'22.5px'}>
-              Delivery details
-            </Text.Medium>
-            <Text.Small
-              mb={'8px'}
-              fontSize={'16px'}
-              lineHeight={'20px'}
-              mt={'8px'}>
-              Address: 28b empire homes estate chevron alternative lekki.
-            </Text.Small>
-            <UnderlinedButton>
-              <Text.Medium
-                lineHeight={'20px'}
-                fontSize={'16px'}
-                style={{textDecorationLine: 'underline'}}
-                color={theme.colors.neutral07}>
-                Change Delivery Address
-              </Text.Medium>
-            </UnderlinedButton>
-          </Base.View>
-          <ShareProductButton>
-            <Base.Row mx={'auto'}>
-              <SvgXml xml={sendTwo} />
-              <Text.General ml={'8px'} color={theme.colors.neutral08}>
-                Share Product
-              </Text.General>
-            </Base.Row>
-          </ShareProductButton>
+      {isLoading && (
+        <Base.View mt={'32px'}>
+          <ActivityIndicator size={'large'} color={theme.colors.green08} />
         </Base.View>
-      </ScrollView>
-      <Base.View
-        borderTopWidth={'1px'}
-        borderTopColor={theme.colors.neutral03}
-        pt={'16px'}
-        pb={'50px'}
-        px={'20px'}>
-        <Base.Row>
-          <Base.Row>
-            <RangeButton
-              onPress={() => {
-                setStockLevel(stockLevel === 0 ? 0 : stockLevel - 1);
-              }}>
-              <SvgXml xml={minus_icon} />
-            </RangeButton>
-            <Text.Medium fontSize={'16px'} mx={'11px'}>
-              {stockLevel}
-            </Text.Medium>
-            <RangeButton onPress={() => setStockLevel(stockLevel + 1)}>
-              <SvgXml xml={add_icon} />
-            </RangeButton>
-          </Base.Row>
-          <AddToCartButton activeOpacity={0.95}>
-            <Text.Medium letterSpacing={'0.24px'} color={theme.colors.white}>
-              Add ₦200,000.00
-            </Text.Medium>
-          </AddToCartButton>
-        </Base.Row>
-      </Base.View>
+      )}
+      {!isLoading && (
+        <Fragment>
+          <ScrollView style={{backgroundColor: theme.colors.white}}>
+            <Base.View p={'20px'}>
+              <Base.Row alignItems={'flex-start'}>
+                <Base.View>
+                  <Text.General
+                    isCapitalize
+                    fontSize={'24px'}
+                    color={theme.colors.black}
+                    fontWeight="500"
+                    lineHeight={'30px'}>
+                    {data?.name}
+                  </Text.General>
+                  <Text.General
+                    fontSize={'14px'}
+                    lineHeight={'17.5px'}
+                    my={'7px'}
+                    color={theme.colors.neutral07}>
+                    Over 200 pieces sold
+                  </Text.General>
+                  <Text.General
+                    mb={'16px'}
+                    lineHeight={'17.5px'}
+                    fontSize={'14px'}
+                    color={theme.colors.neutral07}>
+                    1 gram = 1 peice
+                  </Text.General>
+                  <UnderlinedButton
+                    onPress={() => Alert.alert('You need to message support')}>
+                    <Text.General
+                      lineHeight={'20px'}
+                      fontSize={'16px'}
+                      style={{textDecorationLine: 'underline'}}
+                      color={theme.colors.neutral07}>
+                      Get more details
+                    </Text.General>
+                  </UnderlinedButton>
+                </Base.View>
+                {/* <LikeProductButton>
+                  <SvgXml xml={boldHeart} />
+                </LikeProductButton> */}
+              </Base.Row>
+              <Base.View mt={'24px'}>
+                <Text.General fontSize={'18px'} lineHeight={'22.5px'}>
+                  Description
+                </Text.General>
+                <Text.Small fontSize={'16px'} lineHeight={'20px'} mt={'8px'}>
+                  {data?.description}{' '}
+                  {data?.tags && `, tags: ${JSON.stringify(data?.tags)}`}
+                </Text.Small>
+              </Base.View>
+              <Base.View mt={'24px'}>
+                <Text.General fontSize={'18px'} lineHeight={'22.5px'}>
+                  Delivery details
+                </Text.General>
+                <Text.Small
+                  mb={'8px'}
+                  fontSize={'16px'}
+                  lineHeight={'20px'}
+                  mt={'8px'}>
+                  {JSON.parse(currentLocation as string)?.formatted_address}
+                </Text.Small>
+                <UnderlinedButton
+                  onPress={() => {
+                    isLocationGranted
+                      ? handleOpen?.(DRAWER_CONSTANTS.locationSet)
+                      : handleOpen?.(DRAWER_CONSTANTS.location);
+                  }}>
+                  <Text.General
+                    lineHeight={'20px'}
+                    fontSize={'16px'}
+                    style={{textDecorationLine: 'underline'}}
+                    color={theme.colors.neutral07}>
+                    Change Delivery Address
+                  </Text.General>
+                </UnderlinedButton>
+              </Base.View>
+              <ShareProductButton>
+                <Base.Row mx={'auto'}>
+                  <SvgXml xml={sendTwo} />
+                  <Text.General ml={'8px'} color={theme.colors.neutral08}>
+                    Share Product
+                  </Text.General>
+                </Base.Row>
+              </ShareProductButton>
+            </Base.View>
+          </ScrollView>
+          <Base.View
+            borderTopWidth={'1px'}
+            borderTopColor={theme.colors.neutral03}
+            pt={'16px'}
+            pb={'50px'}
+            px={'20px'}>
+            <Base.Row>
+              {stockLevel > 0 && (
+                <Base.Row marginRight={'8px'}>
+                  <RangeButton
+                    onPress={() => {
+                      setStockLevel(stockLevel === 0 ? 0 : stockLevel - 1);
+                    }}>
+                    <SvgXml xml={minus_icon} />
+                  </RangeButton>
+                  <Text.General fontSize={'16px'} mx={'11px'}>
+                    {stockLevel}
+                  </Text.General>
+                  <RangeButton onPress={() => setStockLevel(stockLevel + 1)}>
+                    <SvgXml xml={add_icon} />
+                  </RangeButton>
+                </Base.Row>
+              )}
+              <Base.Button
+                title={
+                  stockLevel > 0
+                    ? `Add ₦${
+                        formatMonetaryAmount(
+                          (data?.amount as number) * stockLevel,
+                        )?.formattedValue
+                      }`
+                    : 'Add to cart'
+                }
+                flex={'1'}
+                onPress={() => handleButtonPress()}
+                height={stockLevel > 0 ? '48px' : '60px'}
+                isLoading={addIsLoading || manageIsLoading}
+              />
+            </Base.Row>
+          </Base.View>
+        </Fragment>
+      )}
     </Base.View>
   );
 };
-
-const AddToCartButton = styled.TouchableOpacity`
-  flex-shrink: 0;
-  flex-grow: 1;
-  margin-left: 8px;
-  background-color: ${theme.colors.green07};
-  border-radius: 8px;
-  padding: 8px;
-  align-items: center;
-`;
 
 const RangeButton = styled.TouchableOpacity`
   border: 1px solid ${theme.colors.green08};
@@ -203,6 +287,7 @@ const Button = styled.TouchableOpacity`
 const ProductImage = styled.ImageBackground`
   width: 100%;
   height: 248px;
+  background-color: ${theme.colors.green08};
 `;
 
-export default ProductScreen;
+export default withBottomDrawer(ProductScreen);

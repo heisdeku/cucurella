@@ -1,4 +1,4 @@
-import {useSmoothKeyboardHandler} from '@libs/useSmoothKeyboardHandler';
+import {useSmoothKeyboardHandler} from '@hooks/useSmoothKeyboardHandler';
 import React, {Component, FC} from 'react';
 import {ScrollViewProps, useWindowDimensions} from 'react-native';
 import Reanimated, {
@@ -12,6 +12,7 @@ import Reanimated, {
   useSharedValue,
   useWorkletCallback,
 } from 'react-native-reanimated';
+//@ts-ignore
 import {RefObjectFunction} from 'react-native-reanimated/lib/types/lib/reanimated2/hook/commonTypes';
 
 const BOTTOM_OFFSET = 50;
@@ -67,7 +68,7 @@ const KeyboardAwareScrollView: FC<ScrollViewProps> = ({children, ...rest}) => {
 
   useSmoothKeyboardHandler(
     {
-      onStart: e => {
+      onStart: (e: any) => {
         'worklet';
 
         // keyboard will appear

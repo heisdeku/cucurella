@@ -6,8 +6,13 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 interface IKeyboardWrapper {
   children: any;
   hasPaddingTop?: boolean;
+  scrollEnabled?: boolean;
 }
-function KeyboardWrapper({children, hasPaddingTop}: IKeyboardWrapper) {
+function KeyboardWrapper({
+  children,
+  hasPaddingTop,
+  scrollEnabled = true,
+}: IKeyboardWrapper) {
   const insets = useSafeAreaInsets();
   return (
     <KeyboardAvoidingView
@@ -15,6 +20,7 @@ function KeyboardWrapper({children, hasPaddingTop}: IKeyboardWrapper) {
       style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView
         bounces={false}
+        scrollEnabled={scrollEnabled}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           minHeight: windowHeight - 40,

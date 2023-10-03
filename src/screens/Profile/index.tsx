@@ -17,6 +17,7 @@ import {
   pentagon_icon,
 } from '@libs/svgs';
 import updateStatusBar from '@hooks/updateStatusBar';
+import {useUserStore} from '@store/UserStore';
 
 interface ListItemProps {
   text: string;
@@ -34,7 +35,7 @@ const ListItem: React.FC<ListItemProps> = ({
   onPress,
 }) => (
   <>
-    <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
+    <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
       <Base.Row
         justifyContent={'flex-start'}
         height={'47px'}
@@ -64,28 +65,41 @@ const ListItemSeperator = () => (
 
 const Account: React.FC = (): JSX.Element => {
   updateStatusBar('light-content');
+  const [userFirstName, userLastName, userEmail, userImage] = useUserStore(
+    state => [
+      state.user.firstName,
+      state.user.lastName,
+      state.user.email,
+      state.user.image,
+    ],
+  );
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
       <Base.View>
         <Container>
-          <Avatar>
-            <Text.Medium lineHeight={'52.381px'} fontSize={'41.905px'}>
-              JD
-            </Text.Medium>
-          </Avatar>
+          {userImage && <UserImage source={{uri: userImage}} />}
+          {!userImage && (
+            <Avatar>
+              <Text.Medium lineHeight={'52.381px'} fontSize={'41.905px'}>
+                {userFirstName.split('')[0]}
+                {userLastName.split('')[0]}
+              </Text.Medium>
+            </Avatar>
+          )}
           <Text.Medium
             fontSize={'20px'}
             color={theme.colors.white}
             lineHeight={'25px'}
             mb={'2px'}
             textAlign={'center'}>
-            Jane Doe
+            {userFirstName} {userLastName}
           </Text.Medium>
           <Text.General
             fontFamily="400"
             fontSize={'14px'}
             color={theme.colors.neutral03}>
-            Jonedoe@gmail.com
+            {userEmail}
           </Text.General>
         </Container>
         <Section>
@@ -187,6 +201,16 @@ const Container = styled.View`
 `;
 
 const Avatar = styled.View`
+  width: 100px;
+  height: 100px;
+  margin-bottom: 8px;
+  border-radius: 50px;
+  background-color: #d2ffe4;
+  justify-content: center;
+  align-items: center;
+`;
+
+const UserImage = styled.Image`
   width: 100px;
   height: 100px;
   margin-bottom: 8px;

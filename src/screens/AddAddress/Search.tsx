@@ -1,22 +1,49 @@
-import React from 'react';
+import React, {useState} from 'react';
 import theme from '@libs/theme';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {Text} from '@components/Text';
 import {styled} from 'styled-components/native';
-import {Path, Svg, SvgXml} from 'react-native-svg';
-import {outlineAdd, outlineMap, search_icon, trash_icon} from '@libs/svgs';
+import {SvgXml} from 'react-native-svg';
+import {outlineAdd, outlineMap, search_icon} from '@libs/svgs';
 import ScreenHeader from '@components/ScreenHeader';
-import {ScrollView} from 'react-native-gesture-handler';
-import {TouchableOpacity} from 'react-native';
-import {navigate} from '@stacks/helper';
+import {ActivityIndicator, FlatList, TouchableOpacity} from 'react-native';
+import {goBack, navigate} from '@stacks/helper';
+import {PredictionType} from '@api/location/types';
+import {getAddressMetaByPlaceID, getPredictions} from '@api/location';
+import {useDebounce} from '@hooks/useDebounce';
+import {truncate} from 'lodash';
+import {windowHeight} from '@libs/constant';
+import {useAddSavedPlace} from '@api/saved-places/useAddSavedPlace';
 
-interface IPlace {}
+const Place: React.FC<PredictionType> = ({...place}) => {
+  const {mutate, isLoading} = useAddSavedPlace();
+  const handleSelection = async (placeId?: string) => {
+    if (place?.place_id) {
+      const [error, response] = await getAddressMetaByPlaceID(place?.place_id);
 
-const Place: React.FC<IPlace> = () => {
+      if (error) {
+        return console.error('occrued error');
+      }
+
+      const formattedAddress = {
+        formatted_address: response?.result.formatted_address,
+        latitude: response?.result.geometry.location.lat,
+        longitude: response?.result.geometry.location.lng,
+      };
+
+      await mutate(
+        {
+          description: formattedAddress?.formatted_address,
+          location: formattedAddress,
+        },
+        {onSuccess: () => goBack()},
+      );
+    }
+  };
   return (
-    <TouchableOpacity>
+    <TouchableOpacity activeOpacity={0.56} onPress={() => handleSelection()}>
       <Base.Row
         borderBottomWidth={'1px'}
         borderBottomColor={theme.colors.neutral03}
@@ -25,7 +52,7 @@ const Place: React.FC<IPlace> = () => {
         justifyContent={'flex-start'}>
         <SvgXml xml={outlineMap} />
         <Text.Medium ml={'6px'} fontSize={'14px'}>
-          Empire homes lekki lagos, Nigeria
+          {truncate(place?.description, {length: 40})}
         </Text.Medium>
       </Base.Row>
     </TouchableOpacity>
@@ -33,10 +60,49 @@ const Place: React.FC<IPlace> = () => {
 };
 
 const Search = () => {
-  return (
-    <KeyboardWrapper>
-      <ScreenHeader label="Add Address" />
+  const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [predictions, setPredictions] = useState<PredictionType[]>([]);
+  const [showPredictions, setShowPredictions] = useState(false);
 
+  const onChangeText = async () => {
+    if (search.trim() === '') {
+      return;
+    }
+    setIsLoading(true);
+    const [error, response] = await getPredictions(search);
+
+    if (error) {
+      setShowPredictions(true);
+    }
+
+    if (response?.predictions) {
+      setPredictions(response.predictions);
+      setShowPredictions(true);
+    }
+
+    setIsLoading(false);
+  };
+
+  useDebounce(onChangeText, 500, [search]);
+
+  const _renderPredictions = (predictions: PredictionType[]) => {
+    return (
+      <FlatList
+        data={predictions}
+        style={{minHeight: windowHeight}}
+        renderItem={({item, index}) => {
+          return <Place key={index} {...item} />;
+        }}
+        keyExtractor={item => item.place_id}
+        keyboardShouldPersistTaps="handled"
+      />
+    );
+  };
+
+  return (
+    <KeyboardWrapper scrollEnabled={false}>
+      <ScreenHeader label="Add Address" />
       <Container pt={'24px'}>
         <LocationFiled>
           <SvgXml xml={search_icon} />
@@ -46,6 +112,8 @@ const Search = () => {
             autoComplete="off"
             autoCapitalize="none"
             autoCorrect={false}
+            value={search}
+            onChangeText={(value: string) => setSearch(value)}
           />
         </LocationFiled>
         <Base.View
@@ -67,23 +135,17 @@ const Search = () => {
           </TouchableOpacity>
         </Base.View>
         <Base.View>
-          {new Array(6).fill('').map((_, i) => {
-            return <Place key={i} />;
-          })}
+          {isLoading && (
+            <Base.View mt={'16px'}>
+              <ActivityIndicator size={'large'} color={theme.colors.green08} />
+            </Base.View>
+          )}
+          {showPredictions && _renderPredictions(predictions)}
         </Base.View>
       </Container>
     </KeyboardWrapper>
   );
 };
-
-const DeleteButton = styled.TouchableOpacity`
-  border-radius: 41px;
-  background-color: ${theme.colors.red01};
-  width: 27px;
-  height: 27px;
-  justify-content: center;
-  align-items: center;
-`;
 
 const LocationFiled = styled.View`
   background-color: ${theme.colors.green01};

@@ -6,11 +6,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AppNavigation from './AppStack';
 import Onboarding from '@screens/Onboarding';
 import {useIsFirstTime} from '@hooks/useIsFirstTime';
+import {useAuthStore} from '@store/AuthStore';
 
 const Stack = createNativeStackNavigator();
 
 const Root = () => {
   const [isFirstTime] = useIsFirstTime();
+  const [authStatus] = useAuthStore(state => [state.status]);
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
@@ -24,8 +26,13 @@ const Root = () => {
         )}
         {!isFirstTime && (
           <Stack.Group>
-            <Stack.Screen name="Authentication" component={AuthStack} />
-            <Stack.Screen name="App" component={AppNavigation} />
+            {authStatus === 'idle' ||
+              (authStatus === 'signOut' && (
+                <Stack.Screen name="Authentication" component={AuthStack} />
+              ))}
+            {authStatus === 'signIn' && (
+              <Stack.Screen name="App" component={AppNavigation} />
+            )}
           </Stack.Group>
         )}
       </Stack.Navigator>

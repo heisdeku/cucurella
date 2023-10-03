@@ -1,18 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import theme from '@libs/theme';
-import KeyboardWrapper from '@components/KeyboardWrapper';
 import {Base} from '@components/Base';
-import Container from '@components/Container';
 import {Text} from '@components/Text';
 import {styled} from 'styled-components/native';
 import {Path, Svg, SvgXml} from 'react-native-svg';
 import {trash_icon} from '@libs/svgs';
 import ScreenHeader from '@components/ScreenHeader';
-import {ScrollView} from 'react-native-gesture-handler';
+import {useSavedPlaces} from '@api/saved-places/useSavedPlaces';
+import {ISavedPlace} from '@api/saved-places';
+import {navigate} from '@stacks/helper';
 
-interface ISavedPlace {}
-
-const SavedPlace: React.FC<ISavedPlace> = () => {
+const SavedPlace: React.FC<ISavedPlace> = ({...place}) => {
   return (
     <Base.Row
       borderBottomWidth={'1px'}
@@ -20,9 +18,7 @@ const SavedPlace: React.FC<ISavedPlace> = () => {
       alignItems={'center'}
       px={'8px'}
       py={'16px'}>
-      <Text.Medium fontSize={'14px'}>
-        Empire homes lekki lagos, Nigeria
-      </Text.Medium>
+      <Text.Medium fontSize={'14px'}>{place?.description}</Text.Medium>
       <DeleteButton>
         <SvgXml xml={trash_icon} />
       </DeleteButton>
@@ -31,13 +27,28 @@ const SavedPlace: React.FC<ISavedPlace> = () => {
 };
 
 const SavedPlaces = () => {
+  const {data, isLoading, isError} = useSavedPlaces();
+  const [savedPlaces, setSavedPlaces] = useState<ISavedPlace[]>();
+
+  useEffect(() => {
+    if (data) {
+      return setSavedPlaces(data);
+    }
+  });
   return (
-    <KeyboardWrapper>
+    <Base.View backgroundColor={theme.colors.white}>
       <ScreenHeader label="Saved Places" />
-      <ScrollView>
-        <Container pt={'24px'}>
-          <LocationFiled>
-            <Svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <ScrollArea>
+        <Base.View>
+          <LocationFiled
+            onPress={() => navigate('AddAddressSearch')}
+            activeOpacity={0.8}>
+            <Svg
+              width="16"
+              style={{marginRight: 8}}
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none">
               <Path
                 d="M12 8.5H4C3.72667 8.5 3.5 8.27333 3.5 8C3.5 7.72667 3.72667 7.5 4 7.5H12C12.2733 7.5 12.5 7.72667 12.5 8C12.5 8.27333 12.2733 8.5 12 8.5Z"
                 fill="#64748B"
@@ -47,24 +58,28 @@ const SavedPlaces = () => {
                 fill="#64748B"
               />
             </Svg>
-            <InputField
-              placeholder="Add New Location"
-              placeholderTextColor={theme.colors.neutral07}
-              autoComplete="off"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
+            <Text.General
+              fontSize={'12px'}
+              // lineHeight="15px"
+              color={theme.colors.neutral07}>
+              Add New Location
+            </Text.General>
           </LocationFiled>
-          <Base.View my={'14px'}>
-            {new Array(6).fill('').map((_, i) => {
-              return <SavedPlace key={i} />;
-            })}
-          </Base.View>
-        </Container>
-      </ScrollView>
-    </KeyboardWrapper>
+        </Base.View>
+        <Base.View my={'14px'}>
+          {savedPlaces?.map((place, i) => {
+            return <SavedPlace {...place} key={i} />;
+          })}
+        </Base.View>
+      </ScrollArea>
+    </Base.View>
   );
 };
+
+const ScrollArea = styled.ScrollView`
+  padding: 24px 24px 0;
+  min-height: 100%;
+`;
 
 const DeleteButton = styled.TouchableOpacity`
   border-radius: 41px;
@@ -75,26 +90,15 @@ const DeleteButton = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const LocationFiled = styled.View`
+const LocationFiled = styled.TouchableOpacity`
   background-color: ${theme.colors.neutral01};
   border: 1px solid ${theme.colors.stroke};
-  padding: 16px 16px;
+  padding-left: 16px;
   height: 50px;
   border-radius: 8px;
   width: 100%;
   flex-direction: row;
   align-items: center;
-`;
-
-const InputField = styled.TextInput`
-  background-color: transparent;
-  flex: 1;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 15px;
-  color: ${theme.colors.black};
-  margin-left: 8px;
 `;
 
 export default SavedPlaces;

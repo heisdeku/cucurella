@@ -1,6 +1,5 @@
-import {Platform, TextInputProps, TextStyle} from 'react-native';
+import {TextInputProps, TextStyle} from 'react-native';
 import theme from './theme';
-import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 
 export const readOnlyInput = (
   size: number,
@@ -22,49 +21,6 @@ export const readOnlyInput = (
   };
 };
 
-export const requestLocationPermission = async () => {
-  try {
-    let permission;
-
-    // Check if the app already has permission
-    if (Platform.OS === 'ios') {
-      permission = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-    } else {
-      permission = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-    }
-
-    if (Platform.OS === 'android') {
-      permission = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-    } else {
-      permission = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-    }
-
-    // If permission is granted, you can proceed with location-related tasks
-    if (permission === RESULTS.GRANTED) {
-      // Your code for location-related tasks here
-      console.log('code block one');
-    } else {
-      // If permission is not granted, request it
-      if (Platform.OS === 'ios') {
-        permission = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-      } else {
-        permission = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-      }
-
-      // Handle the result of the permission request
-      if (permission === RESULTS.GRANTED) {
-        console.log(`evidenece`);
-        // Permission granted, proceed with location-related tasks
-      } else {
-        // Permission denied, handle accordingly
-        // You may want to show a message to the user or disable location features
-      }
-    }
-  } catch (error) {
-    console.error('Error requesting location permission:', error);
-  }
-};
-
 export const readableInputProps: TextInputProps = {
   editable: false,
   autoCapitalize: 'none',
@@ -72,3 +28,41 @@ export const readableInputProps: TextInputProps = {
   selectionColor: 'transparent',
   maxLength: 4,
 };
+
+export function calculateCountdown(startDate: Date, endDate: Date) {
+  const start = new Date(startDate).getTime();
+  const end = new Date(endDate).getTime();
+  const timeDiff = end - start;
+
+  if (timeDiff <= 0) return 'Expired';
+
+  const seconds = Math.floor((timeDiff / 1000) % 60);
+  const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
+  const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(weeks / 4);
+
+  if (months > 0) return `${months}mo : ${weeks % 4}w`;
+  if (weeks > 0) return `${weeks}w : ${days % 7}d`;
+  if (days > 0) return `${days}d : ${hours}h : ${minutes}min : ${seconds}s`;
+
+  return `${hours}h : ${minutes}min : ${seconds}s`;
+}
+
+export function formatMonetaryAmount(number: number) {
+  if (typeof number !== 'number') {
+    throw new Error('Input must be a number');
+  }
+
+  const formattedValue = number.toLocaleString('en-US');
+  const decimalValue = number.toFixed(2);
+
+  const result = {
+    formattedValue: formattedValue.split('.')[0],
+    decimalValue: decimalValue.split('.')[1],
+    figure: `${formattedValue.split('.')[0]}.${decimalValue.split('.')[1]}`,
+  };
+
+  return result;
+}

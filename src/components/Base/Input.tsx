@@ -55,6 +55,7 @@ const Input = ({
           )}
           {!hasCountryCode && (
             <InputField
+              value={value}
               placeholder={placeholder}
               placeholderTextColor={theme.colors.neutral07}
               autoCapitalize="none"

@@ -1,10 +1,6 @@
 import React, {Fragment, useCallback, useMemo, useRef, useState} from 'react';
 import {getDrawerChild} from './helper';
-import {
-  BottomSheetModal,
-  BottomSheetView,
-  useBottomSheetDynamicSnapPoints,
-} from '@gorhom/bottom-sheet';
+import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import CustomBackdrop from '@components/CustomBackdrop';
 import {SvgXml} from 'react-native-svg';
 import {close_icon} from '@libs/svgs';
@@ -19,18 +15,11 @@ const withBottomDrawer = (Component: any) => (props: any) => {
   });
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const initialSnapPoints = useMemo(() => ['25%', 'CONTENT_HEIGHT'], []);
-
-  const {
-    animatedHandleHeight,
-    animatedSnapPoints,
-    animatedContentHeight,
-    handleContentLayout,
-  } = useBottomSheetDynamicSnapPoints(initialSnapPoints);
-
+  const snapPoints = useMemo(() => ['25%', '74%'], []);
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
+
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
   }, []);
@@ -42,6 +31,7 @@ const withBottomDrawer = (Component: any) => (props: any) => {
     });
     return handlePresentModalPress();
   };
+
   const handleClose = () => {
     setDrawer({
       id: '',
@@ -56,12 +46,10 @@ const withBottomDrawer = (Component: any) => (props: any) => {
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={1}
-        //@ts-ignore
-        snapPoints={animatedSnapPoints}
+        snapPoints={snapPoints}
+        enableDynamicSizing={true}
         onChange={handleSheetChanges}
         handleStyle={{display: 'none'}}
-        handleHeight={animatedHandleHeight}
-        contentHeight={animatedContentHeight}
         backdropComponent={({animatedIndex, style, animatedPosition}) => (
           <CustomBackdrop
             animatedPosition={animatedPosition}
@@ -69,7 +57,7 @@ const withBottomDrawer = (Component: any) => (props: any) => {
             style={style}
           />
         )}>
-        <BottomSheetView onLayout={handleContentLayout}>
+        <BottomSheetView>
           <Base.View px={'20px'} py="23px" mb={'20px'}>
             <Close onPress={() => handleClose()}>
               <SvgXml xml={close_icon} />

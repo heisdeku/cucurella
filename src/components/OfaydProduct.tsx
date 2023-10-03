@@ -7,14 +7,52 @@ import {SvgXml} from 'react-native-svg';
 import {add_icon, minus_icon} from '@libs/svgs';
 import {Text} from './Text';
 import theme from '@libs/theme';
+import {IOfaydProduct} from '@api/types';
+import {useAddToCart, useManageQuantity} from '@api/index';
+import {findProductInCart} from '@store/CartStore';
+import {formatMonetaryAmount} from '@libs/helper';
 
-interface IProduct {}
+export const OfaydProduct: React.FC<IOfaydProduct> = props => {
+  const productInCart = findProductInCart(props?.id);
 
-export const OfaydProduct: React.FC<IProduct> = () => {
+  const [stockLevel, setStockLevel] = useState(
+    productInCart ? productInCart?.quantity : 0,
+  );
+
+  const {mutate: addToCart} = useAddToCart();
+  const {mutate: manageQuantity, isLoading: manageIsLoading} =
+    useManageQuantity();
+
   const goToProduct = () => {
-    return navigate('Product');
+    return navigate('Product', {productId: props?.id});
   };
-  const [stockLevel, setStockLevel] = useState(0);
+
+  const handleAddProductToCart = () => {
+    setStockLevel(1);
+    return addToCart({productId: props?.id, quantity: 1});
+  };
+
+  const handleDecreaseQuantity = () => {
+    const newStockLevel = stockLevel === 0 ? 0 : stockLevel - 1;
+    setStockLevel(newStockLevel);
+    return manageQuantity({
+      productId: props?.id,
+      type: 'decrease',
+      quantity: newStockLevel,
+    });
+  };
+
+  const handleIncreaseQuantity = () => {
+    const newStockLevel =
+      stockLevel < props?.quantity ? stockLevel + 1 : stockLevel;
+    setStockLevel(newStockLevel);
+    manageQuantity({
+      productId: props?.id,
+      type: 'increase',
+      quantity: 1,
+    });
+  };
+
   return (
     <Base.View
       borderRadius={'10px'}
@@ -27,22 +65,25 @@ export const OfaydProduct: React.FC<IProduct> = () => {
       <TouchableOpacity activeOpacity={0.8} onPress={() => goToProduct()}>
         <ProductImage
           source={{
-            uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1692820452/ofayd-mocks/ymjrrmeofornej3m6u1s.png',
+            uri: props?.images[0],
           }}
           resizeMode="cover"
         />
       </TouchableOpacity>
       <Base.View mt={'8px'}>
         <TouchableOpacity activeOpacity={0.8} onPress={() => goToProduct()}>
-          <Text.Medium fontSize={'16px'} color={theme.colors.black12}>
-            Chicken
+          <Text.Medium
+            isCapitalize
+            fontSize={'16px'}
+            color={theme.colors.black12}>
+            {props?.name}
           </Text.Medium>
           <Text.General fontSize={'15px'} color={theme.colors.neutral06}>
-            ₦1150.00/kg
+            ₦ {formatMonetaryAmount(props?.amount).figure}/kg
           </Text.General>
         </TouchableOpacity>
         {stockLevel < 1 && (
-          <AddToCartButton onPress={() => setStockLevel(1)}>
+          <AddToCartButton onPress={() => handleAddProductToCart()}>
             <Text.Medium color={theme.colors.black12} fontSize={'13px'}>
               Add to Cart
             </Text.Medium>
@@ -50,16 +91,13 @@ export const OfaydProduct: React.FC<IProduct> = () => {
         )}
         {stockLevel > 0 && (
           <Base.Row marginTop={'11px'}>
-            <RangeButton
-              onPress={() => {
-                setStockLevel(stockLevel === 0 ? 0 : stockLevel - 1);
-              }}>
+            <RangeButton onPress={() => handleDecreaseQuantity()}>
               <SvgXml xml={minus_icon} />
             </RangeButton>
             <Text.Medium fontSize={'16px'} mx={'11px'}>
               {stockLevel}
             </Text.Medium>
-            <RangeButton onPress={() => setStockLevel(stockLevel + 1)}>
+            <RangeButton onPress={() => handleIncreaseQuantity()}>
               <SvgXml xml={add_icon} />
             </RangeButton>
           </Base.Row>
@@ -81,6 +119,7 @@ const ProductImage = styled.Image`
   width: 100%;
   height: 97px;
   border-radius: 9px;
+  background-color: ${theme.colors.green08};
 `;
 
 const RangeButton = styled.TouchableOpacity`

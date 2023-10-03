@@ -1,238 +1,250 @@
+import {useOrder} from '@api/orders';
 import {Base} from '@components/Base';
 import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
-import {arrowRight, order_progress__tracker} from '@libs/svgs';
+import {formatMonetaryAmount} from '@libs/helper';
+import {order_progress__tracker} from '@libs/svgs';
 import theme from '@libs/theme';
-import {useState} from 'react';
+import {useRoute} from '@react-navigation/native';
+import {Fragment} from 'react';
+import {ActivityIndicator} from 'react-native';
 import {Alert} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
-const orders = [
-  {
-    name: '3kg chicken',
-    price: '570.00',
-  },
-  {
-    name: '3kg chicken',
-    price: '570.00',
-  },
-  {
-    name: '5kg bag of rice',
-    price: '570.00',
-  },
-  {
-    name: '3kg chicken',
-    price: '570.00',
-  },
-  {
-    name: '3kg chicken',
-    price: '570.00',
-  },
-];
 const TrackOrder = () => {
-  const [method, setMethod] = useState<'wallet' | 'debit-card' | null>(null);
+  const params = useRoute().params as {
+    orderId: string;
+    packageId: string;
+    source: 'order-complete' | 'view-order';
+  };
+  const {data, isLoading, isError} = useOrder({
+    variables: {orderId: params?.orderId},
+  });
+
   return (
     <Base.View>
-      <ScreenHeader toHome label="Track Order" />
-      <ScrollArea>
-        <Base.View py={'16px'} px={'24px'} backgroundColor={theme.colors.white}>
-          <Text.General
-            fontSize={'14px'}
-            color={theme.colors.neutral06}
-            mb={'4px'}>
-            Estimated delivery time
-          </Text.General>
-          <Text.H1 lineHeight={'32.64px'} fontSize={'24px'}>
-            18:42
-          </Text.H1>
+      <ScreenHeader
+        toHome={params?.source === 'order-complete' ? true : false}
+        label="Track Order"
+      />
+      {isLoading && (
+        <Base.View mt={'32px'}>
+          <ActivityIndicator size={'large'} color={theme.colors.green08} />
         </Base.View>
-        <Base.View
-          mt={'16px'}
-          py={'16px'}
-          px={'24px'}
-          backgroundColor={theme.colors.white}>
-          <Text.Medium color={theme.colors.black} fontSize={'20px'}>
-            Order Progress
-          </Text.Medium>
-          <Base.Row mt={'18px'}>
-            <Base.View width={'10%'}>
-              <SvgXml xml={order_progress__tracker} />
+      )}
+      {!isLoading && data && (
+        <Fragment>
+          <ScrollArea>
+            <Base.View
+              py={'16px'}
+              px={'24px'}
+              backgroundColor={theme.colors.white}>
+              <Text.General
+                fontSize={'14px'}
+                color={theme.colors.neutral06}
+                mb={'4px'}>
+                Estimated delivery time
+              </Text.General>
+              <Text.H1 lineHeight={'32.64px'} fontSize={'24px'}>
+                18:42
+              </Text.H1>
             </Base.View>
-            <Base.View width={'90%'}>
-              <Base.Row mb={'20px'} justifyContent={'space-between'}>
-                <Text.Medium
-                  fontFamily="400"
-                  fontSize={'14px'}
-                  color={theme.colors.neutral07}>
-                  Order has been confirmed
-                </Text.Medium>
-                <Text.Medium
-                  fontFamily="400"
-                  fontSize={'14px'}
-                  color={theme.colors.neutral07}>
-                  18:22
-                </Text.Medium>
-              </Base.Row>
-              <Base.Row mb={'20px'} justifyContent={'space-between'}>
-                <Text.Medium
-                  fontFamily="400"
-                  fontSize={'14px'}
-                  color={theme.colors.neutral07}>
-                  Order has being processed
-                </Text.Medium>
-                <Text.Medium
-                  fontFamily="400"
-                  fontSize={'14px'}
-                  color={theme.colors.neutral07}>
-                  18:23
-                </Text.Medium>
-              </Base.Row>
-              <Base.Row mb={'20px'} justifyContent={'space-between'}>
-                <Text.Medium
-                  fontFamily="400"
-                  fontSize={'14px'}
-                  color={theme.colors.neutral07}>
-                  Order has been packed
-                </Text.Medium>
-                <Text.Medium
-                  fontFamily="400"
-                  fontSize={'14px'}
-                  color={theme.colors.neutral07}>
-                  18:24
-                </Text.Medium>
-              </Base.Row>
-              <Base.Row justifyContent={'space-between'}>
-                <Text.Medium
-                  fontFamily="400"
-                  fontSize={'14px'}
-                  color={theme.colors.neutral07}
-                  width={'65%'}>
-                  Order picked up by rider and is on the way
-                </Text.Medium>
-                <Text.Medium
-                  fontFamily="400"
-                  fontSize={'14px'}
-                  color={theme.colors.neutral07}>
-                  18:26
-                </Text.Medium>
+            <Base.View
+              mt={'16px'}
+              py={'16px'}
+              px={'24px'}
+              backgroundColor={theme.colors.white}>
+              <Text.Medium color={theme.colors.black} fontSize={'20px'}>
+                Order Progress
+              </Text.Medium>
+              <Base.Row mt={'18px'}>
+                <Base.View width={'10%'}>
+                  <SvgXml xml={order_progress__tracker} />
+                </Base.View>
+                <Base.View width={'90%'}>
+                  <Base.Row mb={'20px'} justifyContent={'space-between'}>
+                    <Text.Medium
+                      fontFamily="400"
+                      fontSize={'14px'}
+                      color={theme.colors.neutral07}>
+                      Order has been confirmed
+                    </Text.Medium>
+                    <Text.Medium
+                      fontFamily="400"
+                      fontSize={'14px'}
+                      color={theme.colors.neutral07}>
+                      18:22
+                    </Text.Medium>
+                  </Base.Row>
+                  <Base.Row mb={'20px'} justifyContent={'space-between'}>
+                    <Text.Medium
+                      fontFamily="400"
+                      fontSize={'14px'}
+                      color={theme.colors.neutral07}>
+                      Order has being processed
+                    </Text.Medium>
+                    <Text.Medium
+                      fontFamily="400"
+                      fontSize={'14px'}
+                      color={theme.colors.neutral07}>
+                      18:23
+                    </Text.Medium>
+                  </Base.Row>
+                  <Base.Row mb={'20px'} justifyContent={'space-between'}>
+                    <Text.Medium
+                      fontFamily="400"
+                      fontSize={'14px'}
+                      color={theme.colors.neutral07}>
+                      Order has been packed
+                    </Text.Medium>
+                    <Text.Medium
+                      fontFamily="400"
+                      fontSize={'14px'}
+                      color={theme.colors.neutral07}>
+                      18:24
+                    </Text.Medium>
+                  </Base.Row>
+                  <Base.Row justifyContent={'space-between'}>
+                    <Text.Medium
+                      fontFamily="400"
+                      fontSize={'14px'}
+                      color={theme.colors.neutral07}
+                      width={'65%'}>
+                      Order picked up by rider and is on the way
+                    </Text.Medium>
+                    <Text.Medium
+                      fontFamily="400"
+                      fontSize={'14px'}
+                      color={theme.colors.neutral07}>
+                      18:26
+                    </Text.Medium>
+                  </Base.Row>
+                </Base.View>
               </Base.Row>
             </Base.View>
-          </Base.Row>
-        </Base.View>
-        <Base.View
-          mt={'16px'}
-          py={'16px'}
-          px={'24px'}
-          backgroundColor={theme.colors.white}>
-          <Text.Medium color={theme.colors.black} fontSize={'20px'}>
-            Rider details
-          </Text.Medium>
-          <Base.Row
-            mt={'12.5px'}
-            justifyContent={'flex-start'}
-            alignItems={'center'}>
-            <RiderImage
-              source={{
-                uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1693918981/jwtwpubur07ekvnoxgkv.png',
-              }}
-            />
-            <Text.General
-              ml={'10px'}
-              fontFamily="500"
-              color={theme.colors.black}
-              fontSize={'16px'}>
-              Tess Ogan
-            </Text.General>
-          </Base.Row>
-        </Base.View>
+            <Base.View
+              mt={'16px'}
+              py={'16px'}
+              px={'24px'}
+              backgroundColor={theme.colors.white}>
+              <Text.Medium color={theme.colors.black} fontSize={'20px'}>
+                Rider details
+              </Text.Medium>
+              <Base.Row
+                mt={'12.5px'}
+                justifyContent={'flex-start'}
+                alignItems={'center'}>
+                <RiderImage
+                  source={{
+                    uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1693918981/jwtwpubur07ekvnoxgkv.png',
+                  }}
+                />
+                <Text.General
+                  ml={'10px'}
+                  fontFamily="500"
+                  color={theme.colors.black}
+                  fontSize={'16px'}>
+                  Tess Ogan
+                </Text.General>
+              </Base.Row>
+            </Base.View>
 
-        <Base.View
-          mt={'16px'}
-          px="18px"
-          pt={'22px'}
-          backgroundColor={theme.colors.white}>
-          <Text.Medium mb={'13px'} color={theme.colors.dark} fontSize={'20px'}>
-            Order Details
-          </Text.Medium>
-          <Base.View mb={'24px'}>
-            {orders.map((order, i) => {
-              return (
-                <Base.Row key={i} py={'4px'}>
+            <Base.View
+              mt={'16px'}
+              px="18px"
+              pt={'22px'}
+              backgroundColor={theme.colors.white}>
+              <Text.Medium
+                mb={'13px'}
+                color={theme.colors.dark}
+                fontSize={'20px'}>
+                Order Details
+              </Text.Medium>
+              <Base.View mb={'24px'}>
+                {data?.order?.products?.map((item, i) => {
+                  return (
+                    <Base.Row key={i} py={'4px'}>
+                      <Text.General
+                        isCapitalize
+                        color={theme.colors.neutral06}
+                        fontSize={'14px'}
+                        fontFamily="500">
+                        {item.name}
+                      </Text.General>
+                      <Text.Medium
+                        color={theme.colors.neutral08}
+                        fontSize={'14px'}>
+                        ₦{formatMonetaryAmount(item?.amount).figure}
+                      </Text.Medium>
+                    </Base.Row>
+                  );
+                })}
+              </Base.View>
+              {/* this view wraps the pricing which includes: subtotal, discount, delivery fee and total amount */}
+              <Base.View>
+                <Base.Row mb={'11px'}>
                   <Text.General
-                    color={theme.colors.neutral06}
+                    color={theme.colors.black}
                     fontSize={'14px'}
                     fontFamily="500">
-                    {order.name}
+                    Subtotal
                   </Text.General>
-                  <Text.Medium color={theme.colors.neutral08} fontSize={'14px'}>
-                    ₦{order.price}
+                  <Text.Medium color={theme.colors.neutral07} fontSize={'14px'}>
+                    ₦{formatMonetaryAmount(data?.order?.subTotalAmount).figure}
                   </Text.Medium>
                 </Base.Row>
-              );
-            })}
+                <Base.Row mb={'11px'}>
+                  <Text.General
+                    color={theme.colors.black}
+                    fontSize={'14px'}
+                    fontFamily="500">
+                    Discount
+                  </Text.General>
+                  <Text.Medium color={theme.colors.neutral07} fontSize={'14px'}>
+                    ₦{formatMonetaryAmount(data?.order?.discount).figure}
+                  </Text.Medium>
+                </Base.Row>
+                <Base.Row mb={'11px'}>
+                  <Text.General
+                    color={theme.colors.black}
+                    fontSize={'14px'}
+                    fontFamily="500">
+                    Delivery Fee
+                  </Text.General>
+                  <Text.Medium color={theme.colors.neutral07} fontSize={'14px'}>
+                    ₦{formatMonetaryAmount(data?.order?.deliveryFee).figure}
+                  </Text.Medium>
+                </Base.Row>
+                <Base.Row mb={'11px'}>
+                  <Text.General
+                    color={theme.colors.black}
+                    fontSize={'14px'}
+                    fontFamily="500">
+                    Total
+                  </Text.General>
+                  <Text.Medium color={theme.colors.neutral07} fontSize={'14px'}>
+                    ₦{formatMonetaryAmount(data?.order?.totalAmount).figure}
+                  </Text.Medium>
+                </Base.Row>
+              </Base.View>
+            </Base.View>
+          </ScrollArea>
+          <Base.View
+            mt={'auto'}
+            pt="20px"
+            pb={'30px'}
+            borderTopWidth={'1px'}
+            borderTopColor={theme.colors.neutral03}
+            backgroundColor={theme.colors.white}
+            px={'20px'}>
+            <Base.Button
+              title="Call Rider"
+              onPress={() => Alert.alert('Call Rider')}
+            />
           </Base.View>
-          <Base.View>
-            <Base.Row mb={'11px'}>
-              <Text.General
-                color={theme.colors.black}
-                fontSize={'14px'}
-                fontFamily="500">
-                Subtotal
-              </Text.General>
-              <Text.Medium color={theme.colors.neutral07} fontSize={'14px'}>
-                ₦200,000,000,000
-              </Text.Medium>
-            </Base.Row>
-            <Base.Row mb={'11px'}>
-              <Text.General
-                color={theme.colors.black}
-                fontSize={'14px'}
-                fontFamily="500">
-                Discount
-              </Text.General>
-              <Text.Medium color={theme.colors.neutral07} fontSize={'14px'}>
-                ₦200
-              </Text.Medium>
-            </Base.Row>
-            <Base.Row mb={'11px'}>
-              <Text.General
-                color={theme.colors.black}
-                fontSize={'14px'}
-                fontFamily="500">
-                Delivery Fee
-              </Text.General>
-              <Text.Medium color={theme.colors.neutral07} fontSize={'14px'}>
-                ₦200
-              </Text.Medium>
-            </Base.Row>
-            <Base.Row mb={'11px'}>
-              <Text.General
-                color={theme.colors.black}
-                fontSize={'14px'}
-                fontFamily="500">
-                Total
-              </Text.General>
-              <Text.Medium color={theme.colors.neutral07} fontSize={'14px'}>
-                ₦200,000,000,000
-              </Text.Medium>
-            </Base.Row>
-          </Base.View>
-        </Base.View>
-      </ScrollArea>
-      <Base.View
-        mt={'auto'}
-        pt="20px"
-        pb={'30px'}
-        borderTopWidth={'1px'}
-        borderTopColor={theme.colors.neutral03}
-        backgroundColor={theme.colors.white}
-        px={'20px'}>
-        <Base.Button
-          title="Call Rider"
-          onPress={() => Alert.alert('Call Rider')}
-        />
-      </Base.View>
+        </Fragment>
+      )}
     </Base.View>
   );
 };

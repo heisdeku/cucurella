@@ -23,6 +23,7 @@ interface CustomTextProps
     Animatable.AnimatableProperties<TextStyle> {
   children: ReactNode;
   fontFamily?: '300' | '400' | '500' | '600' | '700' | '800' | '9000';
+  isCapitalize?: boolean;
 }
 
 /**
@@ -66,7 +67,11 @@ const Small: React.FC<CustomTextProps> = ({children, ...rest}) => {
  */
 const General: React.FC<CustomTextProps> = ({children, ...rest}) => {
   return (
-    <Base.Text color={theme.colors.black} fontFamily="regular" {...rest}>
+    <Base.Text
+      style={{textTransform: rest?.isCapitalize ? 'capitalize' : 'none'}}
+      color={theme.colors.black}
+      fontFamily="regular"
+      {...rest}>
       {children}
     </Base.Text>
   );
@@ -84,6 +89,12 @@ const Medium: React.FC<CustomTextProps> = ({children, ...rest}) => {
       fontSize={'16px'}
       lineHeight={'29.88px'}
       color={theme.colors.black}
+      style={[
+        {
+          textTransform: rest?.isCapitalize ? 'capitalize' : 'none',
+        },
+        rest.style,
+      ]}
       {...rest}>
       {children}
     </Base.Text>

@@ -14,42 +14,56 @@ import {
 } from '@libs/svgs';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
-import {Fragment} from 'react';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {useGlobalStore} from '@store/GlobalStore';
+import {useUserStore} from '@store/UserStore';
+import {Fragment, useEffect, useState} from 'react';
+import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
+import * as _ from 'lodash';
+import {requestLocationPermissions} from '@libs/geolocation';
+import type {IPermissionResTrue} from '@libs/geolocation';
+import {useCategories} from '@api/category';
+import {IPromotion, usePromotions} from '@api/promotions';
+import {useProducts} from '@api/products';
+import {truncate} from 'lodash';
 
-interface IListing {
-  name: string;
-  description: string;
-}
-
-const Listing = ({name, description}: IListing) => {
+const Listing = ({name, ...promotion}: IPromotion) => {
   return (
     <Base.View mb={'-24px'}>
       <Base.Row alignItems={'center'}>
-        <Base.View>
-          <Text.Medium fontSize={'18px'}>{name}</Text.Medium>
+        <Base.View maxWidth={'70%'}>
+          <Text.Medium isCapitalize fontSize={'18px'}>
+            {name}
+          </Text.Medium>
           <Text.Medium
+            isCapitalize
             fontSize={'14px'}
             color={theme.colors.amber07}
-            style={{fontStyle: 'italic'}}
             lineHeight={'20px'}>
-            {description}
+            {promotion?.condition}
           </Text.Medium>
         </Base.View>
-        <ViewAllSpeicalOffers onPress={() => navigate('Deals')}>
+        <ViewAllSpeicalOffers
+          onPress={() =>
+            navigate('Deals', {
+              name,
+              condition: promotion?.condition,
+              id: promotion?.id,
+              startDate: promotion?.startDate,
+              endDate: promotion?.endDate,
+            })
+          }>
           <Text.General fontSize={'12px'}>View all</Text.General>
         </ViewAllSpeicalOffers>
       </Base.Row>
       <Base.View py={'16px'}>
         <Base.Row>
-          {new Array(2)
-            .fill({name: 'Chicken', price: '1150.00'})
-            .map((order, i) => {
-              return <OfaydProduct key={i} />;
-            })}
+          {promotion?.products?.map((product, i) => {
+            const productDetails = product?.product;
+            return <OfaydProduct key={i} {...productDetails} />;
+          })}
         </Base.Row>
       </Base.View>
     </Base.View>
@@ -57,8 +71,57 @@ const Listing = ({name, description}: IListing) => {
 };
 
 const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
-  updateStatusBar('dark-content');
   const insets = useSafeAreaInsets();
+
+  const {data: categoriesData, isLoading: categoriesLoading} = useCategories();
+  const {data: promotionsData, isLoading: promotionsLoading} = usePromotions();
+  const {data: productsData, isLoading: productsLoading} = useProducts();
+
+  const [isFirstTime, isLocationGranted] = useGlobalStore(state => [
+    state.firstTimeLogin,
+    state.locationGranted,
+  ]);
+  const [currentLocation, updateCurrentLocation] = useUserStore(state => [
+    state.user.currentLocation,
+    state.updateCurrentLocation,
+  ]);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefreshing = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 3000);
+  };
+
+  updateStatusBar('dark-content');
+
+  useEffect(() => {
+    isFirstTime && handleOpen?.(DRAWER_CONSTANTS.location);
+  }, []);
+
+  const getLocationAndUpdate = async () => {
+    if (!isFirstTime && isLocationGranted) {
+      const {address, coordinates} =
+        (await requestLocationPermissions()) as unknown as IPermissionResTrue;
+      if (currentLocation) {
+        return;
+      }
+      if (address || coordinates) {
+        return updateCurrentLocation(
+          JSON.stringify({
+            ...coordinates,
+            formatted_address: address,
+          }),
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    getLocationAndUpdate();
+  }, [isFirstTime, isLocationGranted, currentLocation]);
 
   return (
     <CartViewWrapper>
@@ -71,8 +134,9 @@ const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
           pb={'16px'}>
           <TouchableOpacity
             onPress={() => {
-              // handleOpen?.(DRAWER_CONSTANTS.location); - NOTE: this would be moved to an useeffect and would run on first instance
-              handleOpen?.(DRAWER_CONSTANTS.locationSet);
+              isLocationGranted
+                ? handleOpen?.(DRAWER_CONSTANTS.locationSet)
+                : handleOpen?.(DRAWER_CONSTANTS.location);
             }}>
             <Base.Row alignItems={'center'}>
               <LocationPointer>
@@ -84,7 +148,11 @@ const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
                 color={theme.colors.dark}
                 ml={'4px'}
                 mr={'6px'}>
-                Enter your location
+                {(currentLocation &&
+                  _.truncate(JSON.parse(currentLocation)?.formatted_address, {
+                    length: 25,
+                  })) ||
+                  'Enter your location'}
               </Text.General>
               <SvgXml xml={outlineArrowDown} />
             </Base.Row>
@@ -98,40 +166,76 @@ const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
             </ActionButton>
           </Base.Row>
         </Base.Row>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Base.View backgroundColor={theme.colors.white} px={'20px'}>
-            <Text.Medium fontSize={'16px'}>Categories</Text.Medium>
-            <CategoriesView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              bounces={false}>
-              {new Array(6).fill('Vegetables')?.map((category, i) => {
-                return (
-                  <Base.View mr={'8px'} key={i}>
-                    <CategoryImage
-                      source={{
-                        uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1692817235/ofayd-mocks/lellfldd6wtrua9pr3zc.png',
-                      }}
-                    />
-                    <Text.General mt={'8px'} fontSize={'14px'}>
-                      {category}
-                    </Text.General>
-                  </Base.View>
-                );
-              })}
-            </CategoriesView>
-          </Base.View>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefreshing}
+              tintColor={theme.colors.green08}
+            />
+          }
+          showsVerticalScrollIndicator={false}>
+          {categoriesData?.category && (
+            <Base.View backgroundColor={theme.colors.white} px={'20px'}>
+              <Text.Medium fontSize={'16px'}>Categories</Text.Medium>
+              <CategoriesView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                bouncesZoom={false}>
+                {categoriesData?.category?.map((category, i) => {
+                  return (
+                    <Base.View mr={'8px'} key={i}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigate('Category', {
+                            ...category,
+                          })
+                        }
+                        activeOpacity={0.76}>
+                        <CategoryImage
+                          source={{
+                            uri: category?.thumbnails,
+                          }}
+                        />
+                        <Text.General
+                          style={{textTransform: 'capitalize'}}
+                          mt={'8px'}
+                          fontSize={'14px'}>
+                          {truncate(category?.name, {length: 15})}
+                        </Text.General>
+                      </TouchableOpacity>
+                    </Base.View>
+                  );
+                })}
+              </CategoriesView>
+            </Base.View>
+          )}
           <Base.View
             px={'20px'}
             py={'16px'}
             mt={'16px'}
             backgroundColor={theme.colors.white}>
-            <Listing
-              name="Special Offer"
-              description="Get 50% off on all orders"
-            />
-            <Listing name="Ofayd offer" description="Buy two get one free" />
-            <Listing name="Ofayd offer" description="Buy two get one free" />
+            {promotionsData?.promotions?.map((promotion, i) => {
+              return <Listing key={i} {...promotion} />;
+            })}
+            {productsData?.product && (
+              <Base.View mb={'-24px'}>
+                <Base.Row alignItems={'center'}>
+                  <Base.View>
+                    <Text.Medium isCapitalize fontSize={'18px'}>
+                      All Products
+                    </Text.Medium>
+                  </Base.View>
+                </Base.Row>
+                <Base.View py={'16px'}>
+                  <Base.Row flexWrap={'wrap'}>
+                    {productsData?.product?.map((product, i) => {
+                      return <OfaydProduct key={i} {...product} />;
+                    })}
+                  </Base.Row>
+                </Base.View>
+              </Base.View>
+            )}
           </Base.View>
         </ScrollView>
       </Fragment>
@@ -153,6 +257,7 @@ const CategoryImage = styled.Image`
   width: 106px;
   border-radius: 6px;
   padding-bottom: 20px;
+  background-color: ${theme.colors.green08};
 `;
 const CategoriesView = styled.ScrollView`
   margin-top: 12px;

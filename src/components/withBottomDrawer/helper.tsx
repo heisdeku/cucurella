@@ -6,6 +6,7 @@ import {LocationDrawer} from './LocationDrawer';
 import {WarningDrawer} from './WarningDrawer';
 import {BankDetailsDrawer} from './BankDetailsDrawer';
 import {LocationSetDrawer} from './LocationSetDrawer';
+import {AddPaymentMethod} from './AddPaymentMethod';
 
 export interface IDrawerChildProps {
   handleClose?: () => void;
@@ -19,8 +20,14 @@ export const getDrawerChild = (
   handleOpen?: (value: any, payload?: any) => void,
 ) => {
   switch (data?.id) {
+    case DRAWER_CONSTANTS.addPaymentMethod:
+      return (
+        <AddPaymentMethod handleClose={handleClose} handleOpen={handleOpen} />
+      );
     case DRAWER_CONSTANTS.bankDetails:
-      return <BankDetailsDrawer />;
+      return (
+        <BankDetailsDrawer handleClose={handleClose} handleOpen={handleOpen} />
+      );
     case DRAWER_CONSTANTS.biometrics:
       return <BiometricsDrawer handleClose={handleClose} />;
     case DRAWER_CONSTANTS.location:

@@ -1,8 +1,11 @@
+import {useOrdersByType} from '@api/orders';
+import {IOrder} from '@api/orders/types';
 import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {Text} from '@components/Text';
 import updateStatusBar from '@hooks/updateStatusBar';
 import {windowHeight} from '@libs/constant';
+import {formatDateTime} from '@libs/date';
 import {order_empty_illustration, outlineArrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
@@ -26,7 +29,7 @@ const types = [
 const OrdersEmpty = () => {
   return (
     <Fragment>
-      <Base.View mb={'50%'} mx={'auto'} mt="64px">
+      <Base.View mb={'30%'} mx={'auto'} mt="64px">
         <SvgXml xml={order_empty_illustration} />
         <Text.Medium
           color={theme.colors.neutral07}
@@ -42,14 +45,19 @@ const OrdersEmpty = () => {
 
 const Order = ({
   isLast,
-  isComplete = false,
-}: {
+  ...order
+}: IOrder & {
   isLast: boolean;
-  isComplete?: boolean;
 }) => {
   updateStatusBar('dark-content');
   const handleNavigate = () => {
-    return navigate(!isComplete ? 'OrderCheckout' : 'OrderDetails');
+    order?.orderStatus === 'ongoing' &&
+      navigate('TrackOrder', {orderId: order?.id, packageid: order?.packageId});
+    order?.orderStatus !== 'ongoing' &&
+      navigate('OrderDetails', {
+        orderId: order?.id,
+        packageid: order?.packageId,
+      });
   };
   return (
     <TouchableOpacity onPress={handleNavigate}>
@@ -64,19 +72,22 @@ const Order = ({
             fontFamily="500"
             color={theme.colors.neutral07}
             fontSize={'16px'}>
-            5 items (Chicken, green pepper)...
+            {order?.products?.length} items (
+            {`${order?.products?.map(product => product?.name).join(', ')}`})...
           </Text.General>
           <Text.General
             mt={'6px'}
             color={theme.colors.neutral06}
             fontSize={'14px'}>
-            31 July at 10:34am |{' '}
+            {formatDateTime(order?.created_at as Date)} |{' '}
             <Text.General
               color={
-                isComplete ? theme.colors.green07 : theme.colors.goldenYellow
+                order?.orderStatus !== 'ongoing'
+                  ? theme.colors.green07
+                  : theme.colors.goldenYellow
               }
               fontSize={'14px'}>
-              {!isComplete ? 'processing' : 'completed'}
+              {order?.orderStatus}
             </Text.General>
           </Text.General>
         </Base.View>
@@ -88,48 +99,79 @@ const Order = ({
 
 const OrdersFilled = () => {
   const [activeTab, setActiveTab] = useState('ongoing');
+
+  const {data: ongoingOrdersData} = useOrdersByType({
+    variables: {status: 'ongoing'},
+  });
+  const {data: completedOrdersData} = useOrdersByType({
+    variables: {status: 'delivered'},
+  });
+
+  const renderOngoingOrders = (orders: IOrder[]) => {
+    if (orders.length < 1) {
+      return <OrdersEmpty />;
+    }
+    return (
+      <TabOrdersListing bounces={false}>
+        {orders?.map((order, i) => {
+          const isLast = i + 1 === orders.length;
+          return <Order {...order} key={i} isLast={isLast} />;
+        })}
+      </TabOrdersListing>
+    );
+  };
+  const renderCompletedOrders = (orders: IOrder[]) => {
+    if (orders.length < 1) {
+      return <OrdersEmpty />;
+    }
+    return (
+      <TabOrdersListing bounces={false}>
+        {orders?.map((order, i) => {
+          const isLast = i + 1 === orders.length;
+          return <Order {...order} key={i} isLast={isLast} />;
+        })}
+      </TabOrdersListing>
+    );
+  };
   return (
     <ScrollView>
       <Base.View>
-        <Base.Row
-          backgroundColor={theme.colors.white}
-          mt={'24px'}
-          borderRadius={'8px'}
-          justifyContent={'space-between'}
-          padding={'8px'}>
-          {types?.map((type, i) => {
-            return (
-              <TabButton
-                //@ts-ignore
-                isActive={type.key === activeTab}
-                onPress={() => setActiveTab(type?.key)}
-                key={`${type.key}-${i}`}>
-                <Text.Medium
-                  color={
-                    type.key === activeTab
-                      ? theme.colors.white
-                      : theme.colors.black
-                  }
-                  fontFamily={type.key === activeTab ? '500' : '400'}>
-                  {type.label}
-                </Text.Medium>
-              </TabButton>
-            );
-          })}
-        </Base.Row>
-        {activeTab === 'ongoing' && (
-          <TabOrdersListing bounces={false}>
-            {new Array(10).fill('order').map((_, i) => {
-              return <Order key={i} isLast={i + 1 === 5} />;
-            })}
-          </TabOrdersListing>
+        {!ongoingOrdersData?.orders && !completedOrdersData?.orders && (
+          <OrdersEmpty />
         )}
-        {activeTab === 'complete' && (
-          <TabOrdersListing bounces={false}>
-            {new Array(5).fill('order').map((_, i) => {
-              return <Order isComplete={true} key={i} isLast={i + 1 === 5} />;
-            })}
-          </TabOrdersListing>
+        {(ongoingOrdersData?.orders || completedOrdersData?.orders) && (
+          <Fragment>
+            <Base.Row
+              backgroundColor={theme.colors.white}
+              mt={'24px'}
+              borderRadius={'8px'}
+              justifyContent={'space-between'}
+              padding={'8px'}>
+              {types?.map((type, i) => {
+                return (
+                  <TabButton
+                    //@ts-ignore
+                    isActive={type.key === activeTab}
+                    onPress={() => setActiveTab(type?.key)}
+                    key={`${type.key}-${i}`}>
+                    <Text.Medium
+                      color={
+                        type.key === activeTab
+                          ? theme.colors.white
+                          : theme.colors.black
+                      }
+                      fontFamily={type.key === activeTab ? '500' : '400'}>
+                      {type.label}
+                    </Text.Medium>
+                  </TabButton>
+                );
+              })}
+            </Base.Row>
+            {activeTab === 'ongoing' &&
+              renderOngoingOrders(ongoingOrdersData?.orders || [])}
+            {activeTab === 'complete' &&
+              renderCompletedOrders(completedOrdersData?.orders || [])}
+          </Fragment>
         )}
       </Base.View>
     </ScrollView>

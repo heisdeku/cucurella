@@ -1,18 +1,20 @@
+import {ICartItem} from '@api/index';
 import {Base} from '@components/Base';
 import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
 import {windowHeight} from '@libs/constant';
+import {formatMonetaryAmount} from '@libs/helper';
 import {add_icon, minus_icon} from '@libs/svgs';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
+import {useCartStore} from '@store/CartStore';
 import {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
-export interface IOrder {}
-const Order: React.FC<IOrder> = () => {
-  const [amount, setAmount] = useState(1);
+const CartItem: React.FC<ICartItem> = ({...item}) => {
+  const [amount, setAmount] = useState(item?.quantity);
   return (
     <Base.Row
       borderRadius={'8px'}
@@ -24,14 +26,14 @@ const Order: React.FC<IOrder> = () => {
         <Base.Row mb={'16px'}>
           <ProductImage
             source={{
-              uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1692820452/ofayd-mocks/ymjrrmeofornej3m6u1s.png',
+              uri: item?.product?.images[0],
             }}
             resizeMethod="auto"
             resizeMode="cover"
           />
-          <Base.View>
-            <Text.Medium lineHeight={'16px'} fontSize={'16px'}>
-              Mangoes
+          <Base.View pt={'5px'}>
+            <Text.Medium lineHeight={'16px'} isCapitalize fontSize={'16px'}>
+              {item?.product?.name}
             </Text.Medium>
             <Text.General color={theme.colors.neutral06} fontSize={'12px'}>
               10kg
@@ -41,7 +43,11 @@ const Order: React.FC<IOrder> = () => {
               fontSize={'14px'}
               fontFamily="500"
               mt={'5.5px'}>
-              ₦200
+              ₦
+              {
+                formatMonetaryAmount(item?.product?.amount * item?.quantity)
+                  .figure
+              }
             </Text.General>
           </Base.View>
         </Base.Row>
@@ -71,12 +77,13 @@ const Order: React.FC<IOrder> = () => {
 };
 
 const Checkout = () => {
+  const [cart] = useCartStore(state => [state.cart]);
   return (
     <Base.View>
       <ScreenHeader label="Checkout" />
       <OrderList>
-        {new Array(Math.floor(Math.random() * 6)).fill('order').map((_, i) => {
-          return <Order key={i} />;
+        {cart?.cartItems?.map((item, i) => {
+          return <CartItem {...item} key={i} />;
         })}
       </OrderList>
       <Base.View px={'20px'}>
@@ -100,6 +107,7 @@ const ProductImage = styled.Image`
   height: 48px;
   border-radius: 3px;
   margin-right: 8px;
+  background-color: ${theme.colors.green08};
 `;
 const OrderList = styled.ScrollView`
   height: ${windowHeight - 200}px;
