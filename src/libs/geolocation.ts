@@ -83,13 +83,20 @@ export const getLiveLocation: () => Promise<Coords> = async () => {
 };
 
 const handleLocationPermissionTrue = async (): Promise<IPermissionResTrue> => {
+  console.log('before get current location --->');
   const coords = (await getCurrentLocation()) as unknown as Coords;
+  console.log('after get current location --->');
   const {latitude, longitude} = coords;
+  console.log('before get post code address from lat and long --->');
   const [error, response] = await getPostCodeAddressFromLatAndLong(
     coords.latitude,
     coords.longitude,
   );
+  console.log('after get post code address from lat and long --->');
   if (!error) {
+    console.log(
+      'after get post code address from lat and long and no error --->',
+    );
     const currentLocation = response.results[0].formatted_address;
     return {
       address: currentLocation,
@@ -99,6 +106,11 @@ const handleLocationPermissionTrue = async (): Promise<IPermissionResTrue> => {
       },
     };
   }
+  console.log(
+    'error: ',
+    error,
+    'after get post code address from lat and long and there is error --->',
+  );
   return Promise.reject({
     error: true,
     message: 'Something went wrong getting user current location',
@@ -110,6 +122,7 @@ export const requestLocationPermissions = async (): Promise<
 > => {
   return requestLocationPermission().then(async state => {
     if (state) {
+      console.log('requestLocationPermissions ---->');
       const {address, coordinates} = await handleLocationPermissionTrue();
       return {address, coordinates};
     }

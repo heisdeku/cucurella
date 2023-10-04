@@ -66,3 +66,25 @@ export function formatMonetaryAmount(number: number) {
 
   return result;
 }
+
+export const getCardType = (cardNumber: string): string | null => {
+  // Regular expressions for card patterns
+  const visaPattern = /^4[0-9]{12}(?:[0-9]{3})?$/;
+  const mastercardPattern = /^5[1-5][0-9]{14}$/;
+  const vervePattern =
+    /^(506(0|1)|507(8|9)|6500|6504|6505|6507|6509|6512|6513|6514|6515|6516|6550|6556)[0-9]{12}$/;
+
+  // Remove non-digit characters from the card number
+  const cleanedCardNumber = cardNumber.replace(/\D/g, '');
+
+  // Check the card number against the patterns
+  if (visaPattern.test(cleanedCardNumber)) {
+    return 'visa';
+  } else if (mastercardPattern.test(cleanedCardNumber)) {
+    return 'mastercard';
+  } else if (vervePattern.test(cleanedCardNumber)) {
+    return 'verve';
+  } else {
+    return null;
+  }
+};

@@ -5,7 +5,7 @@ export interface ISavedPlace {
   location: {
     latitude: number;
     longitude: number;
-    formated_address: string;
+    formatted_address: string;
   };
   created_at: Date | string;
   updated_at: Date | string;

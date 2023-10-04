@@ -1,6 +1,5 @@
 export function formatDateTime(inputDateTime: Date) {
   const inputDate = new Date(inputDateTime);
-  console.log(inputDate, inputDateTime);
   const currentDate = new Date();
 
   // Check if the input date is today

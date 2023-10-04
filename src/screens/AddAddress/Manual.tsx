@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import theme from '@libs/theme';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 import {Base} from '@components/Base';
@@ -8,42 +8,96 @@ import ScreenHeader from '@components/ScreenHeader';
 import withBottomDrawer from '@components/withBottomDrawer';
 import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
 import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
+import {Formik} from 'formik';
+import {getPlaceFromText} from '@api/location';
+import {useAddSavedPlace} from '@api/saved-places';
+import {goBack} from '@stacks/helper';
 
 const Manual: React.FC<IDrawerChildProps> = ({handleOpen}) => {
+  const {mutate, isLoading} = useAddSavedPlace();
+
+  const [loading, setLoading] = useState(false);
+
+  const handleSearchAdress = async (values: any) => {
+    setLoading(true);
+    const placeToSearch = `${values?.houseNumber}, ${values?.streetName}, ${values?.city}`;
+    const response = await getPlaceFromText(placeToSearch);
+
+    if (response[0] === null) {
+      setLoading(false);
+      const {geometry} = response[1]?.results[1];
+      const formattedAddress = {
+        formatted_address: placeToSearch,
+        latitude: geometry?.location.lat,
+        longitude: geometry?.location.lng,
+      };
+      return mutate(
+        {
+          description: formattedAddress?.formatted_address,
+          location: formattedAddress,
+        },
+        {onSuccess: () => goBack()},
+      );
+    }
+    return setLoading(false);
+  };
   return (
     <KeyboardWrapper>
       <ScreenHeader label="Add Address" />
-      <Base.View px={'24px'}>
-        <Base.View mb={'80%'} mt={'32px'}>
-          <Input
-            keyboardType="default"
-            label="Street Name"
-            placeholder="Empire homes estate"
-          />
-          <Base.View mt={24}>
-            <Input
-              keyboardType="number-pad"
-              label="House number"
-              placeholder="30"
+      <Formik
+        onSubmit={values => {
+          return handleSearchAdress(values);
+        }}
+        initialValues={{
+          streetName: '',
+          houseNumber: '',
+          city: '',
+        }}>
+        {({handleChange, handleSubmit, values}) => (
+          <Base.View px={'24px'}>
+            <Base.View mb={'80%'} mt={'32px'}>
+              <Input
+                keyboardType="default"
+                label="Street Name"
+                placeholder="Empire homes estate"
+                value={values?.streetName}
+                setValue={handleChange('streetName')}
+              />
+              <Base.View mt={24}>
+                <Input
+                  keyboardType="number-pad"
+                  label="House number"
+                  placeholder="30"
+                  value={values?.houseNumber}
+                  setValue={handleChange('houseNumber')}
+                />
+              </Base.View>
+              <Base.View mt={24}>
+                <Input
+                  keyboardType="default"
+                  label="City"
+                  placeholder="Lekki, Lagos"
+                  value={values?.city}
+                  setValue={handleChange('city')}
+                />
+              </Base.View>
+            </Base.View>
+            <Base.Button
+              // onPress={() =>
+              //   handleOpen?.(DRAWER_CONSTANTS.warning, {
+              //     type: 'no-address-support',
+              //   })
+              // }
+              onPress={() => handleSubmit()}
+              disabled={
+                !values?.city || !values?.houseNumber || !values?.streetName
+              }
+              isLoading={loading || isLoading}
+              title={'Confirm'}
             />
           </Base.View>
-          <Base.View mt={24}>
-            <Input
-              keyboardType="default"
-              label="City"
-              placeholder="Lekki, Lagos"
-            />
-          </Base.View>
-        </Base.View>
-        <Base.Button
-          onPress={() =>
-            handleOpen?.(DRAWER_CONSTANTS.warning, {
-              type: 'no-address-support',
-            })
-          }
-          title={'Confirm'}
-        />
-      </Base.View>
+        )}
+      </Formik>
     </KeyboardWrapper>
   );
 };

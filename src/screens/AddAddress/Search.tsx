@@ -19,7 +19,8 @@ import {useAddSavedPlace} from '@api/saved-places/useAddSavedPlace';
 
 const Place: React.FC<PredictionType> = ({...place}) => {
   const {mutate, isLoading} = useAddSavedPlace();
-  const handleSelection = async (placeId?: string) => {
+
+  const handleSelection = async () => {
     if (place?.place_id) {
       const [error, response] = await getAddressMetaByPlaceID(place?.place_id);
 

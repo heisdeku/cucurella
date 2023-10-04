@@ -1,3 +1,4 @@
+import {goBack} from '@stacks/helper';
 import type {AxiosError} from 'axios';
 import {createMutation} from 'react-query-kit';
 import {client, queryClient} from '../common';
@@ -21,8 +22,9 @@ export const useAddSavedPlace = createMutation<Response, Variables, AxiosError>(
         data: variables,
       }).then(response => response?.data);
     },
-    // onSuccess: async () => {
-    //   queryClient.invalidateQueries({queryKey: ['/user/saved-places']});
-    // },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({queryKey: ['/user/saved-places']});
+      return goBack();
+    },
   },
 );

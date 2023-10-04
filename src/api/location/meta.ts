@@ -1,7 +1,7 @@
 import {ErrorResponse} from '@api/types';
 import {handleServerError} from '@libs/error';
 import axios from 'axios';
-import {PlaceAddress, Predictions} from './types';
+import {IPlaceData, PlaceAddress, Predictions} from './types';
 
 const apiClient = async <T>(
   url: string,
@@ -20,6 +20,7 @@ const apiClient = async <T>(
 };
 
 const BASE_GOOGLE_MAPS_URL = 'https://maps.googleapis.com/maps/api';
+
 export const getPredictions = async (search: string) => {
   return apiClient<Predictions>(
     `${BASE_GOOGLE_MAPS_URL}/place/autocomplete/json?key=AIzaSyDj8vnLW0ss28PfWKT0Gy6huvKMK_ZpqBM&input=${search}&types=address&components=country:ng`,
@@ -31,9 +32,16 @@ export const getPredictionsQuery = async (search: string) => {
     `${BASE_GOOGLE_MAPS_URL}/place/queryautocomplete/json?key=AIzaSyDj8vnLW0ss28PfWKT0Gy6huvKMK_ZpqBM&input=${search}&types=establishment&components=country:ng`,
   );
 };
+
 export const getPlacePredictions = async (search: string) => {
   return apiClient<Predictions>(
     `${BASE_GOOGLE_MAPS_URL}/place/findplacefromtext/json?key=AIzaSyDj8vnLW0ss28PfWKT0Gy6huvKMK_ZpqBM&input=${search}&inputype=textquery`,
+  );
+};
+
+export const getPlaceFromText = async (search: string) => {
+  return apiClient<IPlaceData>(
+    `${BASE_GOOGLE_MAPS_URL}/place/textsearch/json?key=AIzaSyDj8vnLW0ss28PfWKT0Gy6huvKMK_ZpqBM&query=${search}`,
   );
 };
 
