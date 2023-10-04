@@ -3,8 +3,13 @@ import {Base} from '@components/Base';
 import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
 import {formatMonetaryAmount} from '@libs/helper';
-import {order_progress__tracker} from '@libs/svgs';
 import theme from '@libs/theme';
+import {
+  tracker_step_one,
+  tracker_step_two,
+  tracker_step_three,
+  tracker_step_four,
+} from '@libs/tracker-svg';
 import {useRoute} from '@react-navigation/native';
 import {Fragment} from 'react';
 import {ActivityIndicator} from 'react-native';
@@ -60,7 +65,7 @@ const TrackOrder = () => {
               </Text.Medium>
               <Base.Row mt={'18px'}>
                 <Base.View width={'10%'}>
-                  <SvgXml xml={order_progress__tracker} />
+                  <SvgXml xml={tracker_step_one} />
                 </Base.View>
                 <Base.View width={'90%'}>
                   <Base.Row mb={'20px'} justifyContent={'space-between'}>
@@ -88,7 +93,7 @@ const TrackOrder = () => {
                       fontFamily="400"
                       fontSize={'14px'}
                       color={theme.colors.neutral07}>
-                      18:23
+                      -
                     </Text.Medium>
                   </Base.Row>
                   <Base.Row mb={'20px'} justifyContent={'space-between'}>
@@ -102,7 +107,7 @@ const TrackOrder = () => {
                       fontFamily="400"
                       fontSize={'14px'}
                       color={theme.colors.neutral07}>
-                      18:24
+                      -
                     </Text.Medium>
                   </Base.Row>
                   <Base.Row justifyContent={'space-between'}>
@@ -117,7 +122,7 @@ const TrackOrder = () => {
                       fontFamily="400"
                       fontSize={'14px'}
                       color={theme.colors.neutral07}>
-                      18:26
+                      -
                     </Text.Medium>
                   </Base.Row>
                 </Base.View>
