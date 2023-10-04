@@ -8,7 +8,8 @@ type Variables = void;
 
 export const useProfile = createQuery<Response, Variables, AxiosError>({
   primaryKey: '/user/profile',
-  queryFn: ({queryKey: [primaryKey]}) => {
-    return client.get(`${primaryKey}`).then(response => response.data?.data);
+  queryFn: async ({queryKey: [primaryKey]}) => {
+    const response = await client.get(`${primaryKey}`);
+    return response.data?.data;
   },
 });

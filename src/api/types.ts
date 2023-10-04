@@ -5,6 +5,7 @@ export type ErrorResponse = {
   status: 'error';
   errorMessage: string;
 };
+
 export type RequestResponse<T> = [ErrorResponse | null, T | null];
 
 export interface IOfaydProduct {

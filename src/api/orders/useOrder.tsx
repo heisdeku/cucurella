@@ -8,9 +8,8 @@ type Variables = {orderId: string};
 
 export const useOrder = createQuery<Response, Variables, AxiosError>({
   primaryKey: 'order',
-  queryFn: ({queryKey: [_, variables]}) => {
-    return client
-      .get(`/order/${variables?.orderId}`)
-      .then(response => response.data.data);
+  queryFn: async ({queryKey: [_, variables]}) => {
+    const response = await client.get(`/order/${variables?.orderId}`);
+    return response.data.data;
   },
 });

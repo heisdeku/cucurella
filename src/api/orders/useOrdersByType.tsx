@@ -8,9 +8,10 @@ type Variables = {status: 'delivered' | 'assigned' | 'ongoing' | 'pending'};
 
 export const useOrdersByType = createQuery<Response, Variables, AxiosError>({
   primaryKey: 'orders',
-  queryFn: ({queryKey: [_, variables]}) => {
-    return client
-      .get(`/order/user/all?status=${variables?.status}`)
-      .then(response => response.data.data);
+  queryFn: async ({queryKey: [_, variables]}) => {
+    const response = await client.get(
+      `/order/user/all?status=${variables?.status}`,
+    );
+    return response.data.data;
   },
 });

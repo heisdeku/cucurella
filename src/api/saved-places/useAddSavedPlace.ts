@@ -2,15 +2,19 @@ import {goBack} from '@stacks/helper';
 import type {AxiosError} from 'axios';
 import {createMutation} from 'react-query-kit';
 import {client, queryClient} from '../common';
+import {IAddSavedPlaceVariable} from './types';
 
-type Variables = {
-  description: string;
-  location: {latitude: string; longitude: string; formatted_address: string};
-};
+type Variables = IAddSavedPlaceVariable;
+
 type Response = {
   status: boolean;
   message: string;
-  data: {id: string; userId: string; description: string; location: string};
+  data: {
+    id: string;
+    userId: string;
+    description: string;
+    location: string;
+  };
 };
 
 export const useAddSavedPlace = createMutation<Response, Variables, AxiosError>(

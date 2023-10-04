@@ -10,7 +10,11 @@ type Variables = {
 type Response = {
   status: boolean;
   message: string;
-  data: {authorization_url: string; access_code: string; reference: string};
+  data: {
+    authorization_url: string;
+    access_code: string;
+    reference: string;
+  };
 };
 
 export const usePayment = createMutation<Response, Variables, AxiosError>({

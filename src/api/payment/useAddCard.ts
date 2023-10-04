@@ -1,4 +1,3 @@
-import {useCheckoutStore} from '@store/CheckoutStore';
 import type {AxiosError} from 'axios';
 import {createMutation} from 'react-query-kit';
 import {client} from '../common';

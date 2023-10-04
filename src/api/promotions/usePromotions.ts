@@ -8,9 +8,8 @@ type Variables = void;
 
 export const usePromotions = createQuery<Response, Variables, AxiosError>({
   primaryKey: '/promotion',
-  queryFn: ({queryKey: [primaryKey]}) => {
-    return client
-      .get(`${primaryKey}?products=true`)
-      .then(response => response.data.data);
+  queryFn: async ({queryKey: [primaryKey]}) => {
+    const response = await client.get(`${primaryKey}?products=true`);
+    return response.data.data;
   },
 });

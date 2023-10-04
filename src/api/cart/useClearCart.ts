@@ -1,3 +1,4 @@
+import {useCartStore} from '@store/CartStore';
 import type {AxiosError} from 'axios';
 import {createMutation} from 'react-query-kit';
 import {client, queryClient} from '../common';
@@ -14,8 +15,9 @@ export const useClearCart = createMutation<Response, Variables, AxiosError>({
     }).then(response => response?.data);
   },
   onSuccess: async data => {
-    console.log('success', data);
+    const {clearCart} = useCartStore.getState();
     await queryClient.cancelQueries({queryKey: ['/cart/cart']});
+    clearCart();
     return queryClient.invalidateQueries({queryKey: ['/cart/cart']});
   },
   onError: async e => {

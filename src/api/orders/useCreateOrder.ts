@@ -1,7 +1,6 @@
 import {navigate} from '@stacks/helper';
 import type {AxiosError} from 'axios';
 import {createMutation} from 'react-query-kit';
-import {useClearCart} from '../cart';
 import {client} from '../common';
 import {ICreateOrder} from './types';
 
