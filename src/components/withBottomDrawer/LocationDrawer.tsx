@@ -25,13 +25,14 @@ export const LocationDrawer: React.FC<IDrawerChildProps> = ({
   ]);
 
   const handleAllowLocationPermission = async () => {
-    setFirstTimeLogin(false);
-    const {address, coordinates} =
-      (await requestLocationPermissions()) as unknown as IPermissionResTrue;
+    //@ts-ignore
+    const {address, coordinates} = await requestLocationPermissions();
     if (address || coordinates) {
+      console.log('handle allow location permission success ---->');
       updateCurrentLocation(
         JSON.stringify({...coordinates, formatted_address: address}),
       );
+      setFirstTimeLogin(false);
       return handleClose?.();
     }
     return handleClose?.();

@@ -7,10 +7,25 @@ import {Path, Svg, SvgXml} from 'react-native-svg';
 import {trash_icon} from '@libs/svgs';
 import ScreenHeader from '@components/ScreenHeader';
 import {useSavedPlaces} from '@api/saved-places/useSavedPlaces';
-import {ISavedPlace} from '@api/saved-places';
+import {ISavedPlace, useDeleteSavedPlaces} from '@api/saved-places';
 import {navigate} from '@stacks/helper';
+import {ActivityIndicator, TouchableOpacity} from 'react-native';
+import {useUpdateUserLocation} from '@api/location/useUpdateLocation';
+import {useUserStore} from '@store/UserStore';
 
 const SavedPlace: React.FC<ISavedPlace> = ({...place}) => {
+  const {mutate, isLoading} = useUpdateUserLocation();
+  const {mutate: deleteMutate, isLoading: deleteLoading} =
+    useDeleteSavedPlaces();
+  const [userId] = useUserStore(state => [state.user.id]);
+
+  const handleUpdateLocation = async () => {
+    return mutate({location: place.location, userId});
+  };
+
+  const handleDeletePlace = async () => {
+    return deleteMutate({placeId: place.id});
+  };
   return (
     <Base.Row
       borderBottomWidth={'1px'}
@@ -18,8 +33,14 @@ const SavedPlace: React.FC<ISavedPlace> = ({...place}) => {
       alignItems={'center'}
       px={'8px'}
       py={'16px'}>
-      <Text.Medium fontSize={'14px'}>{place?.description}</Text.Medium>
-      <DeleteButton>
+      <TouchableOpacity
+        onPress={() => handleUpdateLocation()}
+        activeOpacity={0.45}>
+        <Text.Medium maxWidth={'98%'} fontSize={'14px'}>
+          {place?.description}
+        </Text.Medium>
+      </TouchableOpacity>
+      <DeleteButton onPress={() => handleDeletePlace()}>
         <SvgXml xml={trash_icon} />
       </DeleteButton>
     </Base.Row>
@@ -28,13 +49,14 @@ const SavedPlace: React.FC<ISavedPlace> = ({...place}) => {
 
 const SavedPlaces = () => {
   const {data, isLoading, isError} = useSavedPlaces();
-  const [savedPlaces, setSavedPlaces] = useState<ISavedPlace[]>();
+  const [savedPlaces, setSavedPlaces] = useState<ISavedPlace[]>([]);
 
   useEffect(() => {
-    if (data) {
+    if (data && Array.isArray(data)) {
       return setSavedPlaces(data);
     }
   });
+
   return (
     <Base.View backgroundColor={theme.colors.white}>
       <ScreenHeader label="Saved Places" />
@@ -67,9 +89,18 @@ const SavedPlaces = () => {
           </LocationFiled>
         </Base.View>
         <Base.View my={'14px'}>
-          {savedPlaces?.map((place, i) => {
-            return <SavedPlace {...place} key={i} />;
-          })}
+          {isLoading && (
+            <ActivityIndicator size={'large'} color={theme.colors.green08} />
+          )}
+          {Array.isArray(data) &&
+            savedPlaces?.map((place, i) => {
+              return <SavedPlace {...place} key={i} />;
+            })}
+          {!Array.isArray(data) && (
+            <Text.General mt={'20px'} fontSize={'14px'} textAlign={'center'}>
+              {data}
+            </Text.General>
+          )}
         </Base.View>
       </ScrollArea>
     </Base.View>

@@ -87,7 +87,7 @@ const KeyboardAwareScrollView: FC<ScrollViewProps> = ({children, ...rest}) => {
           if (tag.value !== -1) {
             // save position of focused text input when keyboard starts to move
             layout.value = measureByTag(e.target);
-            console.log('UPDATED LAYOUT::', layout.value);
+            // console.log('UPDATED LAYOUT::', layout.value);
           }
         }
 

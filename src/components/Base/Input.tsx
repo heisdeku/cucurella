@@ -14,6 +14,7 @@ interface IInputProps extends Omit<TextInputProps, 'value'> {
   value?: string;
   setValue?: (value: any) => void | any;
   hasCountryCode?: false;
+  suffix?: React.ReactElement;
 }
 
 const Input = ({
@@ -22,6 +23,7 @@ const Input = ({
   value,
   setValue,
   hasCountryCode,
+  suffix,
   ...props
 }: IInputProps) => {
   const phoneInput = useRef(null);
@@ -54,16 +56,19 @@ const Input = ({
             />
           )}
           {!hasCountryCode && (
-            <InputField
-              value={value}
-              placeholder={placeholder}
-              placeholderTextColor={theme.colors.neutral07}
-              autoCapitalize="none"
-              autoComplete="off"
-              autoCorrect={false}
-              onChangeText={(text: string) => setValue?.(text)}
-              {...props}
-            />
+            <Base.Row>
+              <InputField
+                value={value}
+                placeholder={placeholder}
+                placeholderTextColor={theme.colors.neutral07}
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                onChangeText={(text: string) => setValue?.(text)}
+                {...props}
+              />
+              {suffix}
+            </Base.Row>
           )}
         </Base.View>
       </Base.View>

@@ -43,6 +43,7 @@
     "react-native-screens": "^3.23.0",
     "react-native-sensitive-info": "^6.0.0-alpha.9",
     "react-native-svg": "^13.11.0",
+    "react-native-webview": "^13.6.0",
     "react-query-kit": "^2.0.1",
     "styled-components": "^6.0.7",
     "styled-system": "^5.1.5",

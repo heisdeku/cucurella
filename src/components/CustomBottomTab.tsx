@@ -16,6 +16,9 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
   const {data: ongoingOrdersData} = useOrdersByType({
     variables: {status: 'ongoing'},
   });
+  const {data: pendingOrdersData} = useOrdersByType({
+    variables: {status: 'pending'},
+  });
 
   const onPress = (route: any, isFocused: boolean) => {
     const event = navigation.emit({
@@ -75,7 +78,8 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
           mt={'8px'}>
           Orders
         </Text.General>
-        {Number(ongoingOrdersData?.count) > 0 && (
+        {Number(ongoingOrdersData?.count) + Number(pendingOrdersData?.count) >
+          0 && (
           <Base.View
             position={'absolute'}
             backgroundColor={theme.colors.goldenYellow}
@@ -91,7 +95,10 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
               color={theme.colors.black}
               lineHeight={'12px'}
               fontSize={'10px'}>
-              {ongoingOrdersData?.count}
+              {
+                //@ts-ignore
+                ongoingOrdersData?.count + pendingOrdersData?.count
+              }
             </Text.Medium>
           </Base.View>
         )}

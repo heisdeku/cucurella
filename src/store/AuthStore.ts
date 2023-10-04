@@ -71,7 +71,7 @@ export const useAuthStore = create(
         }
         try {
         } catch (e) {
-          console.log(e);
+          console.error(e);
         }
       },
     }),

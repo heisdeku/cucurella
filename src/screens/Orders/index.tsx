@@ -9,7 +9,7 @@ import {formatDateTime} from '@libs/date';
 import {order_empty_illustration, outlineArrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
-import {Fragment, useState} from 'react';
+import {Fragment, useMemo, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SvgXml} from 'react-native-svg';
@@ -51,9 +51,9 @@ const Order = ({
 }) => {
   updateStatusBar('dark-content');
   const handleNavigate = () => {
-    order?.orderStatus === 'ongoing' &&
+    order?.orderStatus !== 'delivered' &&
       navigate('TrackOrder', {orderId: order?.id, packageid: order?.packageId});
-    order?.orderStatus !== 'ongoing' &&
+    order?.orderStatus === 'delivered' &&
       navigate('OrderDetails', {
         orderId: order?.id,
         packageid: order?.packageId,
@@ -100,6 +100,9 @@ const Order = ({
 const OrdersFilled = () => {
   const [activeTab, setActiveTab] = useState('ongoing');
 
+  const {data: pendingOrdersData} = useOrdersByType({
+    variables: {status: 'pending'},
+  });
   const {data: ongoingOrdersData} = useOrdersByType({
     variables: {status: 'ongoing'},
   });
@@ -133,46 +136,64 @@ const OrdersFilled = () => {
       </TabOrdersListing>
     );
   };
+
+  const ongoing = useMemo(
+    //@ts-ignore
+    () => [...pendingOrdersData?.orders, ...ongoingOrdersData?.orders],
+    [ongoingOrdersData, pendingOrdersData],
+  );
+
   return (
     <ScrollView>
       <Base.View>
-        {!ongoingOrdersData?.orders && !completedOrdersData?.orders && (
-          <OrdersEmpty />
-        )}
-        {(ongoingOrdersData?.orders || completedOrdersData?.orders) && (
-          <Fragment>
-            <Base.Row
-              backgroundColor={theme.colors.white}
-              mt={'24px'}
-              borderRadius={'8px'}
-              justifyContent={'space-between'}
-              padding={'8px'}>
-              {types?.map((type, i) => {
-                return (
-                  <TabButton
-                    //@ts-ignore
-                    isActive={type.key === activeTab}
-                    onPress={() => setActiveTab(type?.key)}
-                    key={`${type.key}-${i}`}>
-                    <Text.Medium
-                      color={
-                        type.key === activeTab
-                          ? theme.colors.white
-                          : theme.colors.black
-                      }
-                      fontFamily={type.key === activeTab ? '500' : '400'}>
-                      {type.label}
-                    </Text.Medium>
-                  </TabButton>
-                );
-              })}
-            </Base.Row>
-            {activeTab === 'ongoing' &&
-              renderOngoingOrders(ongoingOrdersData?.orders || [])}
-            {activeTab === 'complete' &&
-              renderCompletedOrders(completedOrdersData?.orders || [])}
-          </Fragment>
-        )}
+        {
+          //@ts-ignore
+          !ongoing?.length && !completedOrdersData?.orders?.length && (
+            <OrdersEmpty />
+          )
+        }
+        {
+          //@ts-ignore
+          ongoing?.length < 1 && completedOrdersData?.orders?.length < 1 && (
+            <OrdersEmpty />
+          )
+        }
+        {
+          //@ts-ignore
+          (ongoing?.length > 0 || completedOrdersData?.orders?.length > 0) && (
+            <Fragment>
+              <Base.Row
+                backgroundColor={theme.colors.white}
+                mt={'24px'}
+                borderRadius={'8px'}
+                justifyContent={'space-between'}
+                padding={'8px'}>
+                {types?.map((type, i) => {
+                  return (
+                    <TabButton
+                      //@ts-ignore
+                      isActive={type.key === activeTab}
+                      onPress={() => setActiveTab(type?.key)}
+                      key={`${type.key}-${i}`}>
+                      <Text.Medium
+                        color={
+                          type.key === activeTab
+                            ? theme.colors.white
+                            : theme.colors.black
+                        }
+                        fontFamily={type.key === activeTab ? '500' : '400'}>
+                        {type.label}
+                      </Text.Medium>
+                    </TabButton>
+                  );
+                })}
+              </Base.Row>
+              {activeTab === 'ongoing' && renderOngoingOrders(ongoing || [])}
+              {activeTab === 'complete' &&
+                renderCompletedOrders(completedOrdersData?.orders || [])}
+            </Fragment>
+          )
+        }
       </Base.View>
     </ScrollView>
   );

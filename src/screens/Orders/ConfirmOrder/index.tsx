@@ -1,19 +1,112 @@
+import {usePayment} from '@api/payment';
 import {Base} from '@components/Base';
+import PaymentWebView from '@components/PaymentWebview';
 import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
 import withBottomDrawer from '@components/withBottomDrawer';
 import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
+import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
+import {formatMonetaryAmount} from '@libs/helper';
 import {linear_call, mdiLocation, select_checkbox} from '@libs/svgs';
 import theme from '@libs/theme';
-import {navigate} from '@stacks/helper';
+import {getCartTotalAmount, useCartStore} from '@store/CartStore';
+import {useCheckoutStore} from '@store/CheckoutStore';
+import {useGlobalStore} from '@store/GlobalStore';
+import {useUserStore} from '@store/UserStore';
 import {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
-//@ts-ignore
-const ConfirmOrderDetails = ({handleOpen}) => {
-  const [method, setMethod] = useState<'wallet' | 'debit-card' | null>(null);
+type PaymentTypeT = {
+  onPress?: () => void;
+  title: string;
+  isSelected: boolean;
+  typeText: string;
+};
+
+const PaymentType = ({onPress, title, isSelected, typeText}: PaymentTypeT) => {
+  const cartAmount = getCartTotalAmount();
+  return (
+    <PaymentMethod
+      onPress={() => onPress?.()}
+      //@ts-ignore
+      selected={isSelected}>
+      <Base.Row>
+        <Base.View width={'80%'}>
+          <Text.Medium fontSize={'16px'} lineHeight={'24px'}>
+            {title}
+          </Text.Medium>
+          <Text.General
+            fontSize={'14px'}
+            mt={'3px'}
+            color={theme.colors.neutral07}
+            fontFamily="400"
+            lineHeight={'20px'}>
+            <Text.Medium
+              fontSize={'14px'}
+              fontWeight={'500'}
+              lineHeight={'20px'}
+              color={theme.colors.neutral09}>
+              NGN {formatMonetaryAmount(cartAmount).figure}
+            </Text.Medium>{' '}
+            {typeText}
+          </Text.General>
+        </Base.View>
+        <TouchableOpacity>
+          <SvgXml
+            xml={isSelected ? select_checkbox.active : select_checkbox.inactive}
+          />
+        </TouchableOpacity>
+      </Base.Row>
+    </PaymentMethod>
+  );
+};
+
+const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
+  const [method, setMethod] = useState<
+    'wallet' | 'debit-card' | 'online' | null
+  >(null);
+  const [deliveryNote, setDeliveryNote] = useState('');
+
+  const [userCurrentLocation, userPhoneNumber, userEmail] = useUserStore(
+    state => [
+      state.user.currentLocation,
+      state.user.phoneNumber,
+      state.user.email,
+    ],
+  );
+  const [cartItems] = useCartStore(state => [state.cart.cartItems]);
+  const [isLocationGranted] = useGlobalStore(state => [state.locationGranted]);
+  const [setOrderDetails] = useCheckoutStore(state => [state.setOrderDetails]);
+
+  const {mutate, isLoading} = usePayment();
+
+  const handlePayment = async () => {
+    const cartProducts = cartItems?.map(item => ({
+      productId: item?.product?.id,
+      quantity: item?.quantity,
+    }));
+    //@ts-ignore
+    setOrderDetails({
+      products: cartProducts,
+      //@ts-ignore
+      shippingAddress: JSON.parse(userCurrentLocation)?.formatted_address,
+      phoneNumber: userPhoneNumber,
+      subTotalAmount: getCartTotalAmount(),
+      totalAmount: getCartTotalAmount(),
+      discount: 0,
+      deliveryNote: deliveryNote || 'No Note',
+      //@ts-ignore
+      paymentMethod: method === 'wallet' ? method : 'card',
+      deliveryFee: 0,
+    });
+    await mutate({
+      amount: String(getCartTotalAmount()),
+      email: userEmail,
+    });
+  };
+
   return (
     <Base.View>
       <ScreenHeader label="Confirm Order Details" />
@@ -30,7 +123,8 @@ const ConfirmOrderDetails = ({handleOpen}) => {
             Order ID
           </Text.General>
           <Text.H1 lineHeight={'32.64px'} fontSize={'24px'}>
-            #Order346HYT
+            {/* #Order346HYT */}
+            New Order
           </Text.H1>
         </Base.View>
         <Base.View mt={'16px'} px={'24px'} backgroundColor={theme.colors.white}>
@@ -41,7 +135,7 @@ const ConfirmOrderDetails = ({handleOpen}) => {
             mb={'6px'}
             alignItems={'flex-end'}
             justifyContent={'space-between'}>
-            <Base.Row width={'50%'} alignItems={'flex-start'}>
+            <Base.Row width={'60%'} alignItems={'flex-start'}>
               <Base.View
                 backgroundColor={theme.colors.greenRandom}
                 width={'32px'}
@@ -57,19 +151,24 @@ const ConfirmOrderDetails = ({handleOpen}) => {
                   Address
                 </Text.Medium>
                 <Text.General
-                  fontFamily="300"
-                  fontSize={'14px'}
+                  lineHeight={'17.25px'}
+                  fontSize={'13px'}
                   color={theme.colors.neutral06}>
-                  28b empire homes estate chevron alternative lekki
+                  {JSON.parse(userCurrentLocation as string)?.formatted_address}
                 </Text.General>
               </Base.View>
             </Base.Row>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                isLocationGranted
+                  ? handleOpen?.(DRAWER_CONSTANTS.locationSet)
+                  : handleOpen?.(DRAWER_CONSTANTS.location);
+              }}>
               <Text.General
                 color={theme.colors.orange07}
                 fontSize={'14px'}
                 style={{textDecorationLine: 'underline'}}>
-                Edit Number
+                Edit Address
               </Text.General>
             </TouchableOpacity>
           </Base.Row>
@@ -90,21 +189,21 @@ const ConfirmOrderDetails = ({handleOpen}) => {
                   Phone Number
                 </Text.Medium>
                 <Text.General
-                  fontFamily="300"
-                  fontSize={'14px'}
+                  lineHeight={'17.25px'}
+                  fontSize={'13px'}
                   color={theme.colors.neutral06}>
-                  0705678990
+                  {userPhoneNumber}
                 </Text.General>
               </Base.View>
             </Base.Row>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Text.General
                 color={theme.colors.orange07}
                 fontSize={'14px'}
                 style={{textDecorationLine: 'underline'}}>
                 Edit Number
               </Text.General>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </Base.Row>
         </Base.View>
         <Base.View
@@ -116,88 +215,36 @@ const ConfirmOrderDetails = ({handleOpen}) => {
             Select payment method
           </Text.Medium>
           <Base.View mt={'15px'}>
-            <PaymentMethod
+            <PaymentType
+              title="Debit Card"
+              typeText="will be deducted from your visa card ****890"
+              isSelected={method === 'debit-card'}
               onPress={() => {
                 setMethod('debit-card');
-                handleOpen(DRAWER_CONSTANTS.warning, {
+                return handleOpen?.(DRAWER_CONSTANTS.warning, {
                   type: 'no-card-detected',
                 });
               }}
-              //@ts-ignore
-              selected={method === 'debit-card'}>
-              <Base.Row>
-                <Base.View width={'60%'}>
-                  <Text.Medium fontSize={'16px'} lineHeight={'24px'}>
-                    Debit Card
-                  </Text.Medium>
-                  <Text.General
-                    fontSize={'14px'}
-                    mt={'3px'}
-                    color={theme.colors.neutral07}
-                    fontFamily="400"
-                    lineHeight={'20px'}>
-                    <Text.Medium
-                      fontSize={'14px'}
-                      fontWeight={'500'}
-                      lineHeight={'20px'}
-                      color={theme.colors.neutral09}>
-                      NGN 50,000
-                    </Text.Medium>{' '}
-                    will be deducted from your visa card ****890
-                  </Text.General>
-                </Base.View>
-                <TouchableOpacity>
-                  <SvgXml
-                    xml={
-                      method === 'debit-card'
-                        ? select_checkbox.active
-                        : select_checkbox.inactive
-                    }
-                  />
-                </TouchableOpacity>
-              </Base.Row>
-            </PaymentMethod>
-            <PaymentMethod
+            />
+            <PaymentType
+              title="Wallet"
+              typeText=" will be deducted from your wallet balance"
+              isSelected={method === 'wallet'}
               onPress={() => {
                 setMethod('wallet');
-                handleOpen(DRAWER_CONSTANTS.warning, {
+                return handleOpen?.(DRAWER_CONSTANTS.warning, {
                   type: 'insufficient-balance',
                 });
               }}
-              //@ts-ignore
-              selected={method === 'wallet'}>
-              <Base.Row>
-                <Base.View width={'60%'}>
-                  <Text.Medium fontSize={'16px'} lineHeight={'24px'}>
-                    Wallet
-                  </Text.Medium>
-                  <Text.General
-                    fontSize={'14px'}
-                    mt={'3px'}
-                    color={theme.colors.neutral07}
-                    fontFamily="400"
-                    lineHeight={'20px'}>
-                    <Text.Medium
-                      fontSize={'14px'}
-                      fontFamily="500"
-                      lineHeight={'20px'}
-                      color={theme.colors.neutral09}>
-                      NGN 50,000
-                    </Text.Medium>{' '}
-                    will be deducted from your wallet balance
-                  </Text.General>
-                </Base.View>
-                <TouchableOpacity>
-                  <SvgXml
-                    xml={
-                      method === 'wallet'
-                        ? select_checkbox.active
-                        : select_checkbox.inactive
-                    }
-                  />
-                </TouchableOpacity>
-              </Base.Row>
-            </PaymentMethod>
+            />
+            <PaymentType
+              title="Pay Online"
+              typeText="would be debited from your bank account"
+              isSelected={method === 'online'}
+              onPress={() => {
+                return setMethod('online');
+              }}
+            />
           </Base.View>
         </Base.View>
         <Base.View
@@ -209,11 +256,14 @@ const ConfirmOrderDetails = ({handleOpen}) => {
             Add Delivery note
           </Text.Medium>
           <DeliveryNoteField
+            value={deliveryNote}
+            onChangeText={(text: string) => setDeliveryNote(text)}
             multiline
-            placeholder="add a note"
+            placeholder="Add a note"
             placeholderTextColor={theme.colors.neutral07}
           />
         </Base.View>
+        {/* order pricing */}
         <Base.View
           mt={'16px'}
           px="18px"
@@ -227,7 +277,7 @@ const ConfirmOrderDetails = ({handleOpen}) => {
               Subtotal
             </Text.General>
             <Text.Medium color={theme.colors.neutral08} fontSize={'14px'}>
-              ₦200,000,000,000
+              ₦ {formatMonetaryAmount(getCartTotalAmount()).figure}
             </Text.Medium>
           </Base.Row>
           <Base.Row mb={'11px'}>
@@ -238,7 +288,7 @@ const ConfirmOrderDetails = ({handleOpen}) => {
               Discount
             </Text.General>
             <Text.Medium color={theme.colors.neutral08} fontSize={'14px'}>
-              ₦200
+              ₦ {formatMonetaryAmount(0).figure}
             </Text.Medium>
           </Base.Row>
           <Base.Row mb={'11px'}>
@@ -249,7 +299,7 @@ const ConfirmOrderDetails = ({handleOpen}) => {
               Delivery Fee
             </Text.General>
             <Text.Medium color={theme.colors.neutral08} fontSize={'14px'}>
-              ₦200
+              ₦{formatMonetaryAmount(0).figure}
             </Text.Medium>
           </Base.Row>
           <Base.Row mb={'11px'}>
@@ -260,7 +310,7 @@ const ConfirmOrderDetails = ({handleOpen}) => {
               Total
             </Text.General>
             <Text.Medium color={theme.colors.neutral08} fontSize={'14px'}>
-              ₦200,000,000,000
+              ₦ {formatMonetaryAmount(getCartTotalAmount()).figure}
             </Text.Medium>
           </Base.Row>
         </Base.View>
@@ -275,9 +325,13 @@ const ConfirmOrderDetails = ({handleOpen}) => {
         px={'20px'}>
         <Base.Button
           title="Pay now"
-          onPress={() => navigate('Success', {type: 'order'})}
+          disabled={!method}
+          // onPress={() => navigate('Success', {type: 'order'})}
+          onPress={() => handlePayment()}
+          isLoading={isLoading}
         />
       </Base.View>
+      <PaymentWebView />
     </Base.View>
   );
 };
@@ -292,6 +346,7 @@ const DeliveryNoteField = styled.TextInput`
   min-height: 84px;
   border: 1px solid ${theme.colors.neutral03};
 `;
+
 const PaymentMethod = styled.TouchableOpacity`
   border-radius: 8px;
   border: 1px solid

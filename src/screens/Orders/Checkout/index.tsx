@@ -1,4 +1,4 @@
-import {ICartItem} from '@api/index';
+import {ICartItem, useManageQuantity, useRemoveFromCart} from '@api/index';
 import {Base} from '@components/Base';
 import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
@@ -14,7 +14,35 @@ import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
 const CartItem: React.FC<ICartItem> = ({...item}) => {
-  const [amount, setAmount] = useState(item?.quantity);
+  const [stockLevel, setStockLevel] = useState(item?.quantity);
+
+  const {mutate: removeFromCart} = useRemoveFromCart();
+  const {mutate: manageQuantity, isLoading: manageIsLoading} =
+    useManageQuantity();
+
+  const handleDecreaseQuantity = () => {
+    const newStockLevel = stockLevel === 0 ? 0 : stockLevel - 1;
+    setStockLevel(newStockLevel);
+    if (stockLevel === 1) {
+      return removeFromCart({productId: item?.product?.id});
+    }
+    return manageQuantity({
+      productId: item?.product?.id,
+      type: 'decrease',
+      quantity: newStockLevel,
+    });
+  };
+
+  const handleIncreaseQuantity = () => {
+    const newStockLevel =
+      stockLevel < item?.quantity ? stockLevel + 1 : stockLevel;
+    setStockLevel(newStockLevel);
+    manageQuantity({
+      productId: item?.product?.id,
+      type: 'increase',
+      quantity: 1,
+    });
+  };
   return (
     <Base.Row
       borderRadius={'8px'}
@@ -51,7 +79,8 @@ const CartItem: React.FC<ICartItem> = ({...item}) => {
             </Text.General>
           </Base.View>
         </Base.Row>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => removeFromCart({productId: item?.product?.id})}>
           <Text.General
             fontFamily="400"
             fontSize={'12px'}
@@ -62,13 +91,13 @@ const CartItem: React.FC<ICartItem> = ({...item}) => {
         </TouchableOpacity>
       </Base.View>
       <Base.Row>
-        <RangeButton onPress={() => setAmount(amount === 0 ? 0 : amount - 1)}>
+        <RangeButton onPress={() => handleDecreaseQuantity()}>
           <SvgXml xml={minus_icon} />
         </RangeButton>
         <Text.Medium fontSize={'12px'} mx={'7.65px'}>
-          {amount}
+          {stockLevel}
         </Text.Medium>
-        <RangeButton onPress={() => setAmount(amount + 1)}>
+        <RangeButton onPress={() => handleIncreaseQuantity()}>
           <SvgXml xml={add_icon} />
         </RangeButton>
       </Base.Row>

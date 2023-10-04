@@ -8,7 +8,7 @@ import {add_icon, minus_icon} from '@libs/svgs';
 import {Text} from './Text';
 import theme from '@libs/theme';
 import {IOfaydProduct} from '@api/types';
-import {useAddToCart, useManageQuantity} from '@api/index';
+import {useAddToCart, useManageQuantity, useRemoveFromCart} from '@api/index';
 import {findProductInCart} from '@store/CartStore';
 import {formatMonetaryAmount} from '@libs/helper';
 
@@ -20,6 +20,7 @@ export const OfaydProduct: React.FC<IOfaydProduct> = props => {
   );
 
   const {mutate: addToCart} = useAddToCart();
+  const {mutate: removeFromCart} = useRemoveFromCart();
   const {mutate: manageQuantity, isLoading: manageIsLoading} =
     useManageQuantity();
 
@@ -35,6 +36,9 @@ export const OfaydProduct: React.FC<IOfaydProduct> = props => {
   const handleDecreaseQuantity = () => {
     const newStockLevel = stockLevel === 0 ? 0 : stockLevel - 1;
     setStockLevel(newStockLevel);
+    if (stockLevel === 1) {
+      return removeFromCart({productId: props?.id});
+    }
     return manageQuantity({
       productId: props?.id,
       type: 'decrease',

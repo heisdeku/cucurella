@@ -25,50 +25,10 @@ import * as _ from 'lodash';
 import {requestLocationPermissions} from '@libs/geolocation';
 import type {IPermissionResTrue} from '@libs/geolocation';
 import {useCategories} from '@api/category';
-import {IPromotion, usePromotions} from '@api/promotions';
+import {usePromotions} from '@api/promotions';
 import {useProducts} from '@api/products';
 import {truncate} from 'lodash';
-
-const Listing = ({name, ...promotion}: IPromotion) => {
-  return (
-    <Base.View mb={'-24px'}>
-      <Base.Row alignItems={'center'}>
-        <Base.View maxWidth={'70%'}>
-          <Text.Medium isCapitalize fontSize={'18px'}>
-            {name}
-          </Text.Medium>
-          <Text.Medium
-            isCapitalize
-            fontSize={'14px'}
-            color={theme.colors.amber07}
-            lineHeight={'20px'}>
-            {promotion?.condition}
-          </Text.Medium>
-        </Base.View>
-        <ViewAllSpeicalOffers
-          onPress={() =>
-            navigate('Deals', {
-              name,
-              condition: promotion?.condition,
-              id: promotion?.id,
-              startDate: promotion?.startDate,
-              endDate: promotion?.endDate,
-            })
-          }>
-          <Text.General fontSize={'12px'}>View all</Text.General>
-        </ViewAllSpeicalOffers>
-      </Base.Row>
-      <Base.View py={'16px'}>
-        <Base.Row>
-          {promotion?.products?.map((product, i) => {
-            const productDetails = product?.product;
-            return <OfaydProduct key={i} {...productDetails} />;
-          })}
-        </Base.Row>
-      </Base.View>
-    </Base.View>
-  );
-};
+import Listing from '@components/ProductsListing';
 
 const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
   const insets = useSafeAreaInsets();
@@ -81,6 +41,7 @@ const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
     state.firstTimeLogin,
     state.locationGranted,
   ]);
+
   const [currentLocation, updateCurrentLocation] = useUserStore(state => [
     state.user.currentLocation,
     state.updateCurrentLocation,
@@ -242,15 +203,6 @@ const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
     </CartViewWrapper>
   );
 };
-
-const ViewAllSpeicalOffers = styled.TouchableOpacity`
-  border-radius: 11px;
-  width: 64px;
-  height: 31px;
-  background-color: ${theme.colors.offsetGray};
-  justify-content: center;
-  align-items: center;
-`;
 
 const CategoryImage = styled.Image`
   height: 71px;

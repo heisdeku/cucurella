@@ -24,3 +24,19 @@ export interface IOrder {
   subTotalAmount: number;
   discount: number;
 }
+
+export interface ICreateOrder {
+  products: {
+    productId: string;
+    quantity: number;
+  }[];
+  shippingAddress: string;
+  phoneNumber: string;
+  subTotalAmount: number;
+  totalAmount: number;
+  discount: number;
+  deliveryNote: string;
+  paymentMethod: 'card' | 'wallet' | 'online' | string;
+  deliveryFee: number;
+  paymentReference: string;
+}

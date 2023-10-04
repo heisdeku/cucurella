@@ -13,13 +13,16 @@ import {useRoute} from '@react-navigation/native';
 
 export const VerifyCode = () => {
   const params = useRoute().params as {source: string};
+
   const [updateStateItem] = useOnboardingStore(state => [
     state.updateStateItem,
   ]);
+
   const [pinCode, setPinCode] = useState<string>('');
   const [btnDisbled, setBtnDisabled] = useState<boolean>(true);
 
   const styles = createPinViewStyles();
+
   const inputRef = useRef<any>(null);
 
   const splitCode = pinCode.split('');
