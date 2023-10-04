@@ -12,15 +12,29 @@ import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
 import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
 import {createPinViewStyles, FormGroup} from '../styles';
 import {useOnboardingStore} from '@store/OnboardingStore';
+import {client} from '@api/common';
+import {navigate} from '@stacks/helper';
+import {showMessage} from 'react-native-flash-message';
+import {handleServerError, showErrorMessage} from '@libs/error';
 
 const styles = createPinViewStyles();
 
 const PinConfirm: React.FC<IDrawerChildProps> = ({handleOpen}) => {
-  const [userCreatedPin] = useOnboardingStore(state => [state.pin]);
-  const [code, setCode] = useState<string>('');
-  const createRef = useRef<TextInput>(null);
+  const [firstName, lastName, otp, source, userPhoneNumber, userCreatedPin] =
+    useOnboardingStore(state => [
+      state.firstName,
+      state.lastName,
+      state.otp,
+      state.source,
+      state.phoneNumber,
+      state.pin,
+    ]);
 
+  const [code, setCode] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
+
+  const createRef = useRef<TextInput>(null);
 
   const splitCode = code.split('');
 
@@ -35,9 +49,39 @@ const PinConfirm: React.FC<IDrawerChildProps> = ({handleOpen}) => {
     setCode(value);
   }, []);
 
+  const handleCompleteCreation = async () => {
+    setLoading(true);
+    try {
+      const response = await client.post(`/user/verify/${source}`, {
+        firstName,
+        lastName,
+        otp,
+        pin: userCreatedPin,
+        phoneNumber: userPhoneNumber,
+      });
+      if (response.status === 200) {
+        setLoading(false);
+        navigate('Login');
+        return showMessage({
+          message: `Your account has been created successfully`,
+        });
+      }
+    } catch (e) {
+      const message = handleServerError(e);
+      setLoading(false);
+      return showErrorMessage(message);
+    }
+  };
+
   useEffect(() => {
     if (code.length > 3) {
       setBtnDisabled(false);
+    }
+  }, [code]);
+
+  useEffect(() => {
+    if (code !== userCreatedPin) {
+      setBtnDisabled(true);
     }
   }, [code]);
 
@@ -89,11 +133,23 @@ const PinConfirm: React.FC<IDrawerChildProps> = ({handleOpen}) => {
             </FormGroup>
           </Base.View>
         </Base.View>
-        <Base.Button
-          title="Continue"
-          onPress={() => handleOpen?.(DRAWER_CONSTANTS.biometrics)}
-          disabled={btnDisabled}
-        />
+        <Base.View>
+          {code !== userCreatedPin && (
+            <Text.General
+              textAlign={'center'}
+              color={theme.colors.orange07}
+              style={{marginBottom: 20}}>
+              PIN doesn't match
+            </Text.General>
+          )}
+          <Base.Button
+            title="Continue"
+            // onPress={() => handleOpen?.(DRAWER_CONSTANTS.biometrics)}
+            onPress={() => handleCompleteCreation()}
+            isLoading={loading}
+            disabled={btnDisabled}
+          />
+        </Base.View>
       </Container>
     </KeyboardWrapper>
   );

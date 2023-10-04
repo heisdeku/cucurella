@@ -66,7 +66,7 @@ function MoreInformation(): JSX.Element {
                   <Base.View mb={'24px'}>
                     <Input
                       label="Phone Number"
-                      placeholder={`+2348076756427`}
+                      placeholder={`xxx xxx xxxx xxxx`}
                       keyboardType="number-pad"
                       value={values?.phoneNumber}
                       setValue={handleChange('phoneNumber')}

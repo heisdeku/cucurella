@@ -20,12 +20,16 @@ import updateStatusBar from '@hooks/updateStatusBar';
 
 function CreateAccount(): JSX.Element {
   updateStatusBar('dark-content');
+
   const [value, setValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // GET both the updateStateItem and source values from the onboarding State
   const [updateStateItem, source] = useOnboardingStore(state => [
     state.updateStateItem,
     state.source,
   ]);
+
   const handleChangeOnboardingSource = () => {
     return updateStateItem('source', source === 'phone' ? 'email' : 'phone');
   };
@@ -39,7 +43,7 @@ function CreateAccount(): JSX.Element {
       if (response.status === 200) {
         updateStateItem(key, value);
         setIsLoading(false);
-        navigate('VerifyCode');
+        navigate('VerifyCode', {source});
         return showMessage({message: `Kindly check your ${key} for the OTP`});
       }
     } catch (e) {
@@ -48,6 +52,7 @@ function CreateAccount(): JSX.Element {
       return showErrorMessage(message);
     }
   };
+
   return (
     <KeyboardWrapper hasPaddingTop>
       <Container justifyContent={'space-between'} pt={'29px'}>

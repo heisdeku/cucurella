@@ -9,8 +9,10 @@ import {navigate} from '@stacks/helper';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 import {useOnboardingStore} from '@store/OnboardingStore';
 import {createPinViewStyles, FormGroup} from '../styles';
+import {useRoute} from '@react-navigation/native';
 
 export const VerifyCode = () => {
+  const params = useRoute().params as {source: string};
   const [updateStateItem] = useOnboardingStore(state => [
     state.updateStateItem,
   ]);
@@ -35,7 +37,7 @@ export const VerifyCode = () => {
 
   const handlePinComplete = () => {
     updateStateItem('otp', pinCode);
-    return navigate('MoreInformation');
+    return navigate('MoreInformation', {source: params?.source});
   };
 
   useEffect(() => {
@@ -49,7 +51,8 @@ export const VerifyCode = () => {
       <Container pt={'29px'}>
         <Base.View mb={'auto'}>
           <Text.Medium fontSize={'24px'} lineHeight={'31px'}>
-            Enter the 4-digit code sent to your email address
+            Enter the 4-digit code sent to your{' '}
+            {params?.source === 'email' ? 'email address' : 'phone number'}
           </Text.Medium>
           <FormGroup>
             <TextInput

@@ -15,11 +15,15 @@ const styles = createPinViewStyles();
 
 const EnterPin: React.FC = () => {
   const {phoneNumber} = useRoute().params as {phoneNumber: string};
+
   const [authenticate] = useAuthStore(state => [state.authenticate]);
+
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState<string>('');
-  const createRef = useRef<TextInput>(null);
   const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
+
+  const createRef = useRef<TextInput>(null);
+
   const splitCode = code.split('');
 
   const resetAll = () => {
