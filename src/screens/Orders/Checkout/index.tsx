@@ -2,6 +2,7 @@ import {ICartItem, useManageQuantity, useRemoveFromCart} from '@api/index';
 import {Base} from '@components/Base';
 import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
+import updateStatusBar from '@hooks/updateStatusBar';
 import {windowHeight} from '@libs/constant';
 import {formatMonetaryAmount} from '@libs/helper';
 import {add_icon, minus_icon} from '@libs/svgs';
@@ -14,6 +15,7 @@ import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
 const CartItem: React.FC<ICartItem> = ({...item}) => {
+  updateStatusBar('dark-content');
   const [stockLevel, setStockLevel] = useState(item?.quantity);
 
   const {mutate: removeFromCart} = useRemoveFromCart();

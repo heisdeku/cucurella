@@ -53,7 +53,7 @@ const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
-    }, 3000);
+    }, 1000);
   };
 
   updateStatusBar('dark-content');

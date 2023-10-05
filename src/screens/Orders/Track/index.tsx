@@ -175,12 +175,16 @@ const TrackOrder = () => {
                         color={theme.colors.neutral06}
                         fontSize={'14px'}
                         fontFamily="500">
-                        {item.name}
+                        {item.name} ({item?.quantity})
                       </Text.General>
                       <Text.Medium
                         color={theme.colors.neutral08}
                         fontSize={'14px'}>
-                        ₦{formatMonetaryAmount(item?.amount).figure}
+                        ₦
+                        {
+                          formatMonetaryAmount(item?.amount * item?.quantity)
+                            .figure
+                        }
                       </Text.Medium>
                     </Base.Row>
                   );

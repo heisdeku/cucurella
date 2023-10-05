@@ -122,7 +122,6 @@ export const requestLocationPermissions = async (): Promise<
 > => {
   return requestLocationPermission().then(async state => {
     if (state) {
-      console.log('requestLocationPermissions ---->');
       const {address, coordinates} = await handleLocationPermissionTrue();
       return {address, coordinates};
     }

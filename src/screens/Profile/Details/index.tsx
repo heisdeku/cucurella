@@ -11,8 +11,11 @@ import {useUserStore} from '@store/UserStore';
 import {Formik} from 'formik';
 import {Alert, ScrollView} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import {windowHeight} from '@libs/constant';
+import updateStatusBar from '@hooks/updateStatusBar';
 
 const ProfileDetails = () => {
+  updateStatusBar('dark-content');
   const [
     userFirstName,
     userLastName,

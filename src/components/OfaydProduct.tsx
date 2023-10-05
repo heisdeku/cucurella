@@ -21,8 +21,7 @@ export const OfaydProduct: React.FC<IOfaydProduct> = props => {
 
   const {mutate: addToCart} = useAddToCart();
   const {mutate: removeFromCart} = useRemoveFromCart();
-  const {mutate: manageQuantity, isLoading: manageIsLoading} =
-    useManageQuantity();
+  const {mutate: manageQuantity} = useManageQuantity();
 
   const goToProduct = () => {
     return navigate('Product', {productId: props?.id});

@@ -73,7 +73,11 @@ const Order = ({
             color={theme.colors.neutral07}
             fontSize={'16px'}>
             {order?.products?.length} items (
-            {`${order?.products?.map(product => product?.name).join(', ')}`})...
+            {`${order?.products
+              ?.slice(0, 2)
+              ?.map(product => product?.name)
+              .join(', ')}`}
+            )...
           </Text.General>
           <Text.General
             mt={'6px'}

@@ -12,6 +12,7 @@ import {navigate} from '@stacks/helper';
 import {ActivityIndicator, TouchableOpacity} from 'react-native';
 import {useUpdateUserLocation} from '@api/location/useUpdateLocation';
 import {useUserStore} from '@store/UserStore';
+import updateStatusBar from '@hooks/updateStatusBar';
 
 const SavedPlace: React.FC<ISavedPlace> = ({...place}) => {
   const {mutate, isLoading} = useUpdateUserLocation();
@@ -48,6 +49,7 @@ const SavedPlace: React.FC<ISavedPlace> = ({...place}) => {
 };
 
 const SavedPlaces = () => {
+  updateStatusBar('dark-content');
   const {data, isLoading, isError} = useSavedPlaces();
   const [savedPlaces, setSavedPlaces] = useState<ISavedPlace[]>([]);
 

@@ -4,10 +4,11 @@ import withBottomDrawer from '@components/withBottomDrawer';
 import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
 import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
 import updateStatusBar from '@hooks/updateStatusBar';
+import {formatMonetaryAmount} from '@libs/helper';
 import {outlineArrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
-import {Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SvgXml} from 'react-native-svg';
 import styled from 'styled-components/native';
@@ -84,7 +85,7 @@ const WalletScreen: React.FC<IDrawerChildProps> = ({handleOpen}) => {
               color={'white'}
               fontSize={'24px'}
               lineHeight={'24px'}>
-              NGN 90,000.00
+              NGN {formatMonetaryAmount(60000).figure}
             </Text.Medium>
             <Base.Button
               onPress={() => handleOpen?.(DRAWER_CONSTANTS.bankDetails)}

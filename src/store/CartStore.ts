@@ -6,6 +6,7 @@ import type {IOfaydCart} from '@api/cart';
 interface ICartStore {
   cart: IOfaydCart;
   updateCartState: (cart: IOfaydCart) => void;
+  clearCart: () => void;
 }
 
 export const useCartStore = create(
@@ -17,6 +18,14 @@ export const useCartStore = create(
         cartItems: [],
       },
       updateCartState: (cart: IOfaydCart) => set({cart}),
+      clearCart: () =>
+        set({
+          cart: {
+            cartItems: [],
+            cartTotalProductQuantity: 0,
+            cartTotalVisibleQuantity: 0,
+          },
+        }),
     }),
     {name: 'ofayd-cart-store', storage: createJSONStorage(() => appStorage)},
   ),

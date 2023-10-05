@@ -91,7 +91,7 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
     setOrderDetails({
       products: cartProducts,
       //@ts-ignore
-      shippingAddress: JSON.parse(userCurrentLocation)?.formatted_address,
+      shippingAddress: JSON.parse(userCurrentLocation),
       phoneNumber: userPhoneNumber,
       subTotalAmount: getCartTotalAmount(),
       totalAmount: getCartTotalAmount(),
