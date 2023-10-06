@@ -18,6 +18,7 @@ export default {
     green01: '#F0FDF4',
     greenRandom: '#EBFFF1',
     green02: '#DCFCE7',
+    green06: '#22C55E',
     green07: '#16A34A',
     green08: '#15803D',
     neutral01: '#F8FAFC',

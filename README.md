@@ -3,8 +3,8 @@
 Built With
 
 - React Native MMKV
-- Tan Stack Query
 - Axios
+- Tan Stack Query
 - React query Kit
 - Zustand
 - Formik + Yup

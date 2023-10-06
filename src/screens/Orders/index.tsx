@@ -156,12 +156,12 @@ const OrdersFilled = () => {
             <OrdersEmpty />
           )
         }
-        {
+        {/* {
           //@ts-ignore
           ongoing?.length < 1 && completedOrdersData?.orders?.length < 1 && (
             <OrdersEmpty />
           )
-        }
+        } */}
         {
           //@ts-ignore
           (ongoing?.length > 0 || completedOrdersData?.orders?.length > 0) && (
