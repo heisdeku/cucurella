@@ -18,6 +18,7 @@ import {
 } from '@libs/svgs';
 import updateStatusBar from '@hooks/updateStatusBar';
 import {useUserStore} from '@store/UserStore';
+import {onLogout} from '@api/common/logout';
 
 interface ListItemProps {
   text: string;
@@ -173,6 +174,28 @@ const Account: React.FC = (): JSX.Element => {
             icon={<SvgXml xml={support_icon} />}
             text="Follow us"
           />
+        </Section>
+        <Section>
+          <Text.Medium fontSize={'20px'} fontWeight={'500'}>
+            Misc
+          </Text.Medium>
+          <TouchableOpacity activeOpacity={0.6} onPress={() => onLogout()}>
+            <Base.Row
+              justifyContent={'flex-start'}
+              height={'47px'}
+              alignItems={'center'}
+              my={'10px'}>
+              <Text.Medium
+                fontSize={'16px'}
+                color={theme.colors.orange07}
+                textAlign={'center'}>
+                Logout
+              </Text.Medium>
+              <Base.View ml={'auto'}>
+                <SvgXml xml={launch_icon} />
+              </Base.View>
+            </Base.Row>
+          </TouchableOpacity>
         </Section>
         <Text.General
           fontSize={'14px'}

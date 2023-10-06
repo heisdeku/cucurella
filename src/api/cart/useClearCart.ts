@@ -18,6 +18,7 @@ export const useClearCart = createMutation<Response, Variables, AxiosError>({
     const {clearCart} = useCartStore.getState();
     await queryClient.cancelQueries({queryKey: ['/cart/cart']});
     queryClient.invalidateQueries({queryKey: ['/category']});
+    queryClient.invalidateQueries({queryKey: ['orders']});
     queryClient.invalidateQueries({queryKey: ['/promotion']});
     queryClient.invalidateQueries({queryKey: ['/product']});
     clearCart();

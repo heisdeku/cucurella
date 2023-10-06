@@ -20,7 +20,7 @@ export const useCreateOrder = createMutation<Response, Variables, AxiosError>({
     }).then(response => response?.data);
   },
   onSuccess: async data => {
-    navigate('Home');
+    // navigate('Home');
     // return navigate('Success', {type: 'order'});
   },
   onError: async error => {

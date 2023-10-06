@@ -49,15 +49,8 @@ export const useAuthStore = create(
       },
       logOut: async (cb?: TAuthLogoutParams) => {
         try {
-          cb?.(get()?.accessToken as string)
-            .then()
-            .catch(console.error);
+          await appStorage.removeItem('ofayd-user-access-token');
           set({accessToken: null, status: 'signOut'});
-          async () =>
-            await RNSensitiveInfo.deleteItem('ofayd-user-access-token', {
-              sharedPreferencesName: 'ofaydSharedPreferences',
-              keychainService: 'ofaydSharedKeychain',
-            });
         } catch (e) {
           console.error(e);
         }

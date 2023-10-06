@@ -1,5 +1,5 @@
 import {navigate} from '@stacks/helper';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Base} from './Base';
 import styled from 'styled-components/native';
 import {TouchableOpacity} from 'react-native';
@@ -18,6 +18,13 @@ export const OfaydProduct: React.FC<IOfaydProduct> = props => {
   const [stockLevel, setStockLevel] = useState(
     productInCart ? productInCart?.quantity : 0,
   );
+
+  // useEffect(() => {
+  //   if (productInCart?.quantity) {
+  //     return setStockLevel(productInCart?.quantity);
+  //   }
+  //   return setStockLevel(0);
+  // }, [stockLevel, productInCart]);
 
   const {mutate: addToCart} = useAddToCart();
   const {mutate: removeFromCart} = useRemoveFromCart();

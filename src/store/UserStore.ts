@@ -9,6 +9,17 @@ type UserLocationT = {
   longitude: string;
   formatted_address: string;
 };
+
+type UserWalletT = {
+  balance: number;
+  created_at: Date | string;
+  id: string;
+  locked: boolean;
+  paystackCustomerId: string;
+  updated_at: string;
+  userId: string;
+  walletId: string;
+};
 export interface IUser {
   id: string;
   firstName: string;
@@ -27,6 +38,7 @@ export interface IUser {
   updated_at: Date | string;
   currentLocation: string | null;
   image: string;
+  wallets: UserWalletT[];
   type: 'guest' | 'user' | string;
 }
 
@@ -56,6 +68,7 @@ const INITIAL_USER = {
   currentLocation: null,
   image: '',
   type: '',
+  wallets: [],
 };
 
 export const useUserStore = create(

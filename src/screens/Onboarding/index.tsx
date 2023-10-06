@@ -44,7 +44,7 @@ const Onboarding = () => {
               title="Sign up"
               onPress={() => {
                 setIsFirstTime(false);
-                return navigate('Authentication');
+                // return navigate('Authentication');
               }}
             />
             <Base.Row justifyContent={'center'} mt={'13px'}>

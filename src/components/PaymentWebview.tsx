@@ -74,12 +74,24 @@ const PaymentWebView = (props: WebViewCustomPropsType) => {
         {
           text: 'Yes',
           onPress: async () => {
-            await mutate({reference});
-            await createOrderMutate({
-              ...orderDetails,
-              paymentReference: reference,
-            });
-            await clearCartMutate();
+            return mutate(
+              {reference},
+              {
+                onSuccess: () => {
+                  return createOrderMutate(
+                    {
+                      ...orderDetails,
+                      paymentReference: reference,
+                    },
+                    {
+                      onSuccess: () => {
+                        return clearCartMutate();
+                      },
+                    },
+                  );
+                },
+              },
+            );
           },
         },
       ],

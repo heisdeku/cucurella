@@ -1,4 +1,6 @@
+import {useCreateOrder} from '@api/orders';
 import {usePayment} from '@api/payment';
+import {useChargeWallet} from '@api/wallet';
 import {Base} from '@components/Base';
 import PaymentWebView from '@components/PaymentWebview';
 import ScreenHeader from '@components/ScreenHeader';
@@ -9,6 +11,7 @@ import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
 import {formatMonetaryAmount} from '@libs/helper';
 import {linear_call, mdiLocation, select_checkbox} from '@libs/svgs';
 import theme from '@libs/theme';
+import {navigate} from '@stacks/helper';
 import {getCartTotalAmount, useCartStore} from '@store/CartStore';
 import {useCheckoutStore} from '@store/CheckoutStore';
 import {useGlobalStore} from '@store/GlobalStore';
@@ -24,6 +27,8 @@ type PaymentTypeT = {
   isSelected: boolean;
   typeText: string;
 };
+
+type PaymentMethodT = 'wallet' | 'debit-card' | 'online' | null;
 
 const PaymentType = ({onPress, title, isSelected, typeText}: PaymentTypeT) => {
   const cartAmount = getCartTotalAmount();
@@ -64,25 +69,95 @@ const PaymentType = ({onPress, title, isSelected, typeText}: PaymentTypeT) => {
 };
 
 const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
-  const [method, setMethod] = useState<
-    'wallet' | 'debit-card' | 'online' | null
-  >(null);
+  const [method, setMethod] = useState<PaymentMethodT>(null);
   const [deliveryNote, setDeliveryNote] = useState('');
 
-  const [userCurrentLocation, userPhoneNumber, userEmail] = useUserStore(
-    state => [
-      state.user.currentLocation,
-      state.user.phoneNumber,
-      state.user.email,
-    ],
-  );
+  const [
+    userCurrentLocation,
+    userPhoneNumber,
+    userEmail,
+    userId,
+    userWallet,
+    userFirstName,
+    userLastName,
+  ] = useUserStore(state => [
+    state.user.currentLocation,
+    state.user.phoneNumber,
+    state.user.email,
+    state.user.id,
+    state.user.wallets,
+    state.user.firstName,
+    state.user.lastName,
+  ]);
   const [cartItems] = useCartStore(state => [state.cart.cartItems]);
   const [isLocationGranted] = useGlobalStore(state => [state.locationGranted]);
-  const [setOrderDetails] = useCheckoutStore(state => [state.setOrderDetails]);
+  const [orderDetails, setOrderDetails] = useCheckoutStore(state => [
+    state.orderDetails,
+    state.setOrderDetails,
+  ]);
 
   const {mutate, isLoading} = usePayment();
+  const {mutate: chargeMutate, isLoading: chargeIsLoading} = useChargeWallet();
+  const {mutate: createOrderMutate, isLoading: createOrderLoading} =
+    useCreateOrder();
 
-  const handlePayment = async () => {
+  const handleWalletPayment = () => {
+    const walletRequest = {
+      userId,
+      amount: Number(getCartTotalAmount()),
+      walletId: userWallet[0]?.walletId,
+      orderDetails: {
+        products: cartItems?.map(item => ({
+          id: item?.product?.id,
+          quantity: item?.quantity,
+        })),
+        items: cartItems?.map(item => item?.product?.name),
+        deliveryNote,
+        subtotal: '0', //change it to subtotal
+        discount: '0', // change it to discount
+        total: String(getCartTotalAmount()),
+        deliveryFee: '0',
+        description: `payment for ${
+          cartItems?.length
+        } items which includes ${cartItems
+          ?.map(product => product?.product?.name)
+          .join(', ')}`,
+      },
+      metaData: {
+        orderInformation: {
+          //@ts-ignore
+          deliveryAddress: JSON.parse(userCurrentLocation)?.formatted_address,
+          customerName: `${userFirstName} ${userLastName}`,
+        },
+      },
+    };
+    return chargeMutate(walletRequest, {
+      onSuccess: data => {
+        const {response} = data?.data;
+        return createOrderMutate(
+          {
+            ...orderDetails,
+            paymentReference: response?.reference,
+          },
+          {
+            onSuccess: async data => {
+              console.log('create order success', data);
+              // navigate('Success', {type: 'order'});
+            },
+          },
+        );
+      },
+    });
+  };
+
+  const handleOnlinePayment = async () => {
+    return mutate({
+      amount: String(getCartTotalAmount()),
+      email: userEmail,
+    });
+  };
+
+  const handlePayment = () => {
     const cartProducts = cartItems?.map(item => ({
       productId: item?.product?.id,
       quantity: item?.quantity,
@@ -101,10 +176,9 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
       paymentMethod: method === 'wallet' ? method : 'card',
       deliveryFee: 0,
     });
-    await mutate({
-      amount: String(getCartTotalAmount()),
-      email: userEmail,
-    });
+
+    if (method === 'online') return handleOnlinePayment();
+    if (method === 'wallet') return handleWalletPayment();
   };
 
   return (
@@ -228,13 +302,18 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
             />
             <PaymentType
               title="Wallet"
-              typeText=" will be deducted from your wallet balance"
+              typeText="will be deducted from your wallet balance"
               isSelected={method === 'wallet'}
               onPress={() => {
-                setMethod('wallet');
-                return handleOpen?.(DRAWER_CONSTANTS.warning, {
-                  type: 'insufficient-balance',
-                });
+                if (
+                  Number(userWallet[0]?.balance) < 0 ||
+                  Number(userWallet[0]?.balance) < getCartTotalAmount()
+                ) {
+                  return handleOpen?.(DRAWER_CONSTANTS.warning, {
+                    type: 'insufficient-balance',
+                  });
+                }
+                return setMethod('wallet');
               }}
             />
             <PaymentType
@@ -328,7 +407,7 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
           disabled={!method}
           // onPress={() => navigate('Success', {type: 'order'})}
           onPress={() => handlePayment()}
-          isLoading={isLoading}
+          isLoading={isLoading || chargeIsLoading || createOrderLoading}
         />
       </Base.View>
       <PaymentWebView />

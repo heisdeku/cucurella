@@ -11,6 +11,7 @@ import {hydrateAuth} from './src/store/AuthStore';
 import BootSplash from 'react-native-bootsplash';
 
 hydrateAuth();
+
 const styles = StyleSheet.create({
   root: {
     flex: 1,

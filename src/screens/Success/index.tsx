@@ -37,7 +37,11 @@ const Success = () => {
       case 'card-added':
         return navigate('Main');
       case 'order':
-        return navigate('TrackOrder');
+        return navigate('TrackOrder', {
+          source: 'view-order',
+          //@ts-ignore
+          orderId: params?.orderId,
+        });
       default:
         return '';
     }

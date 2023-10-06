@@ -1,4 +1,4 @@
-import {handleServerError, showError} from '@libs/error';
+import {handleServerError, showError, showErrorMessage} from '@libs/error';
 import {useAuthStore} from '@store/AuthStore';
 import axios from 'axios';
 
@@ -20,7 +20,8 @@ client.interceptors.request.use(
   },
   error => {
     const errorMessage = handleServerError(error);
-    showError(errorMessage);
+    showError(error);
+    showErrorMessage(errorMessage);
     return Promise.reject(error);
   },
 );
