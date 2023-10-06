@@ -29,6 +29,7 @@ import {AddAddressManual, AddAddressSearch} from '@screens/AddAddress';
 import {useUserStore} from '@store/UserStore';
 import {useProfile} from '@api/profile';
 import Category from '@screens/Category';
+import Notifications from '@screens/Notifications';
 
 export type AppStackParamList = {
   Main: undefined;
@@ -43,6 +44,7 @@ export type AppStackParamList = {
     startDate: Date | string;
     endDate: Date | string;
   };
+  Notifications: undefined;
   Product: undefined;
   OrderDetails: undefined;
   OrderCheckout: undefined;
@@ -125,6 +127,7 @@ const AppNavigation = () => {
       <Stack.Screen name="Category" component={Category} />
       <Stack.Screen name="Deals" component={Deals} />
       <Stack.Screen name="Product" component={ProductScreen} />
+      <Stack.Screen name="Notifications" component={Notifications} />
 
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
       <Stack.Screen name="OrderCheckout" component={Checkout} />

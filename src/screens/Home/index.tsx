@@ -122,7 +122,7 @@ const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
             <ActionButton>
               <SvgXml xml={search_icon} />
             </ActionButton>
-            <ActionButton>
+            <ActionButton onPress={() => navigate('Notifications')}>
               <SvgXml xml={notification_icon} />
             </ActionButton>
           </Base.Row>
