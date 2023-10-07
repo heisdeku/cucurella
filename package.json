@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "postinstall": "patch-package && react-native setup-ios-permissions && pod-install",
+    "postinstall": "patch-package && react-native setup-ios-permissions && npx pod-install",
     "build:android": "cd android && ./gradlew assembleRelease && cd ..",
     "build:android:aab": "cd android && ./gradlew bundleRelease && cd .."
   },
