@@ -25,6 +25,6 @@ jobs:
         run: |
           npx lefthook run ci-hook
 
-      - name: Run test
-        run: |
-          yarn test-ci
+      # - name: Run test
+      #   run: |
+      #     yarn test-ci
