@@ -54,3 +54,8 @@ This is one way to run your app — you can also run it directly from within And
 ## Congratulations! :tada:
 
 You've successfully run and modified your React Native App. :partying_face:
+
+### Deployment to Android
+
+- https://reactnative.dev/docs/signed-apk-android
+- https://www.linkedin.com/pulse/how-create-signed-aab-bundle-upload-google-play-console-ghulam-rasool/
