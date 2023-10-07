@@ -23,7 +23,7 @@ jobs:
 
       - name: Run CI with Lefthook
         run: |
-          yarn lefthook run ci-hook
+          npx lefthook run ci-hook
 
       - name: Run test
         run: |
