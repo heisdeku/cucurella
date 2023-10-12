@@ -140,3 +140,20 @@ export function calculateDaysLeft(targetDate: Date) {
   const daysLeft = Math.floor(difference / (1000 * 60 * 60 * 24));
   return daysLeft;
 }
+
+export function convertTo12HourFormat(timestamp: Date | string) {
+  const date = new Date(timestamp);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const amPm = hours >= 12 ? 'PM' : 'AM';
+
+  // Convert hours to 12-hour format
+  const formattedHours = hours % 12 || 12;
+
+  const formattedTime = `${formattedHours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')} ${amPm}`;
+
+  return formattedTime;
+}

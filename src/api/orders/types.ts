@@ -30,6 +30,13 @@ export interface IDriver {
   verificationCode: 'null';
   warehouseId: string | null;
 }
+
+export type OrderProgressT =
+  | 'confirmed'
+  | 'packed'
+  | 'processed'
+  | 'delivered'
+  | null;
 export interface IOrder {
   id: string;
   products: IOfaydProduct[];
@@ -57,7 +64,7 @@ export interface IOrder {
   orderConfirmedAt: Date | null;
   orderPackedAt: Date | null;
   orderProcessedAt: Date | null;
-  orderProgress: 'packed' | 'processed' | 'confirmed' | string | null;
+  orderProgress: OrderProgressT;
   user: IUser;
 }
 

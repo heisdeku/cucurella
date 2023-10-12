@@ -1,7 +1,8 @@
-import {useOrder} from '@api/orders';
+import {OrderProgressT, useOrder} from '@api/orders';
 import {Base} from '@components/Base';
 import ScreenHeader from '@components/ScreenHeader';
 import {Text} from '@components/Text';
+import {convertTo12HourFormat} from '@libs/date';
 import {formatMonetaryAmount} from '@libs/helper';
 import theme from '@libs/theme';
 import {
@@ -17,13 +18,31 @@ import {Alert} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {styled} from 'styled-components/native';
 
+/**
+ * This functions returns the order Progress bar component
+ * @param type : OrderProgressT
+ * @returns
+ */
+const getOrderProgressBar = (type: OrderProgressT) => {
+  switch (type) {
+    case 'confirmed':
+      return tracker_step_one;
+    case 'processed':
+      return tracker_step_two;
+    case 'packed':
+      return tracker_step_three;
+    default:
+      return tracker_step_four;
+  }
+};
+
 const TrackOrder = () => {
   const params = useRoute().params as {
     orderId: string;
     packageId: string;
     source: 'order-complete' | 'view-order';
   };
-  const {data, isLoading, isError} = useOrder({
+  const {data, isLoading} = useOrder({
     variables: {orderId: params?.orderId},
   });
 
@@ -60,74 +79,118 @@ const TrackOrder = () => {
               py={'16px'}
               px={'24px'}
               backgroundColor={theme.colors.white}>
-              <Text.Medium color={theme.colors.black} fontSize={'20px'}>
-                Order Progress
-              </Text.Medium>
-              <Base.Row mt={'18px'}>
-                <Base.View width={'10%'}>
-                  <SvgXml xml={tracker_step_one} />
-                </Base.View>
-                <Base.View width={'90%'}>
-                  <Base.Row mb={'20px'} justifyContent={'space-between'}>
-                    <Text.Medium
-                      fontFamily="400"
-                      fontSize={'14px'}
-                      color={theme.colors.neutral07}>
-                      Order has been confirmed
-                    </Text.Medium>
-                    <Text.Medium
-                      fontFamily="400"
-                      fontSize={'14px'}
-                      color={theme.colors.neutral07}>
-                      18:22
-                    </Text.Medium>
-                  </Base.Row>
-                  <Base.Row mb={'20px'} justifyContent={'space-between'}>
-                    <Text.Medium
-                      fontFamily="400"
-                      fontSize={'14px'}
-                      color={theme.colors.neutral07}>
-                      Order has being processed
-                    </Text.Medium>
-                    <Text.Medium
-                      fontFamily="400"
-                      fontSize={'14px'}
-                      color={theme.colors.neutral07}>
-                      -
-                    </Text.Medium>
-                  </Base.Row>
-                  <Base.Row mb={'20px'} justifyContent={'space-between'}>
-                    <Text.Medium
-                      fontFamily="400"
-                      fontSize={'14px'}
-                      color={theme.colors.neutral07}>
-                      Order has been packed
-                    </Text.Medium>
-                    <Text.Medium
-                      fontFamily="400"
-                      fontSize={'14px'}
-                      color={theme.colors.neutral07}>
-                      -
-                    </Text.Medium>
-                  </Base.Row>
-                  <Base.Row justifyContent={'space-between'}>
-                    <Text.Medium
-                      fontFamily="400"
-                      fontSize={'14px'}
-                      color={theme.colors.neutral07}
-                      width={'65%'}>
-                      Order picked up by rider and is on the way
-                    </Text.Medium>
-                    <Text.Medium
-                      fontFamily="400"
-                      fontSize={'14px'}
-                      color={theme.colors.neutral07}>
-                      -
-                    </Text.Medium>
-                  </Base.Row>
-                </Base.View>
-              </Base.Row>
+              <Text.General
+                fontSize={'14px'}
+                color={theme.colors.neutral06}
+                mb={'4px'}>
+                Release Code
+              </Text.General>
+              <Text.H1
+                lineHeight={'32.64px'}
+                color={theme.colors.black}
+                fontSize={'24px'}>
+                9086
+              </Text.H1>
+              <Text.General
+                mt={'4px'}
+                color={theme.colors.neutral08}
+                fontSize={'12px'}
+                lineHeight="17px">
+                Give this code to the rider after you’ve confirmed that your
+                goods was delivered as requested
+              </Text.General>
             </Base.View>
+            {data?.order?.orderProgress !== null && (
+              <Base.View
+                mt={'16px'}
+                py={'16px'}
+                px={'24px'}
+                backgroundColor={theme.colors.white}>
+                <Text.Medium color={theme.colors.black} fontSize={'20px'}>
+                  Order Progress
+                </Text.Medium>
+                <Base.Row mt={'18px'}>
+                  <Base.View width={'10%'}>
+                    <SvgXml
+                      xml={getOrderProgressBar(data?.order?.orderProgress)}
+                    />
+                  </Base.View>
+                  <Base.View width={'90%'}>
+                    <Base.Row mb={'20px'} justifyContent={'space-between'}>
+                      <Text.Medium
+                        fontFamily="400"
+                        fontSize={'14px'}
+                        color={theme.colors.neutral07}>
+                        Order has been confirmed
+                      </Text.Medium>
+                      <Text.Medium
+                        fontFamily="400"
+                        fontSize={'14px'}
+                        color={theme.colors.neutral07}>
+                        {convertTo12HourFormat(
+                          data?.order?.orderConfirmedAt as Date | string,
+                        ) || '-'}
+                      </Text.Medium>
+                    </Base.Row>
+                    <Base.Row mb={'20px'} justifyContent={'space-between'}>
+                      <Text.Medium
+                        fontFamily="400"
+                        fontSize={'14px'}
+                        color={theme.colors.neutral07}>
+                        Order has being processed
+                      </Text.Medium>
+                      <Text.Medium
+                        fontFamily="400"
+                        fontSize={'14px'}
+                        color={theme.colors.neutral07}>
+                        {data?.order?.orderProcessedAt
+                          ? convertTo12HourFormat(
+                              data?.order?.orderProcessedAt as Date | string,
+                            )
+                          : '-'}
+                      </Text.Medium>
+                    </Base.Row>
+                    <Base.Row mb={'20px'} justifyContent={'space-between'}>
+                      <Text.Medium
+                        fontFamily="400"
+                        fontSize={'14px'}
+                        color={theme.colors.neutral07}>
+                        Order has been packed
+                      </Text.Medium>
+                      <Text.Medium
+                        fontFamily="400"
+                        fontSize={'14px'}
+                        color={theme.colors.neutral07}>
+                        {data?.order?.orderPackedAt
+                          ? convertTo12HourFormat(
+                              data?.order?.orderPackedAt as Date | string,
+                            )
+                          : '-'}
+                      </Text.Medium>
+                    </Base.Row>
+                    <Base.Row justifyContent={'space-between'}>
+                      <Text.Medium
+                        fontFamily="400"
+                        fontSize={'14px'}
+                        color={theme.colors.neutral07}
+                        width={'65%'}>
+                        Order picked up by rider and is on the way
+                      </Text.Medium>
+                      <Text.Medium
+                        fontFamily="400"
+                        fontSize={'14px'}
+                        color={theme.colors.neutral07}>
+                        {data?.order?.orderCompletedAt
+                          ? convertTo12HourFormat(
+                              data?.order?.orderCompletedAt as Date | string,
+                            )
+                          : '-'}
+                      </Text.Medium>
+                    </Base.Row>
+                  </Base.View>
+                </Base.Row>
+              </Base.View>
+            )}
             {data?.order?.driver && (
               <Base.View
                 mt={'16px'}
@@ -157,7 +220,6 @@ const TrackOrder = () => {
                 </Base.Row>
               </Base.View>
             )}
-
             <Base.View
               mt={'16px'}
               px="18px"
@@ -242,19 +304,22 @@ const TrackOrder = () => {
               </Base.View>
             </Base.View>
           </ScrollArea>
-          <Base.View
-            mt={'auto'}
-            pt="20px"
-            pb={'30px'}
-            borderTopWidth={'1px'}
-            borderTopColor={theme.colors.neutral03}
-            backgroundColor={theme.colors.white}
-            px={'20px'}>
-            <Base.Button
-              title="Call Rider"
-              onPress={() => Alert.alert('Call Rider')}
-            />
-          </Base.View>
+          {(data?.order?.orderStatus === 'ongoing' ||
+            data?.order?.orderStatus === 'assigned') && (
+            <Base.View
+              mt={'auto'}
+              pt="20px"
+              pb={'30px'}
+              borderTopWidth={'1px'}
+              borderTopColor={theme.colors.neutral03}
+              backgroundColor={theme.colors.white}
+              px={'20px'}>
+              <Base.Button
+                title="Call Rider"
+                onPress={() => Alert.alert('Call Rider')}
+              />
+            </Base.View>
+          )}
         </Fragment>
       )}
     </Base.View>
@@ -266,6 +331,8 @@ const RiderImage = styled.Image`
   height: 40px;
   border-radius: 50px;
 `;
-const ScrollArea = styled.ScrollView``;
+const ScrollArea = styled.ScrollView`
+  margin-bottom: 120px;
+`;
 
 export default TrackOrder;
