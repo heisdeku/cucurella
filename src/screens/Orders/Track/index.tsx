@@ -27,6 +27,8 @@ const TrackOrder = () => {
     variables: {orderId: params?.orderId},
   });
 
+  console.log('racke', data);
+
   return (
     <Base.View>
       <ScreenHeader
@@ -128,32 +130,35 @@ const TrackOrder = () => {
                 </Base.View>
               </Base.Row>
             </Base.View>
-            <Base.View
-              mt={'16px'}
-              py={'16px'}
-              px={'24px'}
-              backgroundColor={theme.colors.white}>
-              <Text.Medium color={theme.colors.black} fontSize={'20px'}>
-                Rider details
-              </Text.Medium>
-              <Base.Row
-                mt={'12.5px'}
-                justifyContent={'flex-start'}
-                alignItems={'center'}>
-                <RiderImage
-                  source={{
-                    uri: 'https://res.cloudinary.com/heisdeku/image/upload/v1693918981/jwtwpubur07ekvnoxgkv.png',
-                  }}
-                />
-                <Text.General
-                  ml={'10px'}
-                  fontFamily="500"
-                  color={theme.colors.black}
-                  fontSize={'16px'}>
-                  Tess Ogan
-                </Text.General>
-              </Base.Row>
-            </Base.View>
+            {data?.order?.driver && (
+              <Base.View
+                mt={'16px'}
+                py={'16px'}
+                px={'24px'}
+                backgroundColor={theme.colors.white}>
+                <Text.Medium color={theme.colors.black} fontSize={'20px'}>
+                  Rider details
+                </Text.Medium>
+                <Base.Row
+                  mt={'12.5px'}
+                  justifyContent={'flex-start'}
+                  alignItems={'center'}>
+                  <RiderImage
+                    source={{
+                      uri: data?.order?.driver?.image || '',
+                    }}
+                  />
+                  <Text.General
+                    ml={'10px'}
+                    fontFamily="500"
+                    color={theme.colors.black}
+                    fontSize={'16px'}>
+                    {data?.order?.driver?.firstName}{' '}
+                    {data?.order?.driver?.lastName}
+                  </Text.General>
+                </Base.Row>
+              </Base.View>
+            )}
 
             <Base.View
               mt={'16px'}
