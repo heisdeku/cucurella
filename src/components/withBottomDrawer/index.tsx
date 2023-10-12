@@ -20,10 +20,6 @@ const withBottomDrawer = (Component: any) => (props: any) => {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
-
   const handleOpen = (id: string, payload?: any) => {
     setDrawer({
       id,
@@ -48,7 +44,6 @@ const withBottomDrawer = (Component: any) => (props: any) => {
         index={1}
         snapPoints={snapPoints}
         enableDynamicSizing={true}
-        onChange={handleSheetChanges}
         handleStyle={{display: 'none'}}
         backdropComponent={({animatedIndex, style, animatedPosition}) => (
           <CustomBackdrop
