@@ -27,8 +27,6 @@ const TrackOrder = () => {
     variables: {orderId: params?.orderId},
   });
 
-  console.log('racke', data);
-
   return (
     <Base.View>
       <ScreenHeader

@@ -1,3 +1,4 @@
+import {useClearCart} from '@api/index';
 import {useCreateOrder} from '@api/orders';
 import {usePayment} from '@api/payment';
 import {useChargeWallet} from '@api/wallet';
@@ -76,7 +77,6 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
     userCurrentLocation,
     userPhoneNumber,
     userEmail,
-    userId,
     userWallet,
     userFirstName,
     userLastName,
@@ -84,7 +84,6 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
     state.user.currentLocation,
     state.user.phoneNumber,
     state.user.email,
-    state.user.id,
     state.user.wallets,
     state.user.firstName,
     state.user.lastName,
@@ -96,16 +95,16 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
     state.setOrderDetails,
   ]);
 
+  /** mutation functions for different actions for order steps which includes: payment, charge wallet, create order and clear cart */
   const {mutate, isLoading} = usePayment();
   const {mutate: chargeMutate, isLoading: chargeIsLoading} = useChargeWallet();
   const {mutate: createOrderMutate, isLoading: createOrderLoading} =
     useCreateOrder();
+  const {mutate: clearCartMutate} = useClearCart();
 
   const handleWalletPayment = () => {
     const walletRequest = {
-      userId,
       amount: Number(getCartTotalAmount()),
-      walletId: userWallet[0]?.walletId,
       orderDetails: {
         products: cartItems?.map(item => ({
           id: item?.product?.id,
@@ -113,8 +112,8 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
         })),
         items: cartItems?.map(item => item?.product?.name),
         deliveryNote,
-        subtotal: '0', //change it to subtotal
-        discount: '0', // change it to discount
+        subtotal: String(getCartTotalAmount()),
+        discount: '0',
         total: String(getCartTotalAmount()),
         deliveryFee: '0',
         description: `payment for ${
@@ -132,17 +131,19 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
       },
     };
     return chargeMutate(walletRequest, {
-      onSuccess: data => {
-        const {response} = data?.data;
+      onSuccess: () => {
         return createOrderMutate(
           {
             ...orderDetails,
-            paymentReference: response?.reference,
+            paymentReference: '',
           },
           {
             onSuccess: async data => {
-              console.log('create order success', data);
-              // navigate('Success', {type: 'order'});
+              clearCartMutate();
+              return navigate('Success', {
+                type: 'order',
+                orderId: data?.data?.orderId,
+              });
             },
           },
         );
@@ -173,7 +174,8 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
       discount: 0,
       deliveryNote: deliveryNote || 'No Note',
       //@ts-ignore
-      paymentMethod: method === 'wallet' ? method : 'card',
+      // paymentMethod: method === 'wallet' ? method : 'card',
+      paymentMethod: 'card',
       deliveryFee: 0,
     });
 
@@ -404,7 +406,9 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
         px={'20px'}>
         <Base.Button
           title="Pay now"
-          disabled={!method}
+          disabled={
+            !method || isLoading || chargeIsLoading || createOrderLoading
+          }
           // onPress={() => navigate('Success', {type: 'order'})}
           onPress={() => handlePayment()}
           isLoading={isLoading || chargeIsLoading || createOrderLoading}

@@ -1,12 +1,9 @@
-import {navigate} from '@stacks/helper';
 import type {AxiosError} from 'axios';
 import {createMutation} from 'react-query-kit';
 import {client, queryClient} from '../common';
 
 type Variables = {
-  userId: string;
   amount: number;
-  walletId: string;
   orderDetails: {
     products: {id: string; quantity: number}[];
     items: string[];

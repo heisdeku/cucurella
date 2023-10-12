@@ -8,11 +8,12 @@ type Variables = ICreateOrder;
 type Response = {
   status: boolean;
   message: string;
-  data: {authorization_url: string; access_code: string; reference: string};
+  data: {orderId: string};
 };
 
 export const useCreateOrder = createMutation<Response, Variables, AxiosError>({
   mutationFn: async variables => {
+    console.log(variables, 'variables');
     return client({
       url: `/order`,
       method: 'POST',
@@ -24,6 +25,9 @@ export const useCreateOrder = createMutation<Response, Variables, AxiosError>({
     // return navigate('Success', {type: 'order'});
   },
   onError: async error => {
-    console.log('something went wrong', error?.response?.data);
+    console.log(
+      'something went wrong via creating order',
+      error?.response?.data,
+    );
   },
 });

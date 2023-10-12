@@ -4,6 +4,7 @@ import {usePaymentVerify} from '@api/payment';
 import {IS_IOS} from '@libs/constant';
 import {arrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
+import {navigate} from '@stacks/helper';
 import {useCheckoutStore} from '@store/CheckoutStore';
 import React, {useRef} from 'react';
 import {Alert, Modal, TouchableOpacity} from 'react-native';
@@ -61,6 +62,31 @@ const PaymentWebView = (props: WebViewCustomPropsType) => {
     );
   };
 
+  const onConfirmPaymentTransaction = async () => {
+    return mutate(
+      {reference},
+      {
+        onSuccess: () => {
+          return createOrderMutate(
+            {
+              ...orderDetails,
+              paymentReference: reference,
+            },
+            {
+              onSuccess: data => {
+                clearCartMutate();
+                return navigate('Success', {
+                  type: 'order',
+                  orderId: data?.data?.orderId,
+                });
+              },
+            },
+          );
+        },
+      },
+    );
+  };
+
   const handleConfirmClick = () => {
     return Alert.alert(
       'Confirm Transaction',
@@ -73,26 +99,7 @@ const PaymentWebView = (props: WebViewCustomPropsType) => {
         },
         {
           text: 'Yes',
-          onPress: async () => {
-            return mutate(
-              {reference},
-              {
-                onSuccess: () => {
-                  return createOrderMutate(
-                    {
-                      ...orderDetails,
-                      paymentReference: reference,
-                    },
-                    {
-                      onSuccess: () => {
-                        return clearCartMutate();
-                      },
-                    },
-                  );
-                },
-              },
-            );
-          },
+          onPress: () => onConfirmPaymentTransaction(),
         },
       ],
     );

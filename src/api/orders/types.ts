@@ -57,7 +57,7 @@ export interface IOrder {
   orderConfirmedAt: Date | null;
   orderPackedAt: Date | null;
   orderProcessedAt: Date | null;
-  orderProgress: string | null;
+  orderProgress: 'packed' | 'processed' | 'confirmed' | string | null;
   user: IUser;
 }
 

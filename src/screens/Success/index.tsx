@@ -38,7 +38,7 @@ const Success = () => {
         return navigate('Main');
       case 'order':
         return navigate('TrackOrder', {
-          source: 'view-order',
+          source: 'order-complete',
           //@ts-ignore
           orderId: params?.orderId,
         });
