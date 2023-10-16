@@ -8,7 +8,7 @@ import {ImageBackground, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import {MotiView} from 'moti';
-import {IS_ANDROID} from '@libs/constant';
+import {IS_ANDROID, IS_IOS} from '@libs/constant';
 
 const Onboarding = () => {
   const insets = useSafeAreaInsets();
@@ -26,7 +26,10 @@ const Onboarding = () => {
         }}
       />
       <Base.View flex={1} pt={insets.top + 34} justifyContent={'space-between'}>
-        <Base.View marginLeft={'auto'} marginRight={'auto'} width={'380px'}>
+        <Base.View
+          marginLeft={'auto'}
+          marginRight={'auto'}
+          width={IS_IOS ? '380px' : '320px'}>
           <Text.Medium
             fontWeight={'700'}
             lineHeight={'40.64px'}

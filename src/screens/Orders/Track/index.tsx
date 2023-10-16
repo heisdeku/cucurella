@@ -74,32 +74,34 @@ const TrackOrder = () => {
                 18:42
               </Text.H1>
             </Base.View>
-            <Base.View
-              mt={'16px'}
-              py={'16px'}
-              px={'24px'}
-              backgroundColor={theme.colors.white}>
-              <Text.General
-                fontSize={'14px'}
-                color={theme.colors.neutral06}
-                mb={'4px'}>
-                Release Code
-              </Text.General>
-              <Text.H1
-                lineHeight={'32.64px'}
-                color={theme.colors.black}
-                fontSize={'24px'}>
-                9086
-              </Text.H1>
-              <Text.General
-                mt={'4px'}
-                color={theme.colors.neutral08}
-                fontSize={'12px'}
-                lineHeight="17px">
-                Give this code to the rider after you’ve confirmed that your
-                goods was delivered as requested
-              </Text.General>
-            </Base.View>
+            {data?.order?.deliveryCode && (
+              <Base.View
+                mt={'16px'}
+                py={'16px'}
+                px={'24px'}
+                backgroundColor={theme.colors.white}>
+                <Text.General
+                  fontSize={'14px'}
+                  color={theme.colors.neutral06}
+                  mb={'4px'}>
+                  Release Code
+                </Text.General>
+                <Text.H1
+                  lineHeight={'32.64px'}
+                  color={theme.colors.black}
+                  fontSize={'24px'}>
+                  {data?.order?.deliveryCode}
+                </Text.H1>
+                <Text.General
+                  mt={'4px'}
+                  color={theme.colors.neutral08}
+                  fontSize={'12px'}
+                  lineHeight="17px">
+                  Give this code to the rider after you’ve confirmed that your
+                  goods was delivered as requested
+                </Text.General>
+              </Base.View>
+            )}
             {data?.order?.orderProgress !== null && (
               <Base.View
                 mt={'16px'}
@@ -204,11 +206,20 @@ const TrackOrder = () => {
                   mt={'12.5px'}
                   justifyContent={'flex-start'}
                   alignItems={'center'}>
-                  <RiderImage
-                    source={{
-                      uri: data?.order?.driver?.image || '',
-                    }}
-                  />
+                  {data?.order?.driver?.image ? (
+                    <RiderImage
+                      source={{
+                        uri: data?.order?.driver?.image || '',
+                      }}
+                    />
+                  ) : (
+                    <Avatar>
+                      <Text.Medium isCapitalize fontSize={'14px'}>
+                        {data?.order?.driver?.firstName.split('')[0]}
+                        {data?.order?.driver?.lastName.split('')[0]}
+                      </Text.Medium>
+                    </Avatar>
+                  )}
                   <Text.General
                     ml={'10px'}
                     fontFamily="500"
@@ -330,6 +341,16 @@ const RiderImage = styled.Image`
   width: 40px;
   height: 40px;
   border-radius: 50px;
+  background-color: ${theme.colors.green08};
+`;
+
+const Avatar = styled.View`
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  background-color: #d2ffe4;
+  justify-content: center;
+  align-items: center;
 `;
 const ScrollArea = styled.ScrollView`
   margin-bottom: 120px;

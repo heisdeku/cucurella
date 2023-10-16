@@ -9,7 +9,6 @@ import {IDrawerChildProps} from './helper';
 import {useGlobalStore} from '@store/GlobalStore';
 import {DRAWER_CONSTANTS} from './constants';
 import {requestLocationPermissions} from '@libs/geolocation';
-import type {IPermissionResTrue} from '@libs/geolocation';
 import {useUserStore} from '@store/UserStore';
 
 export const LocationDrawer: React.FC<IDrawerChildProps> = ({
@@ -26,11 +25,13 @@ export const LocationDrawer: React.FC<IDrawerChildProps> = ({
 
   const handleAllowLocationPermission = async () => {
     //@ts-ignore
-    const {address, coordinates} = await requestLocationPermissions();
-    if (address || coordinates) {
-      console.log('handle allow location permission success ---->');
+    const data = await requestLocationPermissions();
+    if (data?.address || data?.coordinates) {
       updateCurrentLocation(
-        JSON.stringify({...coordinates, formatted_address: address}),
+        JSON.stringify({
+          ...data?.coordinates,
+          formatted_address: data?.address,
+        }),
       );
       setFirstTimeLogin(false);
       return handleClose?.();

@@ -19,6 +19,7 @@ import {
 import updateStatusBar from '@hooks/updateStatusBar';
 import {useUserStore} from '@store/UserStore';
 import {onLogout} from '@api/common/logout';
+import {IS_IOS} from '@libs/constant';
 
 interface ListItemProps {
   text: string;
@@ -65,7 +66,7 @@ const ListItemSeperator = () => (
 );
 
 const Account: React.FC = (): JSX.Element => {
-  updateStatusBar('dark-content');
+  IS_IOS ? updateStatusBar('light-content') : updateStatusBar('dark-content');
   const [userFirstName, userLastName, userEmail, userImage] = useUserStore(
     state => [
       state.user.firstName,
@@ -82,7 +83,10 @@ const Account: React.FC = (): JSX.Element => {
           {userImage && <UserImage source={{uri: userImage}} />}
           {!userImage && (
             <Avatar>
-              <Text.Medium lineHeight={'52.381px'} fontSize={'41.905px'}>
+              <Text.Medium
+                isCapitalize
+                lineHeight={'52.381px'}
+                fontSize={'41.905px'}>
                 {userFirstName.split('')[0]}
                 {userLastName.split('')[0]}
               </Text.Medium>

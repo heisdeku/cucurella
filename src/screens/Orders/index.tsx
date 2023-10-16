@@ -4,7 +4,7 @@ import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {Text} from '@components/Text';
 import updateStatusBar from '@hooks/updateStatusBar';
-import {windowHeight} from '@libs/constant';
+import {IS_IOS, windowHeight} from '@libs/constant';
 import {formatDateTime} from '@libs/date';
 import {order_empty_illustration, outlineArrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
@@ -216,7 +216,7 @@ const TabOrdersListing = styled.ScrollView`
   background-color: ${theme.colors.white};
   padding: 16px;
   border-radius: 12px;
-  max-height: ${windowHeight - 330}px;
+  max-height: ${IS_IOS ? windowHeight - 330 : windowHeight - 300}px;
 `;
 const TabButton = styled.TouchableOpacity`
   width: 49%;

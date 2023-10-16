@@ -52,7 +52,6 @@ export interface IOrder {
   paymentStatus: string;
   orderStatus: string;
   totalItems: number;
-  userId: string;
   driverId: string | null;
   driver: IDriver;
   shippingMethod: string;
@@ -66,6 +65,9 @@ export interface IOrder {
   orderProcessedAt: Date | null;
   orderProgress: OrderProgressT;
   user: IUser;
+  userId: string;
+  deliveryCode: string;
+  warehouseId: string;
 }
 
 export interface ICreateOrder {

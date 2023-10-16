@@ -68,6 +68,7 @@ const OrderAddress = ({address}: {address: string}) => {
     </Base.Row>
   );
 };
+
 const OrderPhoneNumber = ({phoneNumber}: {phoneNumber: string}) => {
   return (
     <Base.Row py={'16px'} alignItems={'flex-end'}>

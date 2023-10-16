@@ -17,6 +17,7 @@ import {client} from '@api/common';
 import {handleServerError, showErrorMessage} from '@libs/error';
 import {showMessage} from 'react-native-flash-message';
 import updateStatusBar from '@hooks/updateStatusBar';
+import {windowHeight} from '@libs/constant';
 
 function CreateAccount(): JSX.Element {
   updateStatusBar('dark-content');
@@ -55,7 +56,10 @@ function CreateAccount(): JSX.Element {
 
   return (
     <KeyboardWrapper hasPaddingTop>
-      <Container justifyContent={'space-between'} pt={'29px'}>
+      <Container
+        // height={windowHeight}
+        justifyContent={'space-between'}
+        pt={'29px'}>
         <Base.View>
           <Text.Medium fontSize={'24px'} mb={'34px'}>
             Enter your {source === 'phone' ? 'phone number' : 'email address'}
@@ -87,54 +91,56 @@ function CreateAccount(): JSX.Element {
               </Text.Caption>
             </TouchableOpacity>
           </Base.Row>
-          <Row mb={'24px'} mt={'45%'} alignItems={'center'} mx={'auto'}>
-            <Line />
-            <Text.General
-              lineHeight={'17.5px'}
-              fontWeight={'400'}
-              fontSize={'14px'}
-              mt={'2px'}
-              mx={'16px'}
-              color={theme.colors.black}>
-              Or sign up with
-            </Text.General>
-            <Line />
-          </Row>
-          <Row width={'250px'} mx={'auto'}>
-            <SocialAuth activeOpacity={0.8}>
-              <SvgXml xml={social.google} />
+          <Base.View mt={'45%'}>
+            <Row mb={'24px'} alignItems={'center'} mx={'auto'}>
+              <Line />
               <Text.General
                 lineHeight={'17.5px'}
                 fontWeight={'400'}
                 fontSize={'14px'}
                 mt={'2px'}
+                mx={'16px'}
                 color={theme.colors.black}>
-                Google
+                Or sign up with
               </Text.General>
-            </SocialAuth>
-            <SocialAuth activeOpacity={0.8}>
-              <SvgXml xml={social.apple} />
-              <Text.General
-                lineHeight={'17.5px'}
-                fontWeight={'400'}
-                fontSize={'14px'}
-                mt={'2px'}
-                color={theme.colors.black}>
-                Apple
-              </Text.General>
-            </SocialAuth>
-            <SocialAuth activeOpacity={0.8}>
-              <SvgXml xml={social.facebook} />
-              <Text.General
-                lineHeight={'17.5px'}
-                fontWeight={'400'}
-                fontSize={'14px'}
-                mt={'4px'}
-                color={theme.colors.black}>
-                Facebook
-              </Text.General>
-            </SocialAuth>
-          </Row>
+              <Line />
+            </Row>
+            <Row width={'250px'} mx={'auto'}>
+              <SocialAuth activeOpacity={0.8}>
+                <SvgXml xml={social.google} />
+                <Text.General
+                  lineHeight={'17.5px'}
+                  fontWeight={'400'}
+                  fontSize={'14px'}
+                  mt={'2px'}
+                  color={theme.colors.black}>
+                  Google
+                </Text.General>
+              </SocialAuth>
+              <SocialAuth activeOpacity={0.8}>
+                <SvgXml xml={social.apple} />
+                <Text.General
+                  lineHeight={'17.5px'}
+                  fontWeight={'400'}
+                  fontSize={'14px'}
+                  mt={'2px'}
+                  color={theme.colors.black}>
+                  Apple
+                </Text.General>
+              </SocialAuth>
+              <SocialAuth activeOpacity={0.8}>
+                <SvgXml xml={social.facebook} />
+                <Text.General
+                  lineHeight={'17.5px'}
+                  fontWeight={'400'}
+                  fontSize={'14px'}
+                  mt={'4px'}
+                  color={theme.colors.black}>
+                  Facebook
+                </Text.General>
+              </SocialAuth>
+            </Row>
+          </Base.View>
         </Base.View>
         <Base.View>
           <Base.Button

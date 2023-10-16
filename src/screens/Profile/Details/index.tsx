@@ -11,7 +11,6 @@ import {useUserStore} from '@store/UserStore';
 import {Formik} from 'formik';
 import {Alert, ScrollView} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import {windowHeight} from '@libs/constant';
 import updateStatusBar from '@hooks/updateStatusBar';
 
 const ProfileDetails = () => {
@@ -69,6 +68,7 @@ const ProfileDetails = () => {
                 {!userImage && (
                   <Avatar>
                     <Text.Medium
+                      isCapitalize
                       lineHeight={'52px'}
                       color={theme.colors.dark}
                       fontSize={'41.9px'}>

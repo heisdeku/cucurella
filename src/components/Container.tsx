@@ -33,7 +33,7 @@ const Container: React.FC<ContainerProps> = ({
   let top = Platform.select({android: `${inserts.top}px`, ios: '0px'});
   return (
     <Base.View
-      // flex={1}
+      flex={1}
       minHeight={'100%'}
       paddingX={'20px'}
       marginTop={insertTop ? top : 0}
