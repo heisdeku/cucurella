@@ -8,6 +8,7 @@ import {formatMonetaryAmount} from '@libs/helper';
 import {outlineArrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
+import {useUserStore} from '@store/UserStore';
 import {TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SvgXml} from 'react-native-svg';
@@ -55,6 +56,7 @@ export const Transaction = ({isDebit}: IWalletTransaction) => {
 const WalletScreen: React.FC<IDrawerChildProps> = ({handleOpen}) => {
   updateStatusBar('dark-content');
   const inserts = useSafeAreaInsets();
+  const [wallets] = useUserStore(state => [state.user.wallets]);
   return (
     <Base.View minHeight={'100%'}>
       <Base.View
@@ -85,7 +87,7 @@ const WalletScreen: React.FC<IDrawerChildProps> = ({handleOpen}) => {
               color={'white'}
               fontSize={'24px'}
               lineHeight={'24px'}>
-              NGN {formatMonetaryAmount(60000).figure}
+              NGN {formatMonetaryAmount(wallets[0]?.balance).figure}
             </Text.Medium>
             <Base.Button
               onPress={() => handleOpen?.(DRAWER_CONSTANTS.bankDetails)}

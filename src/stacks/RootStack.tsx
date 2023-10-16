@@ -18,6 +18,7 @@ const Root = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          animation: 'slide_from_right',
         }}>
         {isFirstTime && (
           <Stack.Group>

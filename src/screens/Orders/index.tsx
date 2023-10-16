@@ -115,7 +115,7 @@ const OrdersFilled = () => {
   });
 
   const renderOngoingOrders = (orders: IOrder[]) => {
-    if (orders.length < 1) {
+    if (orders?.length < 1) {
       return <OrdersEmpty />;
     }
     return (
@@ -127,8 +127,9 @@ const OrdersFilled = () => {
       </TabOrdersListing>
     );
   };
+
   const renderCompletedOrders = (orders: IOrder[]) => {
-    if (orders.length < 1) {
+    if (orders?.length < 1) {
       return <OrdersEmpty />;
     }
     return (
@@ -143,7 +144,10 @@ const OrdersFilled = () => {
 
   const ongoing = useMemo(
     //@ts-ignore
-    () => [...pendingOrdersData?.orders, ...ongoingOrdersData?.orders],
+    () =>
+      pendingOrdersData !== undefined && ongoingOrdersData !== undefined
+        ? [...pendingOrdersData?.orders, ...ongoingOrdersData?.orders]
+        : [],
     [ongoingOrdersData, pendingOrdersData],
   );
 
@@ -156,12 +160,7 @@ const OrdersFilled = () => {
             <OrdersEmpty />
           )
         }
-        {/* {
-          //@ts-ignore
-          ongoing?.length < 1 && completedOrdersData?.orders?.length < 1 && (
-            <OrdersEmpty />
-          )
-        } */}
+
         {
           //@ts-ignore
           (ongoing?.length > 0 || completedOrdersData?.orders?.length > 0) && (

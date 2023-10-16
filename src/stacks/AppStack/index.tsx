@@ -122,6 +122,8 @@ const AppNavigation = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        animationEnabled: true,
+        animationTypeForReplace: 'push',
       }}>
       <Stack.Screen name="Main" component={MainTab} />
       <Stack.Screen name="Category" component={Category} />

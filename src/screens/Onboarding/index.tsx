@@ -7,6 +7,7 @@ import {handleContinueAsGuest} from '@store/UserStore';
 import {ImageBackground, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
+import {MotiView} from 'moti';
 
 const Onboarding = () => {
   const insets = useSafeAreaInsets();
@@ -30,21 +31,34 @@ const Onboarding = () => {
             lineHeight={'40.64px'}
             color={theme.colors.white}
             textAlign={'center'}
-            fontSize={'32px'}>
+            fontSize={'28px'}>
             Get groceries easily delivered at your door
           </Text.Medium>
         </Base.View>
-        <OnboardingImage
-          resizeMode="contain"
-          source={require('../../../assets/images/onboarding-stock.png')}
-        />
+        <MotiWrapper
+          from={{
+            opacity: 0,
+            right: -100,
+          }}
+          animate={{
+            opacity: 1,
+            right: 0,
+          }}
+          transition={{
+            type: 'timing',
+            duration: 800,
+          }}>
+          <OnboardingImage
+            resizeMode="contain"
+            source={require('../../../assets/images/onboarding-stock.png')}
+          />
+        </MotiWrapper>
         <Base.View px={'20px'} pb={insets.bottom + 16}>
           <Base.View>
             <Base.Button
               title="Sign up"
               onPress={() => {
                 setIsFirstTime(false);
-                // return navigate('Authentication');
               }}
             />
             <Base.Row justifyContent={'center'} mt={'13px'}>
@@ -63,11 +77,16 @@ const Onboarding = () => {
   );
 };
 
-const OnboardingImage = styled.Image`
+const MotiWrapper = styled(MotiView)`
   width: 418.789px;
   height: 322.661px;
   margin-left: 5%;
   flex: 0.9;
+`;
+const OnboardingImage = styled.Image`
+  width: 418.789px;
+  height: 322.661px;
+  flex: 1;
 `;
 
 export default Onboarding;

@@ -32,18 +32,18 @@ const ProfileDetails = () => {
   const [userImage, setUserImage] = useState(profileImage);
 
   const handleProfileImageChange = async () => {
-    return Alert.alert('WIP 🚨', 'Updating Profile Picture');
-    // return await ImagePicker?.openPicker({
-    //   width: 100,
-    //   height: 100,
-    //   cropping: true,
-    //   includeBase64: true,
-    // }).then(async image => {
-    //   //@ts-ignore
-    //   const IMAGE_URL = `data:${image.mime};base64,${image.data}`;
-    //   setUserImage(IMAGE_URL);
-    //   console.log('Profile Picture Updated Successfully');
-    // });
+    // return Alert.alert('WIP 🚨', 'Updating Profile Picture');
+    return await ImagePicker?.openPicker({
+      width: 100,
+      height: 100,
+      cropping: true,
+      includeBase64: true,
+    }).then(async image => {
+      //@ts-ignore
+      const IMAGE_URL = `data:${image.mime};base64,${image.data}`;
+      setUserImage(IMAGE_URL);
+      console.log('Profile Picture Updated Successfully');
+    });
   };
   return (
     <KeyboardWrapper>

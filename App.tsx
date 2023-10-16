@@ -9,6 +9,8 @@ import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {APIProvider} from '@api/common';
 import {hydrateAuth} from './src/store/AuthStore';
 import BootSplash from 'react-native-bootsplash';
+import FlashMessage from 'react-native-flash-message';
+import ToastManager, {Toast} from 'toastify-react-native';
 
 hydrateAuth();
 
@@ -34,6 +36,7 @@ function App(): JSX.Element {
           <APIProvider>
             <BottomSheetModalProvider>
               <Root />
+              <FlashMessage position="top" />
             </BottomSheetModalProvider>
           </APIProvider>
         </ThemeProvider>

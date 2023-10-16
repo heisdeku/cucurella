@@ -8,7 +8,6 @@ import {readableInputProps, readOnlyInput} from '@libs/helper';
 import theme from '@libs/theme';
 import KeyboardWrapper from '@components/KeyboardWrapper';
 import withBottomDrawer from '@components/withBottomDrawer';
-import {DRAWER_CONSTANTS} from '@components/withBottomDrawer/constants';
 import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
 import {createPinViewStyles, FormGroup} from '../styles';
 import {useOnboardingStore} from '@store/OnboardingStore';

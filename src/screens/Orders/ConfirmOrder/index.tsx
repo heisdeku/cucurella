@@ -291,7 +291,7 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
             Select payment method
           </Text.Medium>
           <Base.View mt={'15px'}>
-            <PaymentType
+            {/* <PaymentType
               title="Debit Card"
               typeText="will be deducted from your visa card ****890"
               isSelected={method === 'debit-card'}
@@ -301,7 +301,7 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
                   type: 'no-card-detected',
                 });
               }}
-            />
+            /> */}
             <PaymentType
               title="Wallet"
               typeText="will be deducted from your wallet balance"
