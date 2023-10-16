@@ -9,9 +9,11 @@ import Input from '@components/Base/Input';
 import ScreenHeader from '@components/ScreenHeader';
 import {useUserStore} from '@store/UserStore';
 import {Formik} from 'formik';
-import {Alert, ScrollView} from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
+import {ScrollView} from 'react-native';
 import updateStatusBar from '@hooks/updateStatusBar';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {showMessage} from 'react-native-flash-message';
+import {useAddImage} from '@api/profile';
 
 const ProfileDetails = () => {
   updateStatusBar('dark-content');
@@ -29,20 +31,40 @@ const ProfileDetails = () => {
     state.user.image,
   ]);
   const [userImage, setUserImage] = useState(profileImage);
+  const {mutate, isLoading} = useAddImage();
 
   const handleProfileImageChange = async () => {
-    // return Alert.alert('WIP 🚨', 'Updating Profile Picture');
-    return await ImagePicker?.openPicker({
-      width: 100,
-      height: 100,
-      cropping: true,
-      includeBase64: true,
-    }).then(async image => {
-      //@ts-ignore
-      const IMAGE_URL = `data:${image.mime};base64,${image.data}`;
-      setUserImage(IMAGE_URL);
-      console.log('Profile Picture Updated Successfully');
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+      maxHeight: 100,
+      maxWidth: 100,
+      quality: 1,
     });
+    if (result?.assets) {
+      const {fileName, fileSize, uri} = result?.assets[0];
+      //@ts-ignore
+      setUserImage(uri);
+      const formData = new FormData();
+      const file = {
+        uri: uri,
+        name: fileName,
+        type: `image/jpg`,
+      };
+      formData.append('image', file);
+      return mutate(
+        {formData},
+        {
+          onSuccess: () => {
+            return showMessage({
+              message: 'profile Image updated',
+              type: 'success',
+            });
+          },
+        },
+      );
+    }
+    if (result?.didCancel) {
+    }
   };
   return (
     <KeyboardWrapper>

@@ -128,6 +128,12 @@ const WalletScreen: React.FC<IDrawerChildProps> = ({handleOpen}) => {
           <Transaction isDebit={true} />
           <Transaction />
           <Transaction isDebit={true} />
+          <Transaction isDebit={true} />
+          <Transaction />
+          <Transaction isDebit={true} />
+          <Transaction isDebit={true} />
+          <Transaction />
+          <Transaction isDebit={true} />
         </TransactionsListView>
       </Base.View>
     </Base.View>
