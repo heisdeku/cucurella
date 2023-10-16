@@ -12,7 +12,7 @@ export const BankDetailsDrawer: React.FC<IDrawerChildProps> = () => {
       </Text.Medium>
       <Base.View
         backgroundColor={theme.colors.neutral02}
-        borderRadius={'11px'}
+        borderRadius={11}
         px={'19px'}
         py={'23px'}>
         <Base.View mb={'16px'}>

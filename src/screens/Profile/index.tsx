@@ -65,7 +65,7 @@ const ListItemSeperator = () => (
 );
 
 const Account: React.FC = (): JSX.Element => {
-  updateStatusBar('light-content');
+  updateStatusBar('dark-content');
   const [userFirstName, userLastName, userEmail, userImage] = useUserStore(
     state => [
       state.user.firstName,

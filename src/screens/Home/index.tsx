@@ -155,7 +155,7 @@ const HomeScreen: React.FC<IDrawerChildProps> = ({handleOpen, handleClose}) => {
                         activeOpacity={0.76}>
                         <CategoryImage
                           source={{
-                            uri: category?.thumbnails,
+                            uri: category?.thumbnails || '',
                           }}
                         />
                         <Text.General

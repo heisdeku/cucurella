@@ -62,7 +62,7 @@ export const WarningDrawer = ({handleClose, payload}) => {
       <Base.View
         width={'78px'}
         height="78px"
-        borderRadius={'118px'}
+        borderRadius={118}
         mx={'auto'}
         mb="18px"
         justifyContent={'center'}

@@ -8,6 +8,7 @@ import {ImageBackground, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import {MotiView} from 'moti';
+import {IS_ANDROID} from '@libs/constant';
 
 const Onboarding = () => {
   const insets = useSafeAreaInsets();
@@ -80,7 +81,7 @@ const Onboarding = () => {
 const MotiWrapper = styled(MotiView)`
   width: 418.789px;
   height: 322.661px;
-  margin-left: 5%;
+  margin-left: ${IS_ANDROID ? '12%' : '5%'};
   flex: 0.9;
 `;
 const OnboardingImage = styled.Image`

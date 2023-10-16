@@ -168,7 +168,7 @@ const OrdersFilled = () => {
               <Base.Row
                 backgroundColor={theme.colors.white}
                 mt={'24px'}
-                borderRadius={'8px'}
+                borderRadius={8}
                 justifyContent={'space-between'}
                 padding={'8px'}>
                 {types?.map((type, i) => {

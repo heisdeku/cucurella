@@ -26,7 +26,7 @@ const ScreenHeader: React.FC<IScreenHeader> = ({label, toHome}) => {
       </TouchableOpacity>
       <Text.Medium
         mx={'auto'}
-        flex={'1'}
+        /**removed flex equals to one here */
         fontFamily={'700'}
         textAlign={'center'}>
         {label}

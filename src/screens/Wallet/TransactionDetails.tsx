@@ -44,7 +44,7 @@ const WalletTransactionDetails = () => {
                 width={'8px'}
                 marginRight={'6px'}
                 background={theme.colors.green07}
-                borderRadius={'100px'}
+                borderRadius={100}
               />
               <Text.General
                 fontSize={'15px'}

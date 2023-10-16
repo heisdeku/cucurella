@@ -67,7 +67,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <ButtonBase
-      borderRadius={'8px'}
+      borderRadius={8}
       backgroundColor={theme.colors.green08}
       height={'58px'}
       activeOpacity={0.8}

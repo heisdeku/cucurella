@@ -96,7 +96,7 @@ const ProductScreen = ({handleOpen, handleClose}: IDrawerChildProps) => {
               <Base.View
                 position={'absolute'}
                 zIndex={2}
-                borderRadius={'999px'}
+                borderRadius={999}
                 top={'-5px'}
                 right={'-5px'}
                 width={'17.5px'}

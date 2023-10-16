@@ -71,7 +71,7 @@ const WalletScreen: React.FC<IDrawerChildProps> = ({handleOpen}) => {
           backgroundColor={'#001D18'}
           marginTop={16}
           height={171}
-          borderRadius={'8px'}>
+          borderRadius={8}>
           <StyledImageBackground
             source={require('../../../assets/images/wallet-card-background.png')}
             imageStyle={{borderRadius: 8}}>

@@ -65,8 +65,8 @@ export const OfaydProduct: React.FC<IOfaydProduct> = props => {
 
   return (
     <Base.View
-      borderRadius={'10px'}
-      borderWidth={'1px'}
+      borderRadius={10}
+      borderWidth={1}
       py={'8px'}
       width={'49%'}
       mb={'24px'}
@@ -75,7 +75,7 @@ export const OfaydProduct: React.FC<IOfaydProduct> = props => {
       <TouchableOpacity activeOpacity={0.8} onPress={() => goToProduct()}>
         <ProductImage
           source={{
-            uri: props?.images[0],
+            uri: props?.images[0] || '',
           }}
           resizeMode="cover"
         />

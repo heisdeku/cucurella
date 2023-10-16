@@ -146,23 +146,25 @@ function CreateAccount(): JSX.Element {
             }
             isLoading={isLoading}
           />
-          <Base.Row justifyContent={'center'} mt={'10px'}>
-            <Text.Caption
-              fontSize={'14px'}
-              fontFamily="500"
-              color={theme.colors.neutral07}>
-              Have an account?
-            </Text.Caption>
-            <TouchableOpacity onPress={() => navigate('Login')}>
+          <TouchableOpacity onPress={() => navigate('Login')}>
+            <Base.Row justifyContent={'center'} mt={'10px'}>
               <Text.Caption
                 fontSize={'14px'}
                 fontFamily="500"
-                color={theme.colors.green08}>
-                {' '}
-                Login
+                color={theme.colors.neutral07}>
+                Have an account?
               </Text.Caption>
-            </TouchableOpacity>
-          </Base.Row>
+              <TouchableOpacity onPress={() => navigate('Login')}>
+                <Text.Caption
+                  fontSize={'14px'}
+                  fontFamily="500"
+                  color={theme.colors.green08}>
+                  {' '}
+                  Login
+                </Text.Caption>
+              </TouchableOpacity>
+            </Base.Row>
+          </TouchableOpacity>
         </Base.View>
       </Container>
     </KeyboardWrapper>

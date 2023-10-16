@@ -31,9 +31,9 @@ const Input = ({
     <InputContainer>
       <Base.View>
         <Base.View>
-          <Text.Small fontWeight={'500'} mb={'8px'}>
+          <Text.General fontSize={'14px'} fontWeight={'500'} mb={'8px'}>
             {label}
-          </Text.Small>
+          </Text.General>
           {hasCountryCode && (
             <PhoneInput
               ref={phoneInput}

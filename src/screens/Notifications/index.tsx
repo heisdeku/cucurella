@@ -7,7 +7,12 @@ import theme from '@libs/theme';
 import {TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const NotificationItem = ({label, text}: {label: string; text: string}) => {
+interface INotificationItem {
+  label: string;
+  text: string;
+}
+
+const NotificationItem = ({label, text}: INotificationItem) => {
   return (
     <Base.View
       borderBottomWidth={'1px'}
@@ -23,7 +28,7 @@ const NotificationItem = ({label, text}: {label: string; text: string}) => {
             width={'8px'}
             height="8px"
             backgroundColor={theme.colors.green06}
-            borderRadius="100px"
+            borderRadius={100}
             marginRight={'8px'}
           />
           <Base.View mt={'-3px'} maxWidth="85%">

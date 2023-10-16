@@ -37,7 +37,7 @@ export const AddPaymentMethod: React.FC<IDrawerChildProps> = ({
             paddingY={'8px'}
             px="16px"
             backgroundColor={theme.colors.neutral01}
-            borderRadius="9px"
+            borderRadius={9}
             mb={'16px'}>
             <Base.Row height={'62px'}>
               <MethodIcon>
@@ -66,7 +66,7 @@ export const AddPaymentMethod: React.FC<IDrawerChildProps> = ({
             paddingY={'8px'}
             px="16px"
             backgroundColor={theme.colors.neutral01}
-            borderRadius="9px"
+            borderRadius={9}
             mb={'24px'}>
             <Base.Row height={'62px'}>
               <MethodIcon>

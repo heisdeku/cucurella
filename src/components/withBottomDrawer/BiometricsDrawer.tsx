@@ -15,7 +15,7 @@ export const BiometricsDrawer: React.FC<IDrawerChildProps> = ({
       <Base.View
         width={'64px'}
         height="64px"
-        borderRadius={'49px'}
+        borderRadius={49}
         mx={'auto'}
         mb="18px"
         justifyContent={'center'}

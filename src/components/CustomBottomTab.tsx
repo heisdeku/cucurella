@@ -90,7 +90,7 @@ function CustomBottomTab({state, navigation, handleOpen}: any) {
             justifyContent={'center'}
             display={'flex'}
             alignItems={'center'}
-            borderRadius={'46.25px'}>
+            borderRadius={46.25}>
             <Text.Medium
               color={theme.colors.black}
               lineHeight={'12px'}

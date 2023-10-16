@@ -31,7 +31,7 @@ const CartViewWrapper = ({children}) => {
             onPress={() => navigate('OrderCheckout')}
             activeOpacity={0.95}>
             <Base.Row
-              borderRadius={'8px'}
+              borderRadius={8}
               py={'16px'}
               px={'24px'}
               backgroundColor={theme.colors.green07}>

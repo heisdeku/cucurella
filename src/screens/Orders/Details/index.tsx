@@ -52,7 +52,7 @@ const OrderAddress = ({address}: {address: string}) => {
           height={'32px'}
           justifyContent={'center'}
           alignItems={'center'}
-          borderRadius={'40px'}
+          borderRadius={40}
           mr={'8px'}>
           <SvgXml xml={mdiLocation} width={16} height={16} />
         </Base.View>
@@ -78,7 +78,7 @@ const OrderPhoneNumber = ({phoneNumber}: {phoneNumber: string}) => {
           height={'32px'}
           justifyContent={'center'}
           alignItems={'center'}
-          borderRadius={'40px'}
+          borderRadius={40}
           mr={'8px'}>
           <SvgXml xml={linear_call} width={16} height={16} />
         </Base.View>

@@ -1,7 +1,10 @@
 import {useEffect} from 'react';
 import CustomBottomTab from '@components/CustomBottomTab';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 
 // main activity screens
 import HomeScreen from '@screens/Home';
@@ -124,6 +127,7 @@ const AppNavigation = () => {
         headerShown: false,
         animationEnabled: true,
         animationTypeForReplace: 'push',
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Stack.Screen name="Main" component={MainTab} />
       <Stack.Screen name="Category" component={Category} />
