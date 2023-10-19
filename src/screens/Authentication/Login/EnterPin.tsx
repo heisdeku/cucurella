@@ -1,8 +1,14 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, TextInput, TextStyle, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  TextStyle,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Base} from '@components/Base';
 import Container from '@components/Container';
-import {IS_ANDROID} from '@libs/constant';
+import {IS_ANDROID, IS_IOS} from '@libs/constant';
 import {Text} from '@components/Text';
 import {readableInputProps} from '@libs/helper';
 import KeyboardWrapper from '@components/KeyboardWrapper';
@@ -101,13 +107,11 @@ const EnterPin: React.FC = () => {
                 paddingX={14}
                 zIndex={'1'}>
                 {[0, 1, 2, 3].map(i => (
-                  <TextInput
+                  <View
                     key={`${i}`}
-                    secureTextEntry={!!splitCode[i]}
                     style={readOnlyInput(splitCode[i] ? true : false)}
                     value={splitCode[i] || ''}
                     maxLength={5}
-                    blurOnSubmit={false}
                     caretHidden={IS_ANDROID}
                     {...readableInputProps}
                   />
@@ -167,13 +171,12 @@ const style = StyleSheet.create({
   },
 });
 
-export const readOnlyInput = (isCodeInvalid: boolean): TextStyle => {
+export const readOnlyInput = (isCodeInvalid: boolean) => {
   return {
     backgroundColor: !isCodeInvalid ? '#94A3B8' : theme.colors.black,
     width: 4,
     height: 4,
-    borderRadius: 8,
-    fontSize: 25,
+    borderRadius: 10,
     fontFamily: theme.fonts[500],
     textAlign: 'center',
   };

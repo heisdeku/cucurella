@@ -5,12 +5,14 @@ import {OfaydProduct} from '@components/OfaydProduct';
 import {Text} from '@components/Text';
 import withBottomDrawer from '@components/withBottomDrawer';
 import {IDrawerChildProps} from '@components/withBottomDrawer/helper';
+import {IS_IOS} from '@libs/constant';
 import {calculateCountdown} from '@libs/helper';
 import {arrowRight} from '@libs/svgs';
 import theme from '@libs/theme';
 import {useRoute} from '@react-navigation/native';
 import {goBack} from '@stacks/helper';
-import {ActivityIndicator, ScrollView, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {ActivityIndicator, FlatList, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SvgXml} from 'react-native-svg';
 
@@ -41,7 +43,7 @@ const DealsScreen: React.FC<IDrawerChildProps> = () => {
           <SvgXml xml={arrowRight} />
         </TouchableOpacity>
         <Base.Row mt={'17px'} alignItems={'flex-end'} pb={'16px'}>
-          <Base.View>
+          <Base.View width={'50%'}>
             <Text.Medium
               isCapitalize
               fontWeight={'700'}
@@ -70,28 +72,34 @@ const DealsScreen: React.FC<IDrawerChildProps> = () => {
           </Base.View>
         </Base.Row>
       </Base.View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Base.View
-          px={'20px'}
-          py={'16px'}
-          mt={'16px'}
-          minHeight="100%"
-          backgroundColor={theme.colors.white}>
-          {isLoading && (
-            <Base.View mt={'16px'}>
-              <ActivityIndicator size={'large'} color={theme.colors.green08} />
-            </Base.View>
-          )}
-          {!isLoading && data && (
-            <Base.Row flexWrap={'wrap'}>
-              {data?.map((product, i) => {
-                const productDetails = product?.product;
-                return <OfaydProduct {...productDetails} key={i} />;
-              })}
-            </Base.Row>
-          )}
-        </Base.View>
-      </ScrollView>
+      <Base.View
+        px={'20px'}
+        py={'16px'}
+        mt={'16px'}
+        paddingBottom={IS_IOS ? '200px' : '150px'}
+        minHeight="100%"
+        backgroundColor={theme.colors.white}>
+        {isLoading && (
+          <Base.View mt={'16px'}>
+            <ActivityIndicator size={'large'} color={theme.colors.green08} />
+          </Base.View>
+        )}
+        {!isLoading && (
+          <FlatList
+            data={data}
+            renderItem={({item}) => {
+              const productDetails = item?.product;
+              return <OfaydProduct {...productDetails} />;
+            }}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            columnWrapperStyle={{
+              justifyContent: 'space-between',
+            }}
+            initialNumToRender={20}
+          />
+        )}
+      </Base.View>
     </CartViewWrapper>
   );
 };

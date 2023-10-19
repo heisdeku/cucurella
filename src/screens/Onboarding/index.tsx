@@ -59,7 +59,7 @@ const Onboarding = () => {
         <Base.View px={'20px'} pb={insets.bottom + 16}>
           <Base.View>
             <Base.Button
-              title="Sign up"
+              title="Log in"
               onPress={() => {
                 setIsFirstTime(false);
               }}
