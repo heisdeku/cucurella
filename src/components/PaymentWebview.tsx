@@ -75,6 +75,7 @@ const PaymentWebView = (props: WebViewCustomPropsType) => {
             {
               onSuccess: data => {
                 clearCartMutate();
+                updateCheckoutDetails('', '', '', false);
                 return navigate('Success', {
                   type: 'order',
                   orderId: data?.data?.orderId,
@@ -94,7 +95,6 @@ const PaymentWebView = (props: WebViewCustomPropsType) => {
       [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
@@ -129,10 +129,6 @@ const PaymentWebView = (props: WebViewCustomPropsType) => {
             </TouchableOpacity>
           </Base.Row>
         </Base.View>
-        {/* <WebViewHeaderCustom
-          onReloadCick={onReloadHandler}
-          onCloseClick={onCloseHandler}
-        /> */}
 
         <WebView
           source={{uri: url}}
@@ -154,7 +150,9 @@ const PaymentWebView = (props: WebViewCustomPropsType) => {
 
         {/* Adding bottom padding for iOS devices */}
         {IS_IOS && <Base.View style={{height: 30}} />}
-        <LoadingModal loading={isLoading || createOrderLoading} />
+        <LoadingModal
+          loading={isLoading || createOrderLoading || clearLoading}
+        />
       </Base.View>
     </Modal>
   );

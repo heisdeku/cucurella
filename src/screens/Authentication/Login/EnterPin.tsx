@@ -1,17 +1,18 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {TextInput} from 'react-native';
+import {StyleSheet, TextInput, TextStyle, TouchableOpacity} from 'react-native';
 import {Base} from '@components/Base';
 import Container from '@components/Container';
 import {IS_ANDROID} from '@libs/constant';
 import {Text} from '@components/Text';
-import {readableInputProps, readOnlyInput} from '@libs/helper';
+import {readableInputProps} from '@libs/helper';
 import KeyboardWrapper from '@components/KeyboardWrapper';
-import {createPinViewStyles, FormGroup} from '../styles';
+
 import {useAuthStore} from '@store/AuthStore';
 import {client} from '@api/common';
 import {handleServerError, showErrorMessage} from '@libs/error';
 import {useRoute} from '@react-navigation/native';
-const styles = createPinViewStyles();
+import theme from '@libs/theme';
+import styled from 'styled-components/native';
 
 const EnterPin: React.FC = () => {
   const {phoneNumber} = useRoute().params as {phoneNumber: string};
@@ -66,10 +67,18 @@ const EnterPin: React.FC = () => {
     <KeyboardWrapper hasPaddingTop>
       <Container justifyContent={'space-between'} pt={'29px'}>
         <Base.View>
-          <Text.Medium fontSize={'24px'} lineHeight={'31px'}>
-            Enter your 4-digit account PIN
+          <Text.Medium fontSize={'24px'} lineHeight={'31px'} width="90%">
+            Welcome back, Enter your 4-Digit Pin
           </Text.Medium>
-          <Base.View mt={'10px'}>
+          <Base.Row mt={13} justifyContent={'flex-start'}>
+            <Text.General color={'#809C98'}>Not your acccount? </Text.General>
+            <TouchableOpacity onPress={() => {}}>
+              <Text.General fontWeight={'500'} style={style.signUpLink}>
+                Log Out
+              </Text.General>
+            </TouchableOpacity>
+          </Base.Row>
+          <Base.View mt={'28px'}>
             <FormGroup>
               <TextInput
                 ref={createRef}
@@ -80,22 +89,22 @@ const EnterPin: React.FC = () => {
                 value={code}
                 selectionColor="transparent"
                 onChangeText={handleTextChange}
-                style={styles.inputCode}
+                style={style.inputCode}
                 maxLength={5}
                 textContentType="oneTimeCode"
                 blurOnSubmit={false}
                 caretHidden={IS_ANDROID}
               />
               <Base.Row
-                height={'54px'}
-                width={'231px'}
-                mx={'auto'}
+                height={'33px'}
+                width={'100%'}
+                paddingX={14}
                 zIndex={'1'}>
                 {[0, 1, 2, 3].map(i => (
                   <TextInput
                     key={`${i}`}
                     secureTextEntry={!!splitCode[i]}
-                    style={readOnlyInput(60, splitCode[i] ? true : false)}
+                    style={readOnlyInput(splitCode[i] ? true : false)}
                     value={splitCode[i] || ''}
                     maxLength={5}
                     blurOnSubmit={false}
@@ -116,6 +125,58 @@ const EnterPin: React.FC = () => {
       </Container>
     </KeyboardWrapper>
   );
+};
+
+export const FormGroup = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 33px;
+  width: 80px;
+  background-color: #f8fafc;
+  border: 1px solid #edf0f4;
+  border-radius: 8px;
+`;
+
+const style = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  footer: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  signUpLink: {
+    color: theme.colors.green08,
+  },
+  inputCode: {
+    color: 'transparent',
+    fontSize: 30,
+    flex: 1,
+    paddingLeft: 60,
+    letterSpacing: 55,
+    height: 33,
+    position: 'absolute',
+    zIndex: 2,
+    top: 0,
+    left: 0,
+    textAlign: 'center',
+    width: '100%',
+    backgroundColor: 'transparent',
+  },
+});
+
+export const readOnlyInput = (isCodeInvalid: boolean): TextStyle => {
+  return {
+    backgroundColor: !isCodeInvalid ? '#94A3B8' : theme.colors.black,
+    width: 4,
+    height: 4,
+    borderRadius: 8,
+    fontSize: 25,
+    fontFamily: theme.fonts[500],
+    textAlign: 'center',
+  };
 };
 
 export default EnterPin;

@@ -2,7 +2,6 @@ import {Base} from '@components/Base';
 import {Text} from '@components/Text';
 import {useIsFirstTime} from '@hooks/useIsFirstTime';
 import theme from '@libs/theme';
-import {navigate} from '@stacks/helper';
 import {handleContinueAsGuest} from '@store/UserStore';
 import {ImageBackground, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';

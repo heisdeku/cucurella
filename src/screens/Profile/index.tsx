@@ -1,4 +1,4 @@
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {Alert, ScrollView, TouchableOpacity} from 'react-native';
 import {Base} from '@components/Base';
 import {styled} from 'styled-components/native';
 import theme from '@libs/theme';
@@ -183,7 +183,17 @@ const Account: React.FC = (): JSX.Element => {
           <Text.Medium fontSize={'20px'} fontWeight={'500'}>
             Misc
           </Text.Medium>
-          <TouchableOpacity activeOpacity={0.6} onPress={() => onLogout()}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() =>
+              Alert.alert('Logout?', 'Are you sure you want to logout?', [
+                {
+                  text: 'Cancel',
+                  style: 'cancel',
+                },
+                {text: 'Yes', onPress: () => onLogout(), style: 'destructive'},
+              ])
+            }>
             <Base.Row
               justifyContent={'flex-start'}
               height={'47px'}

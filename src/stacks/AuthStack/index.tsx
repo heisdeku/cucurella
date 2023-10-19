@@ -17,13 +17,13 @@ const AuthStack = () => {
         headerShown: false,
         animation: 'slide_from_right',
       }}>
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="LoginEnterPin" component={EnterPin} />
       <Stack.Screen name="Register" component={CreateAccount} />
       <Stack.Screen name="VerifyCode" component={VerifyCode} />
       <Stack.Screen name="MoreInformation" component={MoreInformation} />
       <Stack.Screen name="PinSetup" component={PinSetup} />
       <Stack.Screen name="PinConfirm" component={PinConfirm} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="LoginEnterPin" component={EnterPin} />
     </Stack.Navigator>
   );
 };

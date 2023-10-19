@@ -22,10 +22,6 @@ export const usePaymentVerify = createMutation<Response, Variables, AxiosError>(
         method: 'GET',
       }).then(response => response?.data);
     },
-    onSuccess: async () => {
-      const {updateCheckoutDetails} = useCheckoutStore.getState();
-      updateCheckoutDetails('', '', '', false);
-    },
     onError: async error => {
       console.log('something went wrong', error);
     },

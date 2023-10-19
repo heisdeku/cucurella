@@ -90,10 +90,7 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
   ]);
   const [cartItems] = useCartStore(state => [state.cart.cartItems]);
   const [isLocationGranted] = useGlobalStore(state => [state.locationGranted]);
-  const [orderDetails, setOrderDetails] = useCheckoutStore(state => [
-    state.orderDetails,
-    state.setOrderDetails,
-  ]);
+  const [setOrderDetails] = useCheckoutStore(state => [state.setOrderDetails]);
 
   /** mutation functions for different actions for order steps which includes: payment, charge wallet, create order and clear cart */
   const {mutate, isLoading} = usePayment();
@@ -134,7 +131,22 @@ const ConfirmOrderDetails = ({handleOpen}: IDrawerChildProps) => {
       onSuccess: () => {
         return createOrderMutate(
           {
-            ...orderDetails,
+            products: cartItems?.map(item => ({
+              productId: item?.product?.id,
+              quantity: item?.quantity,
+            })),
+            //@ts-ignore
+            shippingAddress: JSON.parse(userCurrentLocation),
+            phoneNumber: userPhoneNumber,
+            subTotalAmount: getCartTotalAmount(),
+            totalAmount: getCartTotalAmount(),
+            discount: 0,
+            deliveryNote: deliveryNote || 'No Note',
+            //@ts-ignore
+            // paymentMethod: method === 'wallet' ? method : 'card',
+            paymentMethod: 'card',
+            deliveryFee: 0,
+
             paymentReference: '',
           },
           {

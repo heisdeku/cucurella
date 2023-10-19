@@ -87,7 +87,7 @@ const WalletScreen: React.FC<IDrawerChildProps> = ({handleOpen}) => {
               color={'white'}
               fontSize={'24px'}
               lineHeight={'24px'}>
-              NGN {formatMonetaryAmount(wallets[0]?.balance).figure}
+              NGN {formatMonetaryAmount(wallets[0]?.balance || 0).figure}
             </Text.Medium>
             <Base.Button
               onPress={() => handleOpen?.(DRAWER_CONSTANTS.bankDetails)}

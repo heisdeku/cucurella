@@ -5,6 +5,7 @@ import {Text} from '@components/Text';
 import theme from '@libs/theme';
 import {navigate} from '@stacks/helper';
 import {Alert} from 'react-native';
+import {IDrawerChildProps} from './helper';
 
 const getWarningDetails = (type: string) => {
   switch (type) {
@@ -39,8 +40,12 @@ const getWarningDetails = (type: string) => {
       };
   }
 };
-//@ts-ignore
-export const WarningDrawer = ({handleClose, payload}) => {
+
+export const WarningDrawer = ({
+  handleClose,
+  payload,
+  handleOpen,
+}: IDrawerChildProps) => {
   const onButtonClick = () => {
     switch (payload?.type) {
       case 'no-card-detected':
@@ -48,10 +53,7 @@ export const WarningDrawer = ({handleClose, payload}) => {
       case 'no-address-support':
         return navigate('Home');
       case 'insufficient-balance':
-        return Alert.alert(
-          'Insufficient wallet balance',
-          'Your wallet balance is currently insufficient for this payment. Top up your wallet to continue',
-        );
+        return navigate('Wallet');
 
       default:
         return Alert.alert('Button Clicked');
@@ -88,8 +90,8 @@ export const WarningDrawer = ({handleClose, payload}) => {
       </Base.View>
       <Base.Button
         onPress={() => {
-          handleClose();
-          onButtonClick?.();
+          handleClose?.();
+          return onButtonClick?.();
         }}
         title={getWarningDetails(payload?.type)?.buttonText}
       />
