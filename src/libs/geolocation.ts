@@ -1,5 +1,4 @@
 import {getPostCodeAddressFromLatAndLong} from '@api/location';
-import {Platform} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {IS_ANDROID, IS_IOS} from './constant';
 import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
