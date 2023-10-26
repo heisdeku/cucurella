@@ -27,10 +27,9 @@ const Root = () => {
         )}
         {!isFirstTime && (
           <Stack.Group>
-            {authStatus === 'idle' ||
-              (authStatus === 'signOut' && (
-                <Stack.Screen name="Authentication" component={AuthStack} />
-              ))}
+            {(authStatus === 'idle' || authStatus === 'signOut') && (
+              <Stack.Screen name="Authentication" component={AuthStack} />
+            )}
             {authStatus === 'signIn' && (
               <Stack.Screen name="App" component={AppNavigation} />
             )}
